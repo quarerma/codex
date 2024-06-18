@@ -1,0 +1,330 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+///////////////////////////////////////////// Tabela de Usuários /////////////////////////////////////////////
+
+model User {
+  id String @id @default(cuid())
+  username String @unique @db.VarChar(50)
+  password String
+  email String @unique
+  characters Character[]
+  campaigns_dm Campaign[] @relation("CampaignDm")
+  campaigns_player PlayerOnCampaign[] @relation("PlayerCampaigns")
+}
+
+///////////////////////////////////////////// Tabela de Jogadores nas Campanhas /////////////////////////////////////////////
+
+model PlayerOnCampaign {
+  campaign Campaign @relation("CampaignPlayers", fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  player User @relation("PlayerCampaigns", fields: [playerId], references: [id])
+  playerId String @map("player_id")
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  @@unique([campaignId, playerId])
+}
+
+///////////////////////////////////////////// Tabela de Campanhas /////////////////////////////////////////////
+
+model Campaign {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())  
+  
+  name String @db.VarChar(50)
+  description String @db.VarChar(255)
+  password String
+
+  owner User @relation("CampaignDm", fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+
+  players PlayerOnCampaign[] @relation("CampaignPlayers")
+
+  characters Character[]
+
+  addedEquipment String[]
+
+  addedRituals String[]
+
+  addedModifications String[]
+
+  addedFeats String[]
+}
+
+
+///////////////////////////////////////////// Tabela de Personagens /////////////////////////////////////////////
+
+model Character {
+  id String @id @default(cuid())
+  name String @db.VarChar(50)
+
+  level Int
+  
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+  
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  
+  class Class @relation(fields: [classId], references: [id])
+  classId String @map("class_id")
+  
+  subclass Subclass @relation(fields: [subclassId], references: [id])
+  subclassId String @map("subclass_id")
+
+  healthInfo Json @map("health_info")
+  effortInfo Json @map("effort_info")
+  sanityInfo Json @map("sanity_info")
+
+  atributes Json
+
+  skills Json[]
+
+  attacks Json[]
+
+  Inventory Inventory?
+
+  feats Feat[]
+
+  rituals Ritual[]
+}
+
+
+////////////////////////////////////////////// Tabela de Inventário /////////////////////////////////////////////
+
+model Inventory {
+  character Character @relation(fields: [characterId], references: [id])
+  characterId String @id @map("character_id")
+
+  max_carry_weight Int @default(2)
+  current_carry_weight Int @default(0)
+  credit Credit @default(LOW)
+
+  equipment Json[]
+}
+
+
+///////////////////////////////////////////// Tabela de Classes /////////////////////////////////////////////
+model Class {
+  id String @id @default(cuid())
+  name String @db.VarChar(50)
+  subclasses Subclass[]
+  classFeats ClassFeat[]
+  character Character[]
+}
+
+model Subclass {
+  id String @id @default(cuid())
+  name String @db.VarChar(50)
+  classId String
+  class Class @relation(fields: [classId], references: [id])
+  subclassFeats SubclassFeat[]
+  character Character[]
+}
+
+///////////////////////////////////////////// Tabela de Feats /////////////////////////////////////////////
+
+model Feat {
+  id String @id @default(cuid())
+  name String @db.VarChar(50)
+  description String @db.Text
+  prerequisites String?
+  type        FeatType     
+  classFeats ClassFeat[]
+  subclassFeats SubclassFeat[]
+  generalFeats GeneralFeat[]
+  character Character[]
+}
+
+model GeneralFeat {
+  id      String @id @default(cuid())
+  featId  String
+  element Element
+  feat    Feat   @relation(fields: [featId], references: [id])
+}
+
+
+///////////////////////////////////////////// Tabelas de Relacionamento /////////////////////////////////////////////
+model ClassFeat {
+  id String @id @default(cuid())
+  classId String
+  featId String
+  class Class @relation(fields: [classId], references: [id])
+  feat Feat @relation(fields: [featId], references: [id])
+  @@unique([classId, featId])
+}
+
+model SubclassFeat {
+  id String @id @default(cuid())
+  subclassId String
+  featId String
+  subclass Subclass @relation(fields: [subclassId], references: [id])
+  feat Feat @relation(fields: [featId], references: [id])
+  @@unique([subclassId, featId])
+}
+
+
+///////////////////////////////////////////// Tabela de Atributos /////////////////////////////////////////////
+
+model Skill {
+  name String @unique @id
+  atribute Atribute
+  description String
+  only_trained Boolean
+  carry_peanalty Boolean
+  needs_kit Boolean
+  is_custom Boolean
+}
+
+
+///////////////////////////////////////////// Tabela de Feats /////////////////////////////////////////////
+
+model Ritual {
+  id String @id @default(cuid())
+  name String @unique
+  description String
+  element Element
+  is_custom Boolean
+  character Character[]
+}
+
+///////////////////////////////////////////// Tabela de Equipamentos e Modificações /////////////////////////////////////////////
+model Modification {
+  id String @id @default(cuid())
+  name String @unique
+  type ModificationType[]
+  element Element
+  description String
+  is_custom Boolean
+}
+
+model Equipment {
+  id Int @id @default(autoincrement())
+  name String @unique
+  description String
+  weight Int
+  category Int
+  type ItemType
+  is_custom Boolean
+}
+
+model Weapon {
+  id Int @id
+  damage String[]
+  critical_multiplier Int
+  critical_range Int
+  range Range
+  damage_type DamageType
+  weapon_category WeaponCategory 
+  weapon_type WeaponType 
+  hand_type HandType 
+}
+
+model Armor {
+  id Int @id
+  defense Int
+  damage_reduction Int
+}
+
+model Accessory {
+  id Int @id
+  skill_check String
+}
+
+model CursedItem {
+  id Int @id
+  element Element
+}
+
+
+
+/////////////////////////////////////////////  Enums /////////////////////////////////////////////
+enum ModificationType {
+  MELEE_WEAPON
+  BULLET_WEAPON
+  BOLT_WEAPON
+  ARMOR
+  AMMO
+  ACESSORY
+}
+
+enum Atribute {
+  STRENGTH
+  DEXTERITY
+  CONSTITUTION
+  INTELLIGENCE
+  PRESENCE
+}
+
+enum Credit {
+  LOW
+  MEDIUM
+  HIGH
+  UNLIMITED
+}
+
+
+enum HandType {
+  LIGHT
+  ONE_HANDED
+  TWO_HANDED
+}
+enum WeaponType {
+  MELEE
+  BOLT
+  BULLET
+}
+
+enum WeaponCategory {
+  SIMPLE
+  TATICAL
+  HEAVY
+}
+
+enum Element {
+  REALITY
+  FEAR
+  BLOOD
+  DEATH
+  ENERGY
+  KNOWLEDGE
+}
+
+enum ItemType {
+  WEAPON
+  ARMOR
+  AMMO
+  ACESSORY
+  EXPLOSIVE
+  OPERATIONAL_EQUIPMENT
+  PARANORMAL_EQUIPMENT
+  CURSED_ITEM
+  DEFAULT
+}
+
+enum Range {
+  MELEE
+  SHORT
+  MEDIUM
+  LONG
+}
+
+enum DamageType {
+  PIERCING
+  BALISTIC
+  IMPACT
+  SLASHING
+  FIRE
+}
+
+enum FeatType {
+  CLASS
+  SUBCLASS
+  GENERAL
+}
