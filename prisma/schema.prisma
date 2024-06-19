@@ -93,6 +93,9 @@ model Character {
   feats Feat[]
 
   rituals Ritual[]
+
+  origin Origin @relation(fields: [originId], references: [id])
+  originId String @map("origin_id") @unique
 }
 
 
@@ -151,6 +154,8 @@ model Feat {
   subclassFeats SubclassFeat[]
   generalFeats GeneralFeat[]
   character Character[]
+  origin Origin?
+  
 }
 
 model GeneralFeat {
@@ -183,6 +188,16 @@ model SubclassFeat {
 
 ///////////////////////////////////////////// Tabela de Atributos /////////////////////////////////////////////
 
+model Origin {
+  id String @id @default(cuid())
+  name String @unique
+  description String
+  is_custom Boolean
+  feats Feat @relation(fields: [featId], references: [id])
+  featId String @unique
+
+  character Character?
+}
 model Skill {
   name String @unique @id
   atribute Atribute

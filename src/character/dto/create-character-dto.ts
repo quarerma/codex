@@ -32,6 +32,7 @@ export class CreateCharacterDTO {
   ritualsId: string[];
 
   featsId: string[];
+  originId: string;
 }
 
 export class AtributesJson {

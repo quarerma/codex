@@ -80,6 +80,9 @@ export class CharacterService {
           rituals: {
             connect: data.ritualsId.map((id) => ({ id })),
           },
+          origin: {
+            connect: { id: data.originId },
+          },
         },
       });
 
