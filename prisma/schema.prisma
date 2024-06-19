@@ -102,8 +102,7 @@ model Inventory {
   character Character @relation(fields: [characterId], references: [id])
   characterId String @id @map("character_id")
 
-  max_carry_weight Int @default(2)
-  current_carry_weight Int @default(0)
+  carryInfo Json @map("carry_info")
   credit Credit @default(LOW)
 
   equipment Json[]
@@ -114,6 +113,15 @@ model Inventory {
 model Class {
   id String @id @default(cuid())
   name String @db.VarChar(50)
+
+  hitPointsPerLevel Int
+  SanityPointsPerLevel Int
+  effortPointsPerLevel Int
+
+  initialHealth Int
+  initialSanity Int
+  initialEffort Int
+
   subclasses Subclass[]
   classFeats ClassFeat[]
   character Character[]
@@ -135,6 +143,7 @@ model Feat {
   name String @db.VarChar(50)
   description String @db.Text
   prerequisites String?
+  characterUpgrades Json[]
   type        FeatType     
   classFeats ClassFeat[]
   subclassFeats SubclassFeat[]
@@ -200,6 +209,7 @@ model Modification {
   name String @unique
   type ModificationType[]
   element Element
+  characterUpgrades Json[]
   description String
   is_custom Boolean
 }
@@ -212,10 +222,16 @@ model Equipment {
   category Int
   type ItemType
   is_custom Boolean
+  Weapon Weapon?
+  Armor Armor?
+  Accessory Accessory?
+  CursedItem CursedItem?
 }
 
 model Weapon {
-  id Int @id
+
+  Equipment Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int @id
   damage String[]
   critical_multiplier Int
   critical_range Int
@@ -227,18 +243,21 @@ model Weapon {
 }
 
 model Armor {
-  id Int @id
+  Equipment Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int @id
   defense Int
   damage_reduction Int
 }
 
 model Accessory {
-  id Int @id
+  Equipment Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int @id
   skill_check String
 }
 
 model CursedItem {
-  id Int @id
+  Equipment Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int @id
   element Element
 }
 
