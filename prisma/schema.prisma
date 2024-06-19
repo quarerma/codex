@@ -122,6 +122,8 @@ model Class {
   initialSanity Int
   initialEffort Int
 
+  initialFeats String[]
+
   subclasses Subclass[]
   classFeats ClassFeat[]
   character Character[]
