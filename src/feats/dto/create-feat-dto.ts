@@ -6,5 +6,5 @@ export class CreateFeatDto {
   description: string;
   prerequisites?: string;
   characterUpgrade?: CharacterUpgrade[];
-  element: Element;
+  element?: Element;
 }

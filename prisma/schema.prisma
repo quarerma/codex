@@ -155,21 +155,20 @@ model Feat {
   type        FeatType     
   classFeats ClassFeat[]
   subclassFeats SubclassFeat[]
-  generalFeats GeneralFeat[]
+  generalFeats GeneralFeats[]
   character Character[]
   origin Origin?
+  element Element
   
 }
 
-model GeneralFeat {
-  id      String @id @default(cuid())
-  featId  String
-  element Element
-  feat    Feat   @relation(fields: [featId], references: [id])
+model GeneralFeats {
+  id String @id @default(cuid())
+  feat Feat @relation(fields: [featId], references: [id])
+  featId String
 
   @@unique([featId])
 }
-
 
 ///////////////////////////////////////////// Tabelas de Relacionamento /////////////////////////////////////////////
 model ClassFeat {

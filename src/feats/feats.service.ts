@@ -8,9 +8,8 @@ export class FeatsService {
 
   async createGeneralFeat(data: CreateFeatDto) {
     try {
-      return await this.dataBaseService.generalFeat.create({
+      return await this.dataBaseService.generalFeats.create({
         data: {
-          element: data.element,
           feat: {
             create: {
               name: data.name,
@@ -18,6 +17,7 @@ export class FeatsService {
               prerequisites: data.prerequisites,
               characterUpgrades: data.characterUpgrade,
               type: 'GENERAL',
+              element: data.element,
             },
           },
         },
@@ -38,6 +38,7 @@ export class FeatsService {
               prerequisites: data.prerequisites,
               characterUpgrades: data.characterUpgrade,
               type: 'CLASS',
+              element: data.element,
             },
           },
           class: {
@@ -61,6 +62,7 @@ export class FeatsService {
               prerequisites: data.prerequisites,
               characterUpgrades: data.characterUpgrade,
               type: 'SUBCLASS',
+              element: data.element,
             },
           },
           subclass: {
@@ -70,6 +72,18 @@ export class FeatsService {
       });
     } catch (error) {
       throw new Error('Error creating subclass feat');
+    }
+  }
+
+  async getGeneralFeats() {
+    try {
+      return await this.dataBaseService.generalFeats.findMany({
+        select: {
+          feat: true,
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting general feats');
     }
   }
 }
