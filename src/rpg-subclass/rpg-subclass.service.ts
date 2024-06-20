@@ -24,13 +24,11 @@ export class SubClassService {
 
   async assignSubClassFeat(subclassId: string, featId: string) {
     try {
-      return await this.dataBaseService.subclassFeat.create({
+      return await this.dataBaseService.feat.update({
+        where: { id: featId },
         data: {
-          subclass: {
+          subClass: {
             connect: { id: subclassId },
-          },
-          feat: {
-            connect: { id: featId },
           },
         },
       });
@@ -41,10 +39,10 @@ export class SubClassService {
 
   async getSubClassesFeats(subclassId: string) {
     try {
-      return await this.dataBaseService.subclassFeat.findMany({
-        where: { subclassId: subclassId },
+      return await this.dataBaseService.subclass.findMany({
+        where: { id: subclassId },
         select: {
-          feat: true,
+          subclassFeats: true,
         },
       });
     } catch (error) {

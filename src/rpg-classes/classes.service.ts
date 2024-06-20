@@ -16,12 +16,10 @@ export class ClassesService {
 
   async assignClassFeat(classId: string, featId: string) {
     try {
-      return await this.dataBaseService.classFeat.create({
+      return await this.dataBaseService.class.update({
+        where: { id: classId },
         data: {
-          class: {
-            connect: { id: classId },
-          },
-          feat: {
+          classFeats: {
             connect: { id: featId },
           },
         },
@@ -33,10 +31,10 @@ export class ClassesService {
 
   async getClassFeats(classId: string) {
     try {
-      return await this.dataBaseService.classFeat.findMany({
-        where: { classId: classId },
+      return await this.dataBaseService.class.findMany({
+        where: { id: classId },
         select: {
-          feat: true,
+          classFeats: true,
         },
       });
     } catch (error) {

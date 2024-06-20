@@ -48,8 +48,8 @@ model Campaign {
 
   characters Character[]
 
-  addedEquipment String[]
-
+  // addedEquipment CustomEquipment[]
+  equipment Equipment[]
   addedRituals String[]
 
   addedModifications String[]
@@ -131,7 +131,7 @@ model Class {
   proficiencies Proficiency[]
 
   subclasses Subclass[]
-  classFeats ClassFeat[]
+  classFeats Feat[]
   character Character[]
 }
 
@@ -140,7 +140,7 @@ model Subclass {
   name String @db.VarChar(50)
   classId String
   class Class @relation(fields: [classId], references: [id])
-  subclassFeats SubclassFeat[]
+  subclassFeats Feat[]
   character Character[]
 }
 
@@ -152,10 +152,17 @@ model Feat {
   description String @db.Text
   prerequisites String?
   characterUpgrades Json[]
-  type        FeatType     
-  classFeats ClassFeat[]
-  subclassFeats SubclassFeat[]
+  type        FeatType
+
+  class Class? @relation(fields: [classId], references: [id])
+  classId String?
+
+
+  subClass Subclass? @relation(fields: [subClassId], references: [id])
+  subClassId String?
+
   generalFeats GeneralFeats[]
+
   character Character[]
   origin Origin?
   element Element
@@ -169,27 +176,6 @@ model GeneralFeats {
 
   @@unique([featId])
 }
-
-///////////////////////////////////////////// Tabelas de Relacionamento /////////////////////////////////////////////
-model ClassFeat {
-  id String @id @default(cuid())
-  classId String
-  featId String
-
-  class Class @relation(fields: [classId], references: [id])
-  feat Feat @relation(fields: [featId], references: [id])
-  @@unique([classId, featId])
-}
-
-model SubclassFeat {
-  id String @id @default(cuid())
-  subclassId String
-  featId String
-  subclass Subclass @relation(fields: [subclassId], references: [id])
-  feat Feat @relation(fields: [featId], references: [id])
-  @@unique([subclassId, featId])
-}
-
 
 ///////////////////////////////////////////// Tabela de Atributos /////////////////////////////////////////////
 
@@ -243,6 +229,9 @@ model Equipment {
   weight Int
   category Int
   type ItemType
+  // CustomEquipment CustomEquipment[]
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String? @map("campaign_id")
   is_custom Boolean
   Weapon Weapon?
   Armor Armor?
@@ -250,8 +239,17 @@ model Equipment {
   CursedItem CursedItem?
 }
 
-model Weapon {
+// model CustomEquipment {
+//   id String @id @default(cuid())
+//   campaign Campaign @relation(fields: [campaignId], references: [id])
+//   campaignId String @map("campaign_id")
+//   equipment Equipment @relation(fields: [equipmentId], references: [id])
+//   equipmentId Int @map("equipment_id")
 
+//   @@unique([campaignId, equipmentId])
+// }
+
+model Weapon {
   Equipment Equipment @relation(fields: [equipmentId], references: [id])
   equipmentId Int @id
   damage String[]
@@ -274,6 +272,7 @@ model Armor {
 model Accessory {
   Equipment Equipment @relation(fields: [equipmentId], references: [id])
   equipmentId Int @id
+  characterUpgrades Json[]
   skill_check String
 }
 

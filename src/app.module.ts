@@ -6,9 +6,10 @@ import { SubClassModule } from './rpg-subclass/rpg-subclass.module';
 import { FeatsModule } from './feats/feats.module';
 import { CampaingsModule } from './campaings/campaings.module';
 import { DataBaseService } from './database/database.service';
+import { EquipmentModule } from './equipment/equipment.module';
 
 @Module({
-  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule],
+  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule],
   controllers: [],
   providers: [DataBaseService],
 })

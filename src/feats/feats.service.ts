@@ -29,9 +29,10 @@ export class FeatsService {
 
   async createClassFeat(data: CreateFeatDto, classId: string) {
     try {
-      return await this.dataBaseService.classFeat.create({
+      return await this.dataBaseService.class.update({
+        where: { id: classId },
         data: {
-          feat: {
+          classFeats: {
             create: {
               name: data.name,
               description: data.description,
@@ -40,9 +41,6 @@ export class FeatsService {
               type: 'CLASS',
               element: data.element,
             },
-          },
-          class: {
-            connect: { id: classId },
           },
         },
       });
@@ -53,9 +51,10 @@ export class FeatsService {
 
   async createSubClassFeat(data: CreateFeatDto, subclassId: string) {
     try {
-      return await this.dataBaseService.subclassFeat.create({
+      return await this.dataBaseService.subclass.update({
+        where: { id: subclassId },
         data: {
-          feat: {
+          subclassFeats: {
             create: {
               name: data.name,
               description: data.description,
@@ -64,9 +63,6 @@ export class FeatsService {
               type: 'SUBCLASS',
               element: data.element,
             },
-          },
-          subclass: {
-            connect: { id: subclassId },
           },
         },
       });
