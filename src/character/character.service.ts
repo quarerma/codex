@@ -56,7 +56,7 @@ export class CharacterService {
           healthInfo: healthInfo,
           effortInfo: effortInfo,
           sanityInfo: sanityInfo,
-
+          proficiencies: characterClass.proficiencies,
           owner: {
             connect: { id: data.ownerId },
           },

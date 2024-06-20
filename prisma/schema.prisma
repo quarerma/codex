@@ -94,6 +94,8 @@ model Character {
 
   rituals Ritual[]
 
+  proficiencies Proficiency[]
+
   origin Origin @relation(fields: [originId], references: [id])
   originId String @map("origin_id") @unique
 }
@@ -126,6 +128,7 @@ model Class {
   initialEffort Int
 
   initialFeats String[]
+  proficiencies Proficiency[]
 
   subclasses Subclass[]
   classFeats ClassFeat[]
@@ -171,6 +174,7 @@ model ClassFeat {
   id String @id @default(cuid())
   classId String
   featId String
+
   class Class @relation(fields: [classId], references: [id])
   feat Feat @relation(fields: [featId], references: [id])
   @@unique([classId, featId])
@@ -323,6 +327,13 @@ enum WeaponCategory {
   HEAVY
 }
 
+enum Proficiency {
+  SIMPLE
+  TATICAL
+  HEAVY
+  LIGHT_ARMOR
+  HEAVY_ARMOR
+}
 enum Element {
   REALITY
   FEAR
