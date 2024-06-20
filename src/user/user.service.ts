@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { randomUUID } from 'crypto';
 import * as bcrypt from 'bcrypt';
-import {
-  EmailAlreadyInUseExcption,
-  UserNameAlreadyInUseException,
-} from 'src/exceptions/UserExceptions';
+import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/exceptions/UserExceptions';
 import { DataBaseService } from 'src/database/database.service';
 
 @Injectable()
@@ -14,12 +10,10 @@ export class UserService {
 
   async createUser(data: CreateUserDto) {
     try {
-      const id = randomUUID();
-
       const { password, ...userDataWithoutPassword } = data;
       const hashPassword = await this.hashPassword(password);
 
-      const userData = { ...userDataWithoutPassword, id };
+      const userData = { ...userDataWithoutPassword };
 
       await this.checkEmailAlreadyInUse(userData.email);
 
@@ -77,6 +71,68 @@ export class UserService {
       });
     } catch (error) {
       console.log('erro ao buscar usuario por id');
+    }
+  }
+
+  async joinCampaign(userId: string, campaignId: string) {
+    try {
+      return this.dataBaseService.playerOnCampaign.create({
+        data: {
+          player: {
+            connect: { id: userId },
+          },
+          campaign: {
+            connect: { id: campaignId },
+          },
+        },
+      });
+    } catch (error) {
+      console.log('erro ao conectar usuario a campanha');
+    }
+  }
+
+  async getUserCampaigns(userId: string) {
+    try {
+      return await this.dataBaseService.user.findUnique({
+        where: { id: userId },
+        select: {
+          campaigns_dm: true,
+          campaigns_player: {
+            select: {
+              campaign: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.log('erro ao buscar campanhas do usuario');
+    }
+  }
+
+  async leaveCampaign(userId: string, campaignId: string) {
+    try {
+      const participation = await this.dataBaseService.playerOnCampaign.findUnique({
+        where: {
+          campaignId_playerId: {
+            campaignId: campaignId,
+            playerId: userId,
+          },
+        },
+      });
+
+      if (!participation) {
+        throw new Error('User is not in this campaign');
+      }
+      await this.dataBaseService.playerOnCampaign.delete({
+        where: {
+          campaignId_playerId: {
+            campaignId: campaignId,
+            playerId: userId,
+          },
+        },
+      });
+    } catch (error) {
+      console.log('Error leaving the campaign:', error.message);
     }
   }
 }
