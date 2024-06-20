@@ -49,12 +49,12 @@ model Campaign {
   characters Character[]
 
   // addedEquipment CustomEquipment[]
-  equipment Equipment[]
+  customEquipment Equipment[]
   addedRituals String[]
 
   addedModifications String[]
 
-  addedFeats String[]
+  customFeat Feat[]
 }
 
 
@@ -160,6 +160,9 @@ model Feat {
 
   subClass Subclass? @relation(fields: [subClassId], references: [id])
   subClassId String?
+
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String?
 
   generalFeats GeneralFeats[]
 
@@ -371,6 +374,7 @@ enum DamageType {
 }
 
 enum FeatType {
+  CUSTOM
   CLASS
   SUBCLASS
   GENERAL

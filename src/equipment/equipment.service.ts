@@ -39,23 +39,6 @@ export class EquipmentService {
     }
   }
 
-  async createCampaignEquipment(data: CreateItemDto, campaignId: string) {
-    try {
-      const equipment = await this.createEquipment(data);
-
-      return await this.dataBaseService.campaign.update({
-        where: { id: campaignId },
-        data: {
-          equipment: {
-            connect: { id: equipment.id },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error('Error creating equipment');
-    }
-  }
-
   async getEquipment(id: number, type: string) {
     try {
       let equipment;
