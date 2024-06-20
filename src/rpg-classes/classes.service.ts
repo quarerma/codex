@@ -13,4 +13,34 @@ export class ClassesService {
       throw new Error('Error creating class');
     }
   }
+
+  async assignClassFeat(classId: string, featId: string) {
+    try {
+      return await this.dataBaseService.classFeat.create({
+        data: {
+          class: {
+            connect: { id: classId },
+          },
+          feat: {
+            connect: { id: featId },
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getClassFeats(classId: string) {
+    try {
+      return await this.dataBaseService.classFeat.findMany({
+        where: { classId: classId },
+        select: {
+          feat: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

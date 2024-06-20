@@ -166,6 +166,8 @@ model GeneralFeat {
   featId  String
   element Element
   feat    Feat   @relation(fields: [featId], references: [id])
+
+  @@unique([featId])
 }
 
 
