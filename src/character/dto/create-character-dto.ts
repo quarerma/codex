@@ -1,7 +1,5 @@
-import { Atribute } from '@prisma/client';
 import { JsonObject } from '@prisma/client/runtime/library';
 import { Max, MaxLength, Min } from 'class-validator';
-import { TrainingLevel } from 'src/types/skill-relates-types';
 
 export class CreateCharacterDTO {
   @MaxLength(50, {
@@ -35,29 +33,25 @@ export class CreateCharacterDTO {
   originId: string;
 }
 
-export class AtributesJson {
+export type AtributesJson = {
   strenght: number;
   dexterity: number;
   vitality: number;
   intelligence: number;
   presence: number;
-  alterations: string[];
-}
+  alterations: AlterationObject[];
+};
 
-export class SkillJson {
-  name: string;
-  atribute: Atribute;
-  trainingLevel: TrainingLevel;
-  alterations: SkillAlterationObject[];
-}
-
-export type SkillAlterationObject = {
-  value: number;
+export type AlterationObject = {
+  modificartionName?: string;
   modification?: string;
+  featName?: string;
   feat?: string;
 };
 
-export type AtributeAlterationObject = {
-  modification?: string;
-  feat?: string;
+export type StatusJson = {
+  currentValue: number;
+  maxValue: number;
+  valuePerLevel: number;
+  alterations: AlterationObject[];
 };

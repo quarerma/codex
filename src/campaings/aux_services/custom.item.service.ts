@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
-import { CreateItemDto } from 'src/equipment/dto/create-equipment-dto';
+import { CreateItemDto } from 'src/equipment/dto/create.equipment.dto';
 import { EquipmentService } from 'src/equipment/equipment.service';
 
 @Injectable()

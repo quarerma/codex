@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
-import { CreateCharacterDTO } from './dto/create-character-dto';
+import { AtributesJson, CreateCharacterDTO, StatusJson } from './dto/create-character-dto';
+import { CharacterSkillsService } from './aux_services/character.skills.service';
 
 @Injectable()
 export class CharacterService {
-  constructor(private readonly dataBaseService: DataBaseService) {}
+  constructor(
+    private readonly dataBaseService: DataBaseService,
+    private readonly characterSkillsService: CharacterSkillsService,
+  ) {}
 
   async createCharacter(data: CreateCharacterDTO) {
     try {
@@ -19,34 +23,30 @@ export class CharacterService {
         intelligence: data.intelligence,
         presence: data.presence,
         alterations: [],
-      };
+      } as AtributesJson;
 
       const healthInfo = {
-        // prettier-ignore
         currentValue: characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel,
-        // prettier-ignore
         maxValue: characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel,
         valuePerLevel: characterClass.hitPointsPerLevel,
         alterations: [],
-      };
+      } as StatusJson;
 
       const effortInfo = {
-        // prettier-ignore
         currentValue: characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel,
-        // prettier-ignore
         maxValue: characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel,
         valuePerLevel: characterClass.effortPointsPerLevel,
         alterations: [],
-      };
+      } as StatusJson;
 
       const sanityInfo = {
-        // prettier-ignore
-        currentValue: characterClass.initialSanity +  (data.level - 1) * characterClass.SanityPointsPerLevel,
-        // prettier-ignore
-        maxValue: characterClass.initialSanity+ (data.level - 1) * characterClass.SanityPointsPerLevel,
+        currentValue: characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel,
+        maxValue: characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel,
         valuePerLevel: characterClass.SanityPointsPerLevel,
         alterations: [],
-      };
+      } as StatusJson;
+
+      const skills = await this.characterSkillsService.assignBasicSkills();
 
       const createdCharacter = await this.dataBaseService.character.create({
         data: {
@@ -83,13 +83,12 @@ export class CharacterService {
           origin: {
             connect: { id: data.originId },
           },
+          skills,
         },
       });
 
       const carryInfo = {
-        // prettier-ignore
         currentValue: data.strenght > 0 ? data.strenght * 5 : 2,
-        // prettier-ignore
         maxValue: data.strenght > 0 ? data.strenght * 5 : 2,
         alterations: [],
       };

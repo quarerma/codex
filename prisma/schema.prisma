@@ -50,6 +50,8 @@ model Campaign {
 
   // addedEquipment CustomEquipment[]
   customEquipment Equipment[]
+
+  customSkills Skill[]
   addedRituals String[]
 
   addedModifications String[]
@@ -200,6 +202,9 @@ model Skill {
   carry_peanalty Boolean
   needs_kit Boolean
   is_custom Boolean
+
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String? @map("campaign_id")
 }
 
 
