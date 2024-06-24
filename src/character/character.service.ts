@@ -106,4 +106,14 @@ export class CharacterService {
       return createdCharacter;
     } catch (error) {}
   }
+
+  async getCharacter(characterId: string) {
+    try {
+      return await this.dataBaseService.character.findUnique({
+        where: { id: characterId },
+      });
+    } catch (error) {
+      throw new Error('Error getting character');
+    }
+  }
 }

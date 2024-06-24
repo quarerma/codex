@@ -305,7 +305,7 @@ enum ModificationType {
 enum Atribute {
   STRENGTH
   DEXTERITY
-  CONSTITUTION
+  VITALITY
   INTELLIGENCE
   PRESENCE
 }

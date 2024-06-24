@@ -1,3 +1,4 @@
+import { Atribute } from '@prisma/client';
 import { JsonObject } from '@prisma/client/runtime/library';
 import { Max, MaxLength, Min } from 'class-validator';
 
@@ -54,4 +55,10 @@ export type StatusJson = {
   maxValue: number;
   valuePerLevel: number;
   alterations: AlterationObject[];
+};
+
+export type updateAtributeDTO = {
+  characterId: string;
+  atribute: Atribute;
+  value: number;
 };
