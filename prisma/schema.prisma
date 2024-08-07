@@ -56,7 +56,7 @@ model Campaign {
 
   addedModifications String[]
 
-  customFeat Feat[]
+  customFeat CampaignFeats[]
 }
 
 
@@ -133,7 +133,7 @@ model Class {
   proficiencies Proficiency[]
 
   subclasses Subclass[]
-  classFeats Feat[]
+  classFeats ClassFeats[]
   character Character[]
 }
 
@@ -142,7 +142,7 @@ model Subclass {
   name String @db.VarChar(50)
   classId String
   class Class @relation(fields: [classId], references: [id])
-  subclassFeats Feat[]
+  subclassFeats SubclassFeats[]
   character Character[]
 }
 
@@ -156,15 +156,9 @@ model Feat {
   characterUpgrades Json[]
   type        FeatType
 
-  class Class? @relation(fields: [classId], references: [id])
-  classId String?
-
-
-  subClass Subclass? @relation(fields: [subClassId], references: [id])
-  subClassId String?
-
-  campaign Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId String?
+  classFeats ClassFeats[]
+  subclassFeats SubclassFeats[]
+  campaignFeats CampaignFeats[]
 
   generalFeats GeneralFeats[]
 
@@ -172,6 +166,36 @@ model Feat {
   origin Origin?
   element Element
   
+}
+
+model ClassFeats {
+  id String @id @default(cuid())
+  feat Feat @relation(fields: [featId], references: [id])
+  featId String
+  class Class @relation(fields: [classId], references: [id])
+  classId String
+
+  @@unique([featId, classId])
+}
+
+model SubclassFeats {
+  id String @id @default(cuid())
+  feat Feat @relation(fields: [featId], references: [id])
+  featId String
+  subclass Subclass @relation(fields: [subclassId], references: [id])
+  subclassId String
+
+  @@unique([featId, subclassId])
+}
+
+model CampaignFeats {
+  id String @id @default(cuid())
+  feat Feat @relation(fields: [featId], references: [id])
+  featId String
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String
+
+  @@unique([featId, campaignId])
 }
 
 model GeneralFeats {

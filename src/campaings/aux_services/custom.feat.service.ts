@@ -8,10 +8,12 @@ export class CustomFeatService {
 
   async createCustomFeat(data: CreateFeatDto, campaignId: string) {
     try {
-      return await this.dataBaseService.campaign.update({
-        where: { id: campaignId },
+      return await this.dataBaseService.campaignFeats.create({
         data: {
-          customFeat: {
+          campaign: {
+            connect: { id: campaignId },
+          },
+          feat: {
             create: {
               name: data.name,
               description: data.description,
@@ -33,7 +35,11 @@ export class CustomFeatService {
       return await this.dataBaseService.campaign.findUnique({
         where: { id: campaignId },
         select: {
-          customFeat: true,
+          customFeat: {
+            select: {
+              feat: true,
+            },
+          },
         },
       });
     } catch (error) {
