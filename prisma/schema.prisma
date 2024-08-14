@@ -49,14 +49,16 @@ model Campaign {
   characters Character[]
 
   // addedEquipment CustomEquipment[]
-  customEquipment Equipment[]
-
-  customSkills Skill[]
-  addedRituals String[]
-
-  addedModifications String[]
+  customEquipment CampaignEquipment[]
 
   customFeat CampaignFeats[]
+
+  customSkills Skill[]
+
+  customRituals CampaignRitual[]
+
+  customModifications CampaignModifications[]
+
 }
 
 
@@ -241,8 +243,18 @@ model Ritual {
   element Element
   is_custom Boolean
   character Character[]
+  campaign  CampaignRitual[]
 }
 
+model CampaignRitual {
+  id String @id @default(cuid())
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  ritual Ritual @relation(fields: [ritualId], references: [id])
+  ritualId String @map("ritual_id")
+
+  @@unique([campaignId, ritualId])
+}
 ///////////////////////////////////////////// Tabela de Equipamentos e Modificações /////////////////////////////////////////////
 model Modification {
   id String @id @default(cuid())
@@ -252,6 +264,17 @@ model Modification {
   characterUpgrades Json[]
   description String
   is_custom Boolean
+  campaign CampaignModifications[]
+}
+
+model CampaignModifications {
+  id String @id @default(cuid())
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  modification Modification @relation(fields: [modificationId], references: [id])
+  modificationId String @map("modification_id")
+
+  @@unique([campaignId, modificationId])
 }
 
 model Equipment {
@@ -261,14 +284,22 @@ model Equipment {
   weight Int
   category Int
   type ItemType
-  // CustomEquipment CustomEquipment[]
-  campaign Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId String? @map("campaign_id")
   is_custom Boolean
   Weapon Weapon?
   Armor Armor?
   Accessory Accessory?
   CursedItem CursedItem?
+  CampaignEquipment CampaignEquipment[]
+}
+
+model CampaignEquipment {
+  id String @id @default(cuid())
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int @map("equipment_id")
+
+  @@unique([campaignId, equipmentId])
 }
 
 // model CustomEquipment {

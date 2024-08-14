@@ -14,10 +14,12 @@ export class CustomItemService {
     try {
       const equipment = await this.equipmentService.createEquipment(data);
 
-      return await this.dataBaseService.campaign.update({
-        where: { id: campaignId },
+      return await this.dataBaseService.campaignEquipment.create({
         data: {
-          customEquipment: {
+          campaign: {
+            connect: { id: campaignId },
+          },
+          equipment: {
             connect: { id: equipment.id },
           },
         },
@@ -32,7 +34,11 @@ export class CustomItemService {
       return await this.dataBaseService.campaign.findUnique({
         where: { id: campaignId },
         select: {
-          customEquipment: true,
+          customEquipment: {
+            select: {
+              equipment: true,
+            },
+          },
         },
       });
     } catch (error) {
