@@ -171,7 +171,6 @@ model Feat {
 }
 
 model ClassFeats {
-  id String @id @default(cuid())
   feat Feat @relation(fields: [featId], references: [id])
   featId String
   class Class @relation(fields: [classId], references: [id])
@@ -181,7 +180,6 @@ model ClassFeats {
 }
 
 model SubclassFeats {
-  id String @id @default(cuid())
   feat Feat @relation(fields: [featId], references: [id])
   featId String
   subclass Subclass @relation(fields: [subclassId], references: [id])
@@ -191,7 +189,6 @@ model SubclassFeats {
 }
 
 model CampaignFeats {
-  id String @id @default(cuid())
   feat Feat @relation(fields: [featId], references: [id])
   featId String
   campaign Campaign @relation(fields: [campaignId], references: [id])
