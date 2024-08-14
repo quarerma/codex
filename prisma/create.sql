@@ -270,17 +270,3 @@ create table campaign_modification (
 
     primary key (campaign_id, modification_id)
 )
-
-
--- model Weapon {
---   Equipment Equipment @relation(fields: [equipmentId], references: [id])
---   equipmentId Int @id
---   damage String[]
---   critical_multiplier Int
---   critical_range Int
---   range Range
---   damage_type DamageType
---   weapon_category WeaponCategory 
---   weapon_type WeaponType 
---   hand_type HandType 
--- }
