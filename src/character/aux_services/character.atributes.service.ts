@@ -71,18 +71,20 @@ export class CharacterAtributesService {
       });
 
       const healthInfo = character.healthInfo as StatusJson;
-      const previewMaxValue = healthInfo.maxValue;
-      const initialHealth = healthInfo.maxValue - previewValue - (character.level - 1) * healthInfo.valuePerLevel;
+      const previewMaxValue = character.max_health;
+      const initialHealth = character.max_health - previewValue - (character.level - 1) * healthInfo.valuePerLevel;
 
       healthInfo.valuePerLevel += value - previewValue;
 
-      healthInfo.maxValue = initialHealth + value + (character.level - 1) * healthInfo.valuePerLevel;
+      character.max_health = initialHealth + value + (character.level - 1) * healthInfo.valuePerLevel;
 
-      healthInfo.currentValue += healthInfo.maxValue - previewMaxValue;
+      character.current_health += character.max_health - previewMaxValue;
 
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {
+          current_health: character.current_health,
+          max_health: character.max_health,
           healthInfo: healthInfo,
         },
       });
@@ -98,18 +100,20 @@ export class CharacterAtributesService {
       });
 
       const effortInfo = character.effortInfo as StatusJson;
-      const previewMaxValue = effortInfo.maxValue;
-      const initialHealth = effortInfo.maxValue - previewValue - (character.level - 1) * effortInfo.valuePerLevel;
+      const previewMaxValue = character.max_effort;
+      const initialHealth = character.max_effort - previewValue - (character.level - 1) * effortInfo.valuePerLevel;
 
       effortInfo.valuePerLevel += value - previewValue;
 
-      effortInfo.maxValue = initialHealth + value + (character.level - 1) * effortInfo.valuePerLevel;
+      character.max_effort = initialHealth + value + (character.level - 1) * effortInfo.valuePerLevel;
 
-      effortInfo.currentValue += effortInfo.maxValue - previewMaxValue;
+      character.current_effort += character.max_effort - previewMaxValue;
 
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {
+          current_effort: character.current_effort,
+          max_effort: character.max_effort,
           healthInfo: effortInfo,
         },
       });
