@@ -261,11 +261,40 @@ model Skill {
 model Ritual {
   id String @id @default(cuid())
   name String 
-  description String
+
+  normalCastDescription String @db.Text
+  discentCastDescription String @db.Text
+  trueCastDescription String @db.Text
+
+  exectutionTime String
+  range Range
+  target String
+  duration String
   element Element
+
   is_custom Boolean
+  damageRitual DamageRitual?
+
+  type RitualType
   character Character[]
   campaign  CampaignRitual[]
+  
+}
+
+model DamageRitual {
+  ritual Ritual @relation(fields: [ritualId], references: [id])
+  ritualId String @id
+  normalCastDamageType DamageType
+  discentCastDamageType DamageType
+  trueCastDamageType DamageType
+
+  normalCastDamage String
+  discentCastDamage String
+  trueCastDamage String
+}
+enum RitualType {
+  EFFECT
+  DAMAGE
 }
 
 model CampaignRitual {
@@ -324,16 +353,6 @@ model CampaignEquipment {
 
   @@unique([campaignId, equipmentId])
 }
-
-// model CustomEquipment {
-//   id String @id @default(cuid())
-//   campaign Campaign @relation(fields: [campaignId], references: [id])
-//   campaignId String @map("campaign_id")
-//   equipment Equipment @relation(fields: [equipmentId], references: [id])
-//   equipmentId Int @map("equipment_id")
-
-//   @@unique([campaignId, equipmentId])
-// }
 
 model Weapon {
   Equipment Equipment @relation(fields: [equipmentId], references: [id])
@@ -454,6 +473,14 @@ enum DamageType {
   IMPACT
   SLASHING
   FIRE
+  CHEMICAL
+  POISON
+  BLOOD
+  FEAR
+  KNOWLEDGE
+  DEATH
+  ENERGY
+
 }
 
 enum FeatType {

@@ -4,11 +4,12 @@ create type Element as enum ('REALITY', 'DEATH', 'FEAR', 'ENERGY', 'BLOOD', 'KNO
 create type Proficiency as enum ('SIMPLE', 'TACTICAL', 'HEAVY', 'LIGHT_ARMOR', 'HEAVY_ARMOR');
 create type ItemType as enum ('WEAPON', 'ARMOR', 'AMMO', 'ACCESSORY', 'EXPLOSIVE', 'OPERATIONAL_EQUIPMENT', 'PARANORMAL_EQUIPMENT', 'CURSED_ITEM', 'DEFAULT');
 create type Range as enum ('MELEE', 'SHORT', 'MEDIUM', 'LONG');
-create type DamageType as enum ('PIERCING', 'BALLISTIC', 'IMPACT', 'SLASHING', 'FIRE');
+create type DamageType as enum ('PHYSICAL', 'FIRE', 'ICE', 'ELECTRIC', 'ACID', 'POISON', 'CHEMICAL', 'BLOOD', 'FEAR', 'KNOWLEDGE', 'DEATH', 'ENERGY');
 create type WeaponCategory as enum ('SIMPLE', 'TACTICAL', 'HEAVY');
 create type WeaponType as enum ('MELEE', 'BOLT', 'BULLET');
 create type HandType as enum ('ONE_HANDED', 'TWO_HANDED', 'LIGHT');
 create type ModificationType as enum ('MELEE_WEAPON', 'BULLET_WEAPON', 'BOLT_WEAPON', 'ARMOR', 'AMMO', 'ACCESSORY');
+create type RitualType as enum ('DAMAGE', 'EFFECT');
 
 create table user (
     id varchar(100) primary key not null default cuid(),
@@ -156,9 +157,35 @@ create table character_feats (
 create table rituals(
     id varchar(100) primary key not null default cuid(),
     name varchar(50) unique,
-    description text,
+    
+    normalCastDescription text,
+    discentCastDescription text,
+    trueCastDescription text,
+
+    exectutionTime varchar(50),
+    range Range,
+    target varchar(50),
+    duration varchar(50),
     element Element,
-    is_custom boolean default false
+
+    is_custom boolean default false,
+    
+    type RitualType
+);
+
+create table damage_ritual (
+    ritual_id varchar(100),
+
+    normalCastDamageType DamageType,
+    discentCastDamageType DamageType,
+    trueCastDamageType DamageType,
+
+    normalCastDamage varchar(15),
+    discentCastDamage varchar(15),
+    trueCastDamage varchar(15),
+
+    foreign key (ritual_id) references rituals(id),
+    primary key (ritual_id)
 );
 
 create table character_rituals(

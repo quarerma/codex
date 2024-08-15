@@ -130,4 +130,24 @@ export class CharacterService {
       throw new Error('Error getting character');
     }
   }
+
+  async deleteCharacter(characterId: string) {
+    try {
+      await this.dataBaseService.character.delete({
+        where: { id: characterId },
+      });
+
+      // delete all character inventory
+      await this.dataBaseService.inventory.delete({
+        where: { characterId },
+      });
+
+      // delete all inventory slots
+      await this.dataBaseService.inventorySlot.deleteMany({
+        where: { inventory: { characterId } },
+      });
+    } catch (error) {
+      throw new Error('Error deleting character');
+    }
+  }
 }
