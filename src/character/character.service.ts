@@ -25,19 +25,23 @@ export class CharacterService {
         alterations: [],
       } as AtributesJson;
 
+      const currentHealth = characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel;
+      const maxHealth = characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel;
       const healthInfo = {
-        currentValue: characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel,
-        maxValue: characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel,
         valuePerLevel: characterClass.hitPointsPerLevel,
         alterations: [],
       } as StatusJson;
 
+      const currentEffort = characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel;
+      const maxEffort = characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel;
+
       const effortInfo = {
-        currentValue: characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel,
-        maxValue: characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel,
         valuePerLevel: characterClass.effortPointsPerLevel,
         alterations: [],
       } as StatusJson;
+
+      const currentSanity = characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel;
+      const maxSanity = characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel;
 
       const sanityInfo = {
         currentValue: characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel,
@@ -52,6 +56,14 @@ export class CharacterService {
         data: {
           name: data.name,
           level: data.level,
+
+          current_effort: currentEffort,
+          max_effort: maxEffort,
+          current_health: currentHealth,
+          max_health: maxHealth,
+          current_sanity: currentSanity,
+          max_sanity: maxSanity,
+
           atributes: atributes,
           healthInfo: healthInfo,
           effortInfo: effortInfo,

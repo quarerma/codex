@@ -82,6 +82,14 @@ model Character {
   subclass Subclass @relation(fields: [subclassId], references: [id])
   subclassId String @map("subclass_id")
 
+  current_health Int
+  current_sanity Int
+  current_effort Int
+
+  max_health Int
+  max_sanity Int
+  max_effort Int
+  
   healthInfo Json @map("health_info")
   effortInfo Json @map("effort_info")
   sanityInfo Json @map("sanity_info")

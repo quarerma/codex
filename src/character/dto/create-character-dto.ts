@@ -51,8 +51,6 @@ export type AlterationObject = {
 };
 
 export type StatusJson = {
-  currentValue: number;
-  maxValue: number;
   valuePerLevel: number;
   alterations: AlterationObject[];
 };
