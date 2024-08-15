@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AtributesJson, StatusJson, updateAtributeDTO } from '../dto/create-character-dto';
 import { DataBaseService } from 'src/database/database.service';
-import { carryInfo } from 'src/types/invetory.types';
 
 @Injectable()
 export class CharacterAtributesService {
@@ -54,21 +53,10 @@ export class CharacterAtributesService {
   async onStreghthUpdate(characterId: string, value: number) {
     try {
       const carry_weight = 5 * value;
-      const inventory = await this.dataBaseService.inventory.findUnique({
-        where: { characterId: characterId },
-        select: {
-          carryInfo: true,
-        },
-      });
-
-      const carryInfo = inventory.carryInfo as carryInfo;
-
-      carryInfo.maxValue = carry_weight;
-
-      await this.dataBaseService.inventory.update({
+      return await this.dataBaseService.inventory.update({
         where: { characterId: characterId },
         data: {
-          carryInfo: carryInfo,
+          maxValue: carry_weight,
         },
       });
     } catch (error) {

@@ -100,8 +100,8 @@ model Character {
 
   proficiencies Proficiency[]
 
-  origin Origin @relation(fields: [originId], references: [id])
-  originId String @map("origin_id") @unique
+  origin Origin? @relation(fields: [originId], references: [id])
+  originId String @map("origin_id")
 }
 
 
@@ -111,12 +111,29 @@ model Inventory {
   character Character @relation(fields: [characterId], references: [id])
   characterId String @id @map("character_id")
 
-  carryInfo Json @map("carry_info")
-  credit Credit @default(LOW)
+  currentValue Int
+  maxValue Int
+  alterations Json[]
 
-  equipment Json[]
+  slots InventorySlot[]
+  credit Credit @default(LOW)
 }
 
+model InventorySlot {
+  id String @id @default(cuid())
+  inventory Inventory @relation(fields: [inventoryId], references: [characterId])
+  inventoryId String @map("inventory_id")
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int @map("equipment_id")
+
+  uses Int @default(0)
+  category Int
+  local_name String
+
+  alterations Json[]
+
+}
 
 ///////////////////////////////////////////// Tabela de Classes /////////////////////////////////////////////
 model Class {
@@ -165,7 +182,7 @@ model Feat {
   generalFeats GeneralFeats[]
 
   character Character[]
-  origin Origin?
+  origin Origin[]
   element Element
   
 }
@@ -209,16 +226,16 @@ model GeneralFeats {
 
 model Origin {
   id String @id @default(cuid())
-  name String @unique
+  name String 
   description String
   is_custom Boolean
-  feats Feat @relation(fields: [featId], references: [id])
-  featId String @unique
+  feats Feat? @relation(fields: [featId], references: [id])
+  featId String  @map("feat_id")
 
-  character Character?
+  character Character[]
 }
 model Skill {
-  name String @unique @id
+  name String @id
   atribute Atribute
   description String
   only_trained Boolean
@@ -235,7 +252,7 @@ model Skill {
 
 model Ritual {
   id String @id @default(cuid())
-  name String @unique
+  name String 
   description String
   element Element
   is_custom Boolean
@@ -255,7 +272,7 @@ model CampaignRitual {
 ///////////////////////////////////////////// Tabela de Equipamentos e Modificações /////////////////////////////////////////////
 model Modification {
   id String @id @default(cuid())
-  name String @unique
+  name String 
   type ModificationType[]
   element Element
   characterUpgrades Json[]
@@ -286,6 +303,7 @@ model Equipment {
   Armor Armor?
   Accessory Accessory?
   CursedItem CursedItem?
+  slots InventorySlot[]
   CampaignEquipment CampaignEquipment[]
 }
 

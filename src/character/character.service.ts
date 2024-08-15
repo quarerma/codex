@@ -99,7 +99,9 @@ export class CharacterService {
           character: {
             connect: { id: createdCharacter.id },
           },
-          carryInfo: carryInfo,
+          maxValue: carryInfo.maxValue,
+          currentValue: carryInfo.currentValue,
+          alterations: carryInfo.alterations,
         },
       });
 
