@@ -331,11 +331,15 @@ model CampaignModifications {
 model Equipment {
   id Int @id @default(autoincrement())
   name String @unique
+
+  num_of_uses Int
   description String
   weight Int
   category Int
+  
   type ItemType
   is_custom Boolean
+  
   Weapon Weapon?
   Armor Armor?
   Accessory Accessory?

@@ -108,6 +108,7 @@ export class EquipmentService {
         category: data.category,
         type: data.type,
         is_custom: data.is_custom,
+        num_of_uses: data.num_of_uses,
         Accessory: {
           create: {
             skill_check: data.skill_check,
@@ -127,6 +128,7 @@ export class EquipmentService {
         category: data.category,
         type: data.type,
         is_custom: data.is_custom,
+        num_of_uses: data.num_of_uses,
         CursedItem: {
           create: {
             element: data.element,
@@ -145,6 +147,7 @@ export class EquipmentService {
         category: data.category,
         type: data.type,
         is_custom: data.is_custom,
+        num_of_uses: data.num_of_uses,
         Weapon: {
           create: {
             damage: data.damage,
@@ -170,6 +173,7 @@ export class EquipmentService {
         category: data.category,
         type: data.type,
         is_custom: data.is_custom,
+        num_of_uses: data.num_of_uses,
         Armor: {
           create: {
             defense: data.defense,
@@ -189,6 +193,7 @@ export class EquipmentService {
         category: data.category,
         type: data.type,
         is_custom: data.is_custom,
+        num_of_uses: data.num_of_uses,
       },
     });
   }

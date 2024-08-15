@@ -8,6 +8,7 @@ export class CreateItemDto {
   category: number;
   type: ItemType;
   is_custom: boolean;
+  num_of_uses: number;
   // Weapon variables
   damage?: string[];
   critical_range?: number;

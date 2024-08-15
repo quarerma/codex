@@ -8,9 +8,10 @@ import { CampaingsModule } from './campaings/campaings.module';
 import { DataBaseService } from './database/database.service';
 import { EquipmentModule } from './equipment/equipment.module';
 import { SkillModule } from './skill/skill.module';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
-  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule],
+  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule],
   controllers: [],
   providers: [DataBaseService],
 })
