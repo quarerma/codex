@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
+import { WeapondAddService } from './aux-services/weapond-add-service';
 
 @Injectable()
 export class InventoryService {
-  constructor(private readonly dataBaseService: DataBaseService) {}
+  constructor(
+    private readonly dataBaseService: DataBaseService,
+    private readonly weaponService: WeapondAddService,
+  ) {}
 
   async addItemToInventory(item_id: number, characterId: string) {
     try {
@@ -17,12 +21,7 @@ export class InventoryService {
         throw new Error('Item not found');
       }
 
-      // TODO: update character stats based on item
-
-      // On weapon add -- add attack
-      // On acessory add -- modify skills
-
-      return await this.dataBaseService.inventory.update({
+      await this.dataBaseService.inventory.update({
         where: {
           characterId: characterId,
         },
@@ -30,20 +29,36 @@ export class InventoryService {
           currentValue: {
             increment: item.weight,
           },
-          slots: {
-            create: {
-              equipment: {
-                connect: {
-                  id: item.id,
-                },
-              },
-              uses: item.num_of_uses,
-              local_name: item.name,
-              category: item.category,
-            },
-          },
         },
       });
+
+      const slot = await this.dataBaseService.inventorySlot.create({
+        data: {
+          equipment: {
+            connect: {
+              id: item_id,
+            },
+          },
+          inventory: {
+            connect: {
+              characterId: characterId,
+            },
+          },
+          category: item.category,
+          local_name: item.name,
+          alterations: [],
+          uses: item.num_of_uses,
+        },
+      });
+      // TODO: update character stats based on item
+
+      // On weapon add -- add attack
+      if (item.type === 'WEAPON') {
+        await this.weaponService.addWeapon(item_id, characterId, item, slot.id);
+      }
+      // On acessory add -- modify skills
+
+      return slot;
     } catch (e) {
       console.error(e);
     }
@@ -59,6 +74,11 @@ export class InventoryService {
 
       if (!item) {
         throw new Error('Item not found');
+      }
+
+      // On weapon remove -- remove attack
+      if (item.type === 'WEAPON') {
+        await this.weaponService.removeWeapon(characterId, slot_id);
       }
 
       // TODO: remove item influence on character stats
