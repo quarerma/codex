@@ -4,7 +4,7 @@ export type Attack = {
   name: string;
   local_id: string;
   skill: string;
-  roll_bonus: number;
+  roll_bonus?: number;
   damaga_dies: string[];
   critical_margin: number;
   critical_multiplier: number;
