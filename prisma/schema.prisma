@@ -59,6 +59,8 @@ model Campaign {
 
   customModifications CampaignModifications[]
 
+  customOrigins CampaignOrigin[]
+
 }
 
 
@@ -104,7 +106,7 @@ model Character {
 
   feats Feat[]
 
-  rituals Ritual[]
+  rituals CharacterRitual[]
 
   proficiencies Proficiency[]
 
@@ -241,6 +243,17 @@ model Origin {
   featId String  @map("feat_id")
 
   character Character[]
+  campaign CampaignOrigin[]
+}
+
+model CampaignOrigin {
+  id String @id @default(cuid())
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  origin Origin @relation(fields: [originId], references: [id])
+  originId String @map("origin_id")
+
+  @@unique([campaignId, originId])
 }
 model Skill {
   name String @id
@@ -276,9 +289,18 @@ model Ritual {
   damageRitual DamageRitual?
 
   type RitualType
-  character Character[]
+  character CharacterRitual[]
   campaign  CampaignRitual[]
   
+}
+
+model CharacterRitual {
+  character Character @relation(fields: [characterId], references: [id])
+  characterId String @map("character_id")
+  ritual Ritual @relation(fields: [ritualId], references: [id])
+  ritualId String @map("ritual_id")
+
+  @@unique([characterId, ritualId])
 }
 
 model DamageRitual {
