@@ -17,10 +17,8 @@ export class UserService {
 
       await this.checkEmailAlreadyInUse(userData.email);
 
-      console.log;
       console.log('username', userData.username);
       await this.checkExistingUser(userData.username);
-      console.log('passou2');
 
       return await this.dataBaseService.user.create({
         data: { ...userData, password: hashPassword },
@@ -110,6 +108,7 @@ export class UserService {
   }
 
   async leaveCampaign(userId: string, campaignId: string) {
+    // TODO delete character
     try {
       const participation = await this.dataBaseService.playerOnCampaign.findUnique({
         where: {

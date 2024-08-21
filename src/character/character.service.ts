@@ -90,8 +90,13 @@ export class CharacterService {
           },
 
           rituals: {
-            connect: data.ritualsId.map((id) => ({ id })),
+            create: data.ritualsId.map((ritualId) => ({
+              ritual: {
+                connect: { id: ritualId },
+              },
+            })),
           },
+
           origin: {
             connect: { id: data.originId },
           },

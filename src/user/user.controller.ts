@@ -1,17 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpException,
-  HttpStatus,
-  Get,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpException, HttpStatus, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import {
-  EmailAlreadyInUseExcption,
-  UserNameAlreadyInUseException,
-} from 'src/exceptions/UserExceptions';
+import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/exceptions/UserExceptions';
 
 @Controller('user')
 export class UserController {
