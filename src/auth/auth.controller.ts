@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
@@ -6,19 +6,19 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('/auth-login')
+  @Post('/auth-login')
   async login(@Body() body: LoginDto) {
     try {
       const payload = await this.authService.login(body);
 
-      if (payload === undefined) {
-        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      if (typeof payload === 'object' && payload.error) {
+        throw new HttpException(payload.error, HttpStatus.UNAUTHORIZED);
       }
 
       return payload;
     } catch (error) {
       console.log(error);
-      return { error: 'Error' };
+      throw error;
     }
   }
 }
