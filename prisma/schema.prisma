@@ -14,9 +14,15 @@ model User {
   username String @unique @db.VarChar(50)
   password String
   email String @unique
+  role Role @default(USER)
   characters Character[]
   campaigns_dm Campaign[] @relation("CampaignDm")
   campaigns_player PlayerOnCampaign[] @relation("PlayerCampaigns")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 ///////////////////////////////////////////// Tabela de Jogadores nas Campanhas /////////////////////////////////////////////

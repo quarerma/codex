@@ -66,18 +66,37 @@ export class UserService {
     try {
       const user = await this.dataBaseService.user.findUnique({
         where: { id },
+        select: {
+          username: true,
+          id: true,
+          role: true,
+        },
       });
 
+      console.log('user', user);
       if (!user) {
         throw new Error('User not found');
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, email, ...userWithoutSensitiveInfo } = user;
 
-      return userWithoutSensitiveInfo;
+      return user;
     } catch (error) {
       console.log('erro ao buscar usuario por id');
+    }
+  }
+
+  async getAllUsers() {
+    try {
+      return await this.dataBaseService.user.findMany({
+        select: {
+          username: true,
+          id: true,
+          role: true,
+        },
+      });
+    } catch (error) {
+      console.log('erro ao buscar todos os usuarios');
     }
   }
 

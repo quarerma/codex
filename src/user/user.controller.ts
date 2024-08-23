@@ -53,4 +53,20 @@ export class UserController {
       );
     }
   }
+
+  @Get('all')
+  @UseGuards(JwtAuthGuards)
+  async getAllUsers() {
+    try {
+      return await this.userService.getAllUsers();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 'userError',
+          message: 'Usuários não encontrados',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 }
