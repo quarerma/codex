@@ -64,9 +64,18 @@ export class UserService {
 
   async getUserById(id: string) {
     try {
-      return await this.dataBaseService.user.findUnique({
+      const user = await this.dataBaseService.user.findUnique({
         where: { id },
       });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, email, ...userWithoutSensitiveInfo } = user;
+
+      return userWithoutSensitiveInfo;
     } catch (error) {
       console.log('erro ao buscar usuario por id');
     }

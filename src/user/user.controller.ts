@@ -1,7 +1,10 @@
-import { Controller, Post, Body, HttpException, HttpStatus, Get } from '@nestjs/common';
+import { Controller, Post, Body, HttpException, HttpStatus, Get, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/exceptions/UserExceptions';
+import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { Request } from 'express';
+import { UserRequest } from './dto/user-request';
 
 @Controller('user')
 export class UserController {
@@ -33,8 +36,21 @@ export class UserController {
     }
   }
 
-  @Get(':id')
-  async getUserById(@Body() id: string) {
-    return await this.userService.getUserById(id);
+  @Get()
+  @UseGuards(JwtAuthGuards)
+  async getUserById(@Req() req: Request) {
+    try {
+      console.log('fez');
+      const user = req.user as UserRequest;
+      return await this.userService.getUserById(user.id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 'userError',
+          message: 'Usuário não encontrado',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
