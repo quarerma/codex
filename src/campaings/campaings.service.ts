@@ -7,18 +7,32 @@ import * as bcrypt from 'bcrypt';
 export class CampaingsService {
   constructor(private readonly dataBaseService: DataBaseService) {}
 
-  async createCampaign(data: CreateCampaignDTO) {
+  async createCampaign(data: CreateCampaignDTO, ownerId: string) {
     try {
+      // console.log('data', data, ownerId);
       const { password, ...campaignWithoutPassword } = data;
       const hashPassword = await this.hashPassword(password);
 
+      console.log(data, ownerId);
       return await this.dataBaseService.campaign.create({
         data: {
           name: campaignWithoutPassword.name,
           description: campaignWithoutPassword.description,
           password: hashPassword,
           owner: {
-            connect: { id: data.ownerId },
+            connect: { id: ownerId },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          createdAt: true,
+          owner: {
+            select: {
+              id: true,
+              username: true,
+            },
           },
         },
       });

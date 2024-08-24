@@ -119,17 +119,52 @@ export class UserService {
 
   async getUserCampaigns(userId: string) {
     try {
-      return await this.dataBaseService.user.findUnique({
+      const campaigns = await this.dataBaseService.user.findUnique({
         where: { id: userId },
         select: {
-          campaigns_dm: true,
+          campaigns_dm: {
+            select: {
+              id: true,
+              createdAt: true,
+              name: true,
+              description: true,
+              owner: {
+                select: {
+                  id: true,
+                  username: true,
+                },
+              },
+            },
+          },
           campaigns_player: {
             select: {
-              campaign: true,
+              campaign: {
+                select: {
+                  id: true,
+                  createdAt: true,
+                  name: true,
+                  description: true,
+                  owner: {
+                    select: {
+                      id: true,
+                      username: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
       });
+
+      // join campaigns
+      const playerCampaigns = campaigns.campaigns_player.map((campaign) => campaign.campaign);
+      const dmCampaigns = campaigns.campaigns_dm;
+
+      // concat campaigns
+      const allCampaigns = [...playerCampaigns, ...dmCampaigns];
+
+      return allCampaigns;
     } catch (error) {
       console.log('erro ao buscar campanhas do usuario');
     }
