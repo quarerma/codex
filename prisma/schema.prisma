@@ -154,7 +154,8 @@ model InventorySlot {
 ///////////////////////////////////////////// Tabela de Classes /////////////////////////////////////////////
 model Class {
   id String @id @default(cuid())
-  name String @db.VarChar(50)
+  name String @db.VarChar(50) 
+  description String @db.Text
 
   hitPointsPerLevel Int
   SanityPointsPerLevel Int
@@ -175,6 +176,8 @@ model Class {
 model Subclass {
   id String @id @default(cuid())
   name String @db.VarChar(50)
+  description String @db.Text 
+
   classId String
   class Class @relation(fields: [classId], references: [id])
   subclassFeats SubclassFeats[]

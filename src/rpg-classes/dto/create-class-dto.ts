@@ -4,6 +4,8 @@ export class CreateClassDTO {
   @MaxLength(50)
   name: string;
 
+  description: string;
+
   hitPointsPerLevel: number;
   SanityPointsPerLevel: number;
   effortPointsPerLevel: number;
@@ -11,4 +13,6 @@ export class CreateClassDTO {
   initialHealth: number;
   initialSanity: number;
   initialEffort: number;
+  initialFeats: string[];
+  proficiencies: string[];
 }

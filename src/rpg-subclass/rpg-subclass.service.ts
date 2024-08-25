@@ -11,7 +11,7 @@ export class SubClassService {
       return await this.dataBaseService.subclass.create({
         data: {
           name: data.name,
-
+          description: data.description,
           class: {
             connect: { id: data.classId },
           },
