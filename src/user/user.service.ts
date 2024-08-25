@@ -110,6 +110,7 @@ export class UserService {
           username: true,
           id: true,
           role: true,
+          email: true,
         },
       });
     } catch (error) {
