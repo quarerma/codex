@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/exceptions/UserExceptions';
 import { DataBaseService } from 'src/database/database.service';
+import { UserRequest } from './dto/user-request';
 
 @Injectable()
 export class UserService {
@@ -86,8 +87,24 @@ export class UserService {
     }
   }
 
-  async getAllUsers() {
+  async getAllUsers(user: UserRequest) {
     try {
+      const userRole = await this.dataBaseService.user.findUnique({
+        where: { id: user.id },
+        select: {
+          role: true,
+        },
+      });
+
+      if (userRole.role !== 'ADMIN') {
+        throw new HttpException(
+          {
+            status: 'userError',
+            message: 'Usuário não autorizado',
+          },
+          401,
+        );
+      }
       return await this.dataBaseService.user.findMany({
         select: {
           username: true,

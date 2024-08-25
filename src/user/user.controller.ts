@@ -56,9 +56,19 @@ export class UserController {
 
   @Get('all')
   @UseGuards(JwtAuthGuards)
-  async getAllUsers() {
+  async getAllUsers(@Req() req: Request) {
     try {
-      return await this.userService.getAllUsers();
+      const user = req.user as UserRequest;
+      if (user.role !== 'ADMIN') {
+        throw new HttpException(
+          {
+            status: 'userError',
+            message: 'Usuário não autorizado',
+          },
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      return await this.userService.getAllUsers(user);
     } catch (error) {
       throw new HttpException(
         {
