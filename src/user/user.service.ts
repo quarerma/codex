@@ -23,6 +23,11 @@ export class UserService {
 
       return await this.dataBaseService.user.create({
         data: { ...userData, password: hashPassword },
+        select: {
+          username: true,
+          id: true,
+          role: true,
+        },
       });
     } catch (error) {
       if (error instanceof UserNameAlreadyInUseException) {
