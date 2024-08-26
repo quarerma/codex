@@ -86,7 +86,11 @@ export class CharacterService {
           },
 
           feats: {
-            connect: data.featsId.map((id) => ({ id })),
+            create: data.featsId.map((featId) => ({
+              feat: {
+                connect: { id: featId },
+              },
+            })),
           },
 
           rituals: {
