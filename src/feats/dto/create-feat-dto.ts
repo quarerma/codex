@@ -7,4 +7,6 @@ export class CreateFeatDto {
   prerequisites?: string;
   characterUpgrade?: CharacterUpgrade[];
   element?: Element;
+  afinity?: string;
+  afinityUpgrades?: CharacterUpgrade[];
 }

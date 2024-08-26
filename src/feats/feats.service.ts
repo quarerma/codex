@@ -18,6 +18,8 @@ export class FeatsService {
               characterUpgrades: data.characterUpgrade,
               type: 'GENERAL',
               element: data.element,
+              afinity: data.afinity,
+              afinityUpgrades: data.afinityUpgrades,
             },
           },
         },

@@ -21,6 +21,8 @@ export class CustomFeatService {
               characterUpgrades: data.characterUpgrade,
               type: 'CUSTOM',
               element: data.element,
+              afinity: data.afinity,
+              afinityUpgrades: data.afinityUpgrades,
             },
           },
         },

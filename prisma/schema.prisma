@@ -194,6 +194,10 @@ model Feat {
   characterUpgrades Json[]
   type        FeatType
 
+  element Element
+  afinity String? @db.Text
+  afinityUpgrades Json[]
+
   classFeats ClassFeats[]
   subclassFeats SubclassFeats[]
   campaignFeats CampaignFeats[]
@@ -202,9 +206,9 @@ model Feat {
 
   character Character[]
   origin Origin[]
-  element Element
   
 }
+
 
 model ClassFeats {
   feat Feat @relation(fields: [featId], references: [id])
@@ -229,6 +233,7 @@ model CampaignFeats {
   featId String
   campaign Campaign @relation(fields: [campaignId], references: [id])
   campaignId String
+  
 
   @@unique([featId, campaignId])
 }
@@ -278,7 +283,7 @@ model Skill {
 }
 
 
-///////////////////////////////////////////// Tabela de Feats /////////////////////////////////////////////
+///////////////////////////////////////////// Tabela de Rituais /////////////////////////////////////////////
 
 model Ritual {
   id String @id @default(cuid())

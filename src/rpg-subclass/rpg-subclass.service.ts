@@ -8,6 +8,7 @@ export class SubClassService {
 
   async createSubClass(data: CreateSubClassDto) {
     try {
+      console.log(data);
       return await this.dataBaseService.subclass.create({
         data: {
           name: data.name,
@@ -49,6 +50,21 @@ export class SubClassService {
               feat: true,
             },
           },
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getAllSubclasses() {
+    try {
+      return await this.dataBaseService.subclass.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          class: true,
         },
       });
     } catch (error) {

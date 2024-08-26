@@ -63,4 +63,12 @@ export class ClassesService {
       throw new Error(error);
     }
   }
+
+  async getClasses() {
+    try {
+      return await this.dataBaseService.class.findMany();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
