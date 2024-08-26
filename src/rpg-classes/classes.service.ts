@@ -70,7 +70,6 @@ export class ClassesService {
                   description: true,
                   prerequisites: true,
                   element: true,
-                  afinity: true,
                 },
               },
             },

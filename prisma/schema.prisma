@@ -204,8 +204,7 @@ model Feat {
   type        FeatType
 
   element Element
-  afinity String? @db.Text
-  afinityUpgrades Json[]
+
 
   classFeats ClassFeats[]
   subclassFeats SubclassFeats[]
@@ -242,6 +241,8 @@ model CampaignFeats {
   featId String
   campaign Campaign @relation(fields: [campaignId], references: [id])
   campaignId String
+    afinity String? @db.Text
+  afinityUpgrades Json[]
   
 
   @@unique([featId, campaignId])
@@ -251,6 +252,8 @@ model GeneralFeats {
   id String @id @default(cuid())
   feat Feat @relation(fields: [featId], references: [id])
   featId String
+    afinity String? @db.Text
+  afinityUpgrades Json[]
 
   @@unique([featId])
 }

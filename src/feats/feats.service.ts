@@ -10,6 +10,8 @@ export class FeatsService {
     try {
       return await this.dataBaseService.generalFeats.create({
         data: {
+          afinity: data.afinity,
+          afinityUpgrades: data.afinityUpgrades,
           feat: {
             create: {
               name: data.name,
@@ -18,8 +20,6 @@ export class FeatsService {
               characterUpgrades: data.characterUpgrade,
               type: 'GENERAL',
               element: data.element,
-              afinity: data.afinity,
-              afinityUpgrades: data.afinityUpgrades,
             },
           },
         },
@@ -88,7 +88,6 @@ export class FeatsService {
               description: true,
               prerequisites: true,
               element: true,
-              afinity: true,
             },
           },
         },

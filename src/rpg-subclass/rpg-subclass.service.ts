@@ -54,7 +54,6 @@ export class SubClassService {
                   description: true,
                   prerequisites: true,
                   element: true,
-                  afinity: true,
                 },
               },
             },
