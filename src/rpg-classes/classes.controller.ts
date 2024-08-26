@@ -27,10 +27,10 @@ export class ClassesController {
     }
   }
 
-  @Patch('assign-feat/:classId/:featId')
+  @Patch('assign-starter-feat/:classId/:featId')
   async assignClassFeat(@Param('classId') classId: string, @Param('featId') featId: string) {
     try {
-      return await this.classesService.assignClassFeat(classId, featId);
+      return await this.classesService.assignStarterClassFeat(classId, featId);
     } catch (error) {
       throw new Error(error);
     }

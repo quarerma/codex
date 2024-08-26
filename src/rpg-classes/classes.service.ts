@@ -30,15 +30,24 @@ export class ClassesService {
     }
   }
 
-  async assignClassFeat(classId: string, featId: string) {
+  async assignStarterClassFeat(classId: string, featId: string) {
     try {
-      return await this.dataBaseService.classFeats.create({
+      await this.dataBaseService.classFeats.create({
         data: {
           class: {
             connect: { id: classId },
           },
           feat: {
             connect: { id: featId },
+          },
+        },
+      });
+
+      await this.dataBaseService.class.update({
+        where: { id: classId },
+        data: {
+          initialFeats: {
+            push: featId,
           },
         },
       });
