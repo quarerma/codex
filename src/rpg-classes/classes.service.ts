@@ -63,7 +63,16 @@ export class ClassesService {
         select: {
           classFeats: {
             select: {
-              feat: true,
+              feat: {
+                select: {
+                  id: true,
+                  name: true,
+                  description: true,
+                  prerequisites: true,
+                  element: true,
+                  afinity: true,
+                },
+              },
             },
           },
         },

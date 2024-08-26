@@ -39,7 +39,16 @@ export class CustomFeatService {
         select: {
           customFeat: {
             select: {
-              feat: true,
+              feat: {
+                select: {
+                  id: true,
+                  name: true,
+                  description: true,
+                  prerequisites: true,
+                  element: true,
+                  afinity: true,
+                },
+              },
             },
           },
         },

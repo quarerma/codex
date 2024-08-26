@@ -110,7 +110,7 @@ model Character {
 
   Inventory Inventory?
 
-  feats Feat[]
+  feats CharacterFeat[]
 
   rituals CharacterRitual[]
 
@@ -118,6 +118,15 @@ model Character {
 
   origin Origin? @relation(fields: [originId], references: [id])
   originId String @map("origin_id")
+}
+
+model CharacterFeat {
+  character Character @relation(fields: [characterId], references: [id])
+  characterId String @map("character_id")
+  feat Feat @relation(fields: [featId], references: [id])
+  featId String @map("feat_id")
+
+  @@unique([characterId, featId])
 }
 
 
@@ -204,7 +213,7 @@ model Feat {
 
   generalFeats GeneralFeats[]
 
-  character Character[]
+  character CharacterFeat[]
   origin Origin[]
   
 }
