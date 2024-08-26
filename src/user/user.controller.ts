@@ -40,7 +40,6 @@ export class UserController {
   @UseGuards(JwtAuthGuards)
   async getUserById(@Req() req: Request) {
     try {
-      console.log('fez');
       const user = req.user as UserRequest;
       return await this.userService.getUserById(user.id);
     } catch (error) {

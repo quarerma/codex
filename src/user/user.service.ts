@@ -79,7 +79,6 @@ export class UserService {
         },
       });
 
-      console.log('user', user);
       if (!user) {
         throw new Error('User not found');
       }
