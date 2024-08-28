@@ -12,6 +12,11 @@ export type SkillJson = {
 
 export type SkillAlterationObject = {
   value: number;
+  modificationName?: string;
   modification?: string;
+  featName?: string;
   feat?: string;
+  itemName?: string;
+  item?: string;
+  otherName?: string;
 };

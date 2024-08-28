@@ -44,6 +44,8 @@ export type AtributesJson = {
 };
 
 export type AlterationObject = {
+  item?: string;
+  itemName: string;
   modificartionName?: string;
   modification?: string;
   featName?: string;

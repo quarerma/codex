@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
 import { FeatsService } from './feats.service';
 import { CreateFeatDto } from './dto/create-feat-dto';
 
@@ -8,7 +8,11 @@ export class FeatsController {
 
   @Post('general-feat')
   async createGeneralFeat(@Body() data: CreateFeatDto) {
-    return await this.featsService.createGeneralFeat(data);
+    try {
+      return await this.featsService.createGeneralFeat(data);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post('class-feat/:classId')
