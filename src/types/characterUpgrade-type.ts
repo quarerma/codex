@@ -1,4 +1,5 @@
 export type CharacterUpgrade = {
-  upgradeTarget: string;
+  type: string;
+  upgradeTarget?: string | number;
   upgradeValue: number;
 };
