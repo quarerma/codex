@@ -22,6 +22,9 @@ export class SkillService {
         where: {
           is_custom: false,
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } catch (error) {
       throw new Error('Error getting non custom skills');
