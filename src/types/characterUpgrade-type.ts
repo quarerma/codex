@@ -1,5 +1,7 @@
+import { CharacterUpgradeType } from 'src/character/dto/characterUpgrade';
+
 export type CharacterUpgrade = {
-  type: string;
+  type: CharacterUpgradeType;
   upgradeTarget?: string | number;
   upgradeValue: number;
 };

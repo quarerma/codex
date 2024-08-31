@@ -235,6 +235,7 @@ model SubclassFeats {
   featId String
   subclass Subclass @relation(fields: [subclassId], references: [id])
   subclassId String
+  levelRequired Int
 
   @@unique([featId, subclassId])
 }
@@ -305,8 +306,14 @@ model Ritual {
   name String 
 
   normalCastDescription String @db.Text
+
   discentCastDescription String @db.Text
+  discentCost Int
+
   trueCastDescription String @db.Text
+  trueCost Int
+
+  ritualLevel Int
 
   exectutionTime String
   range Range

@@ -4,7 +4,10 @@ export type CreateRitualDto = {
   name: string;
   normalCastDescription: string;
   discentCastDescription: string;
+  discentCost: number;
   trueCastDescription: string;
+  trueCost: number;
+  ritualLevel: number;
   exectutionTime: string;
   range: Range;
   target: string;

@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { AtributesJson, CreateCharacterDTO, StatusJson } from './dto/create-character-dto';
 import { CharacterSkillsService } from './aux_services/character.skills.service';
+import { CharacterClassService } from './aux_services/character.class.service';
 
 @Injectable()
 export class CharacterService {
   constructor(
     private readonly dataBaseService: DataBaseService,
     private readonly characterSkillsService: CharacterSkillsService,
+    private readonly characterClassService: CharacterClassService,
   ) {}
 
   async createCharacter(data: CreateCharacterDTO) {
@@ -85,26 +87,11 @@ export class CharacterService {
             connect: { id: data.subClassId },
           },
 
-          feats: {
-            create: data.featsId.map((featId) => ({
-              feat: {
-                connect: { id: featId },
-              },
-            })),
-          },
-
-          rituals: {
-            create: data.ritualsId.map((ritualId) => ({
-              ritual: {
-                connect: { id: ritualId },
-              },
-            })),
-          },
-
-          origin: {
-            connect: { id: data.originId },
-          },
           skills,
+        },
+        include: {
+          class: true,
+          subclass: true,
         },
       });
 
@@ -126,8 +113,62 @@ export class CharacterService {
         },
       });
 
+      // TODO: assign rituals
+      await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsId);
+
+      // TODO: assign items
+
+      // await this.assignItemsOnCreate(createdCharacter.id, data.itemsId);
+
+      // TODO: assign origin on create
+
+      // TODO: assign class, subclass and feats on create
+      await this.characterClassService.assignInitialClassAtributes(createdCharacter.class, createdCharacter);
+      await this.characterClassService.assignInitialSubClassFeats(createdCharacter.subclass, createdCharacter);
+
       return createdCharacter;
     } catch (error) {}
+  }
+
+  async assignRitualsOnCreate(characterId: string, ritualsId: string[]) {
+    try {
+      const rituals = await this.dataBaseService.ritual.findMany({
+        where: { id: { in: ritualsId } },
+      });
+
+      for (const ritual of rituals) {
+        let ritual_cost;
+
+        switch (ritual.ritualLevel) {
+          case 1:
+            ritual_cost = 1;
+            break;
+          case 2:
+            ritual_cost = 3;
+            break;
+          case 3:
+            ritual_cost = 6;
+            break;
+          case 4:
+            ritual_cost = 9;
+            break;
+        }
+
+        await this.dataBaseService.characterRitual.create({
+          data: {
+            character: {
+              connect: { id: characterId },
+            },
+            ritual: {
+              connect: { id: ritual.id },
+            },
+            ritual_cost,
+          },
+        });
+      }
+    } catch (error) {
+      throw new Error('Error assigning rituals');
+    }
   }
 
   async getCharacter(characterId: string) {

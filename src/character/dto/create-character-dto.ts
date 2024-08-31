@@ -1,5 +1,4 @@
 import { Atribute } from '@prisma/client';
-import { JsonObject } from '@prisma/client/runtime/library';
 import { Max, MaxLength, Min } from 'class-validator';
 
 export class CreateCharacterDTO {
@@ -27,7 +26,6 @@ export class CreateCharacterDTO {
   intelligence: number;
   presence: number;
 
-  itens: JsonObject;
   ritualsId: string[];
 
   featsId: string[];
