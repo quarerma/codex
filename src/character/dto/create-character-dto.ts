@@ -27,6 +27,7 @@ export class CreateCharacterDTO {
   presence: number;
 
   ritualsId: string[];
+  itemsId: number[];
 
   featsId: string[];
   originId: string;

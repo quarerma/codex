@@ -8,9 +8,10 @@ import { CharacterAttacksService } from './aux_services/character.attacks.servic
 import { CharacterUpgradesService } from './aux_services/character.upgrades';
 import { CharacterClassService } from './aux_services/character.class.service';
 import { CharacterFeatsService } from './aux_services/character.feats';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Module({
   controllers: [CharacterController],
-  providers: [CharacterService, DataBaseService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService],
+  providers: [CharacterService, DataBaseService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService, InventoryService],
 })
 export class CharacterModule {}

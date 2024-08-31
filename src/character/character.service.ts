@@ -3,6 +3,7 @@ import { DataBaseService } from 'src/database/database.service';
 import { AtributesJson, CreateCharacterDTO, StatusJson } from './dto/create-character-dto';
 import { CharacterSkillsService } from './aux_services/character.skills.service';
 import { CharacterClassService } from './aux_services/character.class.service';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class CharacterService {
@@ -10,6 +11,7 @@ export class CharacterService {
     private readonly dataBaseService: DataBaseService,
     private readonly characterSkillsService: CharacterSkillsService,
     private readonly characterClassService: CharacterClassService,
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async createCharacter(data: CreateCharacterDTO) {
@@ -117,8 +119,9 @@ export class CharacterService {
       await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsId);
 
       // TODO: assign items
-
-      // await this.assignItemsOnCreate(createdCharacter.id, data.itemsId);
+      for (const item_id of data.itemsId) {
+        await this.inventoryService.addItemToInventory(item_id, createdCharacter.id);
+      }
 
       // TODO: assign origin on create
 
