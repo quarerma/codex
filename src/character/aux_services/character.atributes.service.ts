@@ -121,4 +121,22 @@ export class CharacterAtributesService {
       throw error;
     }
   }
+
+  async onDexterityUpdate(characterId: string, value: number) {
+    try {
+      // TODO: Implement dexterity update
+      console.log(characterId, value);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async onIntelligenceUpdate(characterId: string, value: number) {
+    try {
+      // TODO: Implement intelligence update
+      console.log(characterId, value);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

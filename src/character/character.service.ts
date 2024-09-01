@@ -4,6 +4,7 @@ import { AtributesJson, CreateCharacterDTO, StatusJson } from './dto/create-char
 import { CharacterSkillsService } from './aux_services/character.skills.service';
 import { CharacterClassService } from './aux_services/character.class.service';
 import { InventoryService } from 'src/inventory/inventory.service';
+import { CharacterFeatsService } from './aux_services/character.feats';
 
 @Injectable()
 export class CharacterService {
@@ -12,6 +13,7 @@ export class CharacterService {
     private readonly characterSkillsService: CharacterSkillsService,
     private readonly characterClassService: CharacterClassService,
     private readonly inventoryService: InventoryService,
+    private readonly characterFeatsService: CharacterFeatsService,
   ) {}
 
   async createCharacter(data: CreateCharacterDTO) {
@@ -94,6 +96,7 @@ export class CharacterService {
         include: {
           class: true,
           subclass: true,
+          origin: true,
         },
       });
 
@@ -124,10 +127,18 @@ export class CharacterService {
       }
 
       // TODO: assign origin on create
+      for (const skill of createdCharacter.origin.skills) {
+        await this.characterSkillsService.editCharacterSkillTraining(createdCharacter.id, skill, 'trained');
+      }
+      await this.characterFeatsService.assignFeat(createdCharacter.origin.featId, createdCharacter.id);
 
       // TODO: assign class, subclass and feats on create
       await this.characterClassService.assignInitialClassAtributes(createdCharacter.class, createdCharacter);
       await this.characterClassService.assignInitialSubClassFeats(createdCharacter.subclass, createdCharacter);
+
+      for (const featId of data.featsId) {
+        await this.characterFeatsService.assignFeat(featId, createdCharacter.id);
+      }
 
       return createdCharacter;
     } catch (error) {}

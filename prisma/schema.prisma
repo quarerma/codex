@@ -272,6 +272,7 @@ model Origin {
   feats Feat? @relation(fields: [featId], references: [id])
   featId String  @map("feat_id")
 
+  skills String[]
   character Character[]
   campaign CampaignOrigin[]
 }
