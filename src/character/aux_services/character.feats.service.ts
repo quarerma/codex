@@ -38,4 +38,28 @@ export class CharacterFeatsService {
       throw error;
     }
   }
+
+  async useFeatAfinity(characterId: string, featId: string) {
+    try {
+      const feat = await this.dataBaseService.characterFeat.update({
+        where: { characterId_featId: { characterId, featId } },
+        data: {
+          usingAfinity: true,
+        },
+        select: {
+          feat: true,
+        },
+      });
+
+      if (!feat || feat.feat.afinityUpgrades.length <= 0) {
+        return;
+      }
+
+      for (const upgrade of feat.feat.afinityUpgrades as CharacterUpgrade[]) {
+        await this.upgradesService.applyUpgrade(characterId, upgrade, feat.feat);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }

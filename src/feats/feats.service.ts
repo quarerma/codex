@@ -10,10 +10,10 @@ export class FeatsService {
     try {
       return await this.dataBaseService.generalFeats.create({
         data: {
-          afinity: data.afinity,
-          afinityUpgrades: data.afinityUpgrades,
           feat: {
             create: {
+              afinityUpgrades: data.afinityUpgrades,
+              afinity: data.afinity,
               name: data.name,
               description: data.description,
               prerequisites: data.prerequisites,
@@ -82,7 +82,6 @@ export class FeatsService {
     try {
       const general_feats = await this.dataBaseService.generalFeats.findMany({
         select: {
-          afinity: true,
           feat: {
             select: {
               id: true,
@@ -90,16 +89,14 @@ export class FeatsService {
               description: true,
               prerequisites: true,
               element: true,
+              afinity: true,
             },
           },
         },
       });
 
       // concatenate afinity and feat data
-      return general_feats.map((feat) => ({
-        afinity: feat.afinity,
-        ...feat.feat,
-      }));
+      return general_feats;
     } catch (error) {
       throw new Error('Error getting general feats');
     }

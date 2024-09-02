@@ -13,6 +13,8 @@ export class CharacterAttacksService {
         attack.local_id = cuid();
       }
 
+      // TODO: check character feats to see if attack changes
+
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {

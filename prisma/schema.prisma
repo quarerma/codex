@@ -128,6 +128,7 @@ model CharacterFeat {
   characterId String @map("character_id")
   feat Feat @relation(fields: [featId], references: [id])
   featId String @map("feat_id")
+  usingAfinity Boolean @default(false)
 
   @@unique([characterId, featId])
 }
@@ -158,6 +159,7 @@ model InventorySlot {
   uses Int @default(0)
   category Int
   local_name String
+  is_equipped Boolean @default(false)
 
   alterations Json[]
 
@@ -206,6 +208,9 @@ model Feat {
   characterUpgrades Json[]
   type        FeatType
 
+  afinity String? @db.Text
+  afinityUpgrades Json[]
+
   element Element
 
 
@@ -245,9 +250,7 @@ model CampaignFeats {
   featId String
   campaign Campaign @relation(fields: [campaignId], references: [id])
   campaignId String
-    afinity String? @db.Text
-  afinityUpgrades Json[]
-  
+ 
 
   @@unique([featId, campaignId])
 }
@@ -256,8 +259,7 @@ model GeneralFeats {
   id String @id @default(cuid())
   feat Feat @relation(fields: [featId], references: [id])
   featId String
-    afinity String? @db.Text
-  afinityUpgrades Json[]
+ 
 
   @@unique([featId])
 }
@@ -269,7 +271,7 @@ model Origin {
   name String 
   description String
   is_custom Boolean
-  feats Feat? @relation(fields: [featId], references: [id])
+  feats Feat @relation(fields: [featId], references: [id])
   featId String  @map("feat_id")
 
   skills String[]
@@ -549,6 +551,7 @@ enum DamageType {
 }
 
 enum FeatType {
+  ORIGIN
   CUSTOM
   CLASS
   SUBCLASS

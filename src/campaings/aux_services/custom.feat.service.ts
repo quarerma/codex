@@ -13,10 +13,10 @@ export class CustomFeatService {
           campaign: {
             connect: { id: campaignId },
           },
-          afinity: data.afinity,
-          afinityUpgrades: data.afinityUpgrades,
           feat: {
             create: {
+              afinity: data.afinity,
+              afinityUpgrades: data.afinityUpgrades,
               name: data.name,
               description: data.description,
               prerequisites: data.prerequisites,
@@ -39,10 +39,10 @@ export class CustomFeatService {
         select: {
           customFeat: {
             select: {
-              afinity: true,
               feat: {
                 select: {
                   id: true,
+                  afinity: true,
                   name: true,
                   description: true,
                   prerequisites: true,
