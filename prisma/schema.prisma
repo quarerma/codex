@@ -403,9 +403,9 @@ model Equipment {
   type ItemType
   is_custom Boolean
   
+  characterUpgrades Json[]
+
   Weapon Weapon?
-  Armor Armor?
-  Accessory Accessory?
   CursedItem CursedItem?
   slots InventorySlot[]
   CampaignEquipment CampaignEquipment[]
@@ -434,19 +434,6 @@ model Weapon {
   hand_type HandType 
 }
 
-model Armor {
-  Equipment Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId Int @id
-  defense Int
-  damage_reduction Int
-}
-
-model Accessory {
-  Equipment Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId Int @id
-  characterUpgrades Json[]
-  skill_check String
-}
 
 model CursedItem {
   Equipment Equipment @relation(fields: [equipmentId], references: [id])

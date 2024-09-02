@@ -43,7 +43,7 @@ export type AtributesJson = {
 };
 
 export type AlterationObject = {
-  item?: string;
+  item?: number;
   itemName?: string;
   modificartionName?: string;
   modification?: string;

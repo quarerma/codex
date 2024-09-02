@@ -1,10 +1,10 @@
-import { Character, Feat, Proficiency } from '@prisma/client';
+import { Character, Equipment, Feat, Modification, Proficiency } from '@prisma/client';
 import { CharacterUpgradeType } from '../dto/characterUpgrade';
 import { DataBaseService } from 'src/database/database.service';
 import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
 import { Injectable } from '@nestjs/common';
 import { SkillJson } from 'src/types/skill-relates-types';
-import { AtributesJson, StatusJson } from '../dto/create-character-dto';
+import { AlterationObject, AtributesJson, StatusJson } from '../dto/create-character-dto';
 import { CharacterAtributesService } from './character.atributes.service';
 
 @Injectable()
@@ -14,17 +14,17 @@ export class CharacterUpgradesService {
     private readonly atributesService: CharacterAtributesService,
   ) {}
 
-  async applyUpgrade(characterId: string, upgrade: CharacterUpgrade, feat: Feat) {
+  async applyUpgrade(characterId: string, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
     const character = await this.dataBaseService.character.findUnique({ where: { id: characterId } });
     switch (upgrade.type) {
       case CharacterUpgradeType.PERICIA:
-        await this.skillUpgrade(character, upgrade, feat);
+        await this.skillUpgrade(character, upgrade, object, upgradeSource);
         break;
       case CharacterUpgradeType.NUM_DE_PERICIA:
         // Implementar lógica para NUM_DE_PERICIA
         break;
       case CharacterUpgradeType.ATRIBUTO:
-        await this.atributeUpgrade(character, upgrade, feat);
+        await this.atributeUpgrade(character, upgrade, object, upgradeSource);
         break;
       case CharacterUpgradeType.DEFESA:
         await this.defenseUpgrade(character, upgrade);
@@ -48,13 +48,13 @@ export class CharacterUpgradesService {
         // Implementar lógica para LIMITE_PE
         break;
       case CharacterUpgradeType.VIDA_P_NEX:
-        await this.statusPerLevelUpgrade(character, upgrade, 'health', feat);
+        await this.statusPerLevelUpgrade(character, upgrade, 'health', object, upgradeSource);
         break;
       case CharacterUpgradeType.VIDA_MAX:
         await this.maxStatusUpgrade(character, upgrade, 'health');
         break;
       case CharacterUpgradeType.PE_P_NEX:
-        await this.statusPerLevelUpgrade(character, upgrade, 'effort', feat);
+        await this.statusPerLevelUpgrade(character, upgrade, 'effort', object, upgradeSource);
         break;
       case CharacterUpgradeType.PE_MAX:
         await this.maxStatusUpgrade(character, upgrade, 'effort');
@@ -82,7 +82,7 @@ export class CharacterUpgradesService {
     }
   }
 
-  async skillUpgrade(character: Character, upgrade: CharacterUpgrade, feat: Feat) {
+  async skillUpgrade(character: Character, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
     try {
       const skills = character.skills as SkillJson[];
 
@@ -94,12 +94,11 @@ export class CharacterUpgradesService {
 
       skills[skillIndex].value += upgrade.upgradeValue;
 
+      const alterationObject = this.createAlterationObject(object, upgradeSource);
       skills[skillIndex].alterations.push({
-        feat: feat.id,
-        featName: feat.name,
+        ...alterationObject,
         value: upgrade.upgradeValue,
       });
-
       await this.dataBaseService.character.update({
         where: { id: character.id },
         data: {
@@ -113,7 +112,7 @@ export class CharacterUpgradesService {
     }
   }
 
-  async atributeUpgrade(character: Character, upgrade: CharacterUpgrade, feat: Feat) {
+  async atributeUpgrade(character: Character, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
     try {
       const atribute = character.atributes as AtributesJson;
 
@@ -142,10 +141,8 @@ export class CharacterUpgradesService {
           throw new Error('Atribute not found');
       }
 
-      atribute.alterations.push({
-        feat: feat.id,
-        featName: feat.name,
-      });
+      const alterationObject = this.createAlterationObject(object, upgradeSource);
+      atribute.alterations.push(alterationObject);
 
       await this.dataBaseService.character.update({
         where: { id: character.id },
@@ -240,12 +237,9 @@ export class CharacterUpgradesService {
     }
   }
 
-  async statusPerLevelUpgrade(character: Character, upgrade: CharacterUpgrade, status: 'health' | 'effort', feat: Feat) {
+  async statusPerLevelUpgrade(character: Character, upgrade: CharacterUpgrade, status: 'health' | 'effort', object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
     try {
-      const alterationObject = {
-        feat: feat.id,
-        featName: feat.name,
-      };
+      const alterationObject = this.createAlterationObject(object, upgradeSource);
       switch (status) {
         case 'health':
           // calculate the life to increment
@@ -322,6 +316,28 @@ export class CharacterUpgradesService {
       });
     } catch (error) {
       throw new Error('Error applying speed upgrade');
+    }
+  }
+
+  private createAlterationObject(object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification'): AlterationObject {
+    switch (upgradeSource) {
+      case 'feat':
+        return {
+          feat: object.id as string,
+          featName: object.name,
+        };
+      case 'equipment':
+        return {
+          item: object.id as number,
+          itemName: object.name,
+        };
+      case 'modification':
+        return {
+          modification: object.id as string,
+          modificartionName: object.name,
+        };
+      default:
+        throw new Error('Unknown upgrade source');
     }
   }
 }

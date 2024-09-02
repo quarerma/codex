@@ -32,7 +32,7 @@ export class CharacterFeatsService {
 
       // apply upgrades
       for (const upgrade of upgrades) {
-        await this.upgradesService.applyUpgrade(characterId, upgrade, createdFeat.feat);
+        await this.upgradesService.applyUpgrade(characterId, upgrade, createdFeat.feat, 'feat');
       }
     } catch (error) {
       throw error;
@@ -56,7 +56,7 @@ export class CharacterFeatsService {
       }
 
       for (const upgrade of feat.feat.afinityUpgrades as CharacterUpgrade[]) {
-        await this.upgradesService.applyUpgrade(characterId, upgrade, feat.feat);
+        await this.upgradesService.applyUpgrade(characterId, upgrade, feat.feat, 'feat');
       }
     } catch (error) {
       throw error;

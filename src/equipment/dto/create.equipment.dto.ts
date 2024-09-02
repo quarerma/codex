@@ -9,6 +9,7 @@ export class CreateItemDto {
   type: ItemType;
   is_custom: boolean;
   num_of_uses: number;
+  characterUpgrades: CharacterUpgrade[];
   // Weapon variables
   damage?: string[];
   critical_range?: number;
@@ -18,12 +19,7 @@ export class CreateItemDto {
   weapon_type?: WeaponType;
   weapon_category?: WeaponCategory;
   hand_type?: HandType;
-  // Armor variables
-  defense?: number;
-  damage_reduction?: number;
-  // Acessory variables
-  skill_check?: string;
-  characterUpgrades: CharacterUpgrade[];
+
   // Cursed Item variables
   element?: Element;
 }

@@ -17,6 +17,6 @@ export type SkillAlterationObject = {
   featName?: string;
   feat?: string;
   itemName?: string;
-  item?: string;
+  item?: number;
   otherName?: string;
 };

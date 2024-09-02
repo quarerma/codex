@@ -14,19 +14,15 @@ export class EquipmentService {
         case 'EXPLOSIVE':
         case 'OPERATIONAL_EQUIPMENT':
         case 'PARANORMAL_EQUIPMENT':
+        case 'ACESSORY':
+        case 'ARMOR':
           equipment = await this.createGeneralequipment(data);
           break;
         case 'WEAPON':
           equipment = await this.createWeaponequipment(data);
           break;
-        case 'ARMOR':
-          equipment = await this.createArmorequipment(data);
-          break;
-        case 'ACESSORY':
-          equipment = await this.createAccessoryequipment(data);
-          break;
         case 'CURSED_ITEM':
-          equipment = await this.createAccessoryequipment(data);
+          equipment = await this.createCursedequipment(data);
           break;
 
         default:
@@ -47,6 +43,8 @@ export class EquipmentService {
         case 'EXPLOSIVE':
         case 'OPERATIONAL_EQUIPMENT':
         case 'PARANORMAL_EQUIPMENT':
+        case 'ACESSORY':
+        case 'ARMOR':
           equipment = await this.dataBaseService.equipment.findUnique({
             where: { id },
           });
@@ -57,22 +55,6 @@ export class EquipmentService {
             where: { id },
             include: {
               Weapon: true,
-            },
-          });
-          break;
-        case 'ARMOR':
-          equipment = this.dataBaseService.equipment.findUnique({
-            where: { id },
-            include: {
-              Armor: true,
-            },
-          });
-          break;
-        case 'ACESSORY':
-          equipment = this.dataBaseService.equipment.findUnique({
-            where: { id },
-            include: {
-              Accessory: true,
             },
           });
           break;
@@ -99,25 +81,6 @@ export class EquipmentService {
   //
   //
   // Auxiliary functions
-  async createAccessoryequipment(data: CreateItemDto) {
-    return this.dataBaseService.equipment.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        weight: data.weight,
-        category: data.category,
-        type: data.type,
-        is_custom: data.is_custom,
-        num_of_uses: data.num_of_uses,
-        Accessory: {
-          create: {
-            skill_check: data.skill_check,
-            characterUpgrades: data.characterUpgrades,
-          },
-        },
-      },
-    });
-  }
 
   async createCursedequipment(data: CreateItemDto) {
     return this.dataBaseService.equipment.create({
@@ -164,26 +127,6 @@ export class EquipmentService {
     });
   }
 
-  async createArmorequipment(data: CreateItemDto) {
-    return this.dataBaseService.equipment.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        weight: data.weight,
-        category: data.category,
-        type: data.type,
-        is_custom: data.is_custom,
-        num_of_uses: data.num_of_uses,
-        Armor: {
-          create: {
-            defense: data.defense,
-            damage_reduction: data.damage_reduction,
-          },
-        },
-      },
-    });
-  }
-
   async createGeneralequipment(data: CreateItemDto) {
     return this.dataBaseService.equipment.create({
       data: {
@@ -194,6 +137,7 @@ export class EquipmentService {
         type: data.type,
         is_custom: data.is_custom,
         num_of_uses: data.num_of_uses,
+        characterUpgrades: data.characterUpgrades,
       },
     });
   }

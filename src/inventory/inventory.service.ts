@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { WeapondAddService } from './aux-services/weapond-add-service';
+import { CharacterUpgradesService } from 'src/character/aux_services/character.upgrades.service';
+import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
 
 @Injectable()
 export class InventoryService {
   constructor(
     private readonly dataBaseService: DataBaseService,
     private readonly weaponService: WeapondAddService,
+    private readonly characterUpgradesService: CharacterUpgradesService,
   ) {}
 
   async addItemToInventory(item_id: number, characterId: string) {
@@ -56,7 +59,12 @@ export class InventoryService {
       if (item.type === 'WEAPON') {
         await this.weaponService.addWeapon(item_id, characterId, item, slot.id);
       }
-      // On acessory add -- modify skills
+
+      if (item.characterUpgrades.length > 0) {
+        for (const upgrade of item.characterUpgrades as CharacterUpgrade[]) {
+          await this.characterUpgradesService.applyUpgrade(characterId, upgrade, item, 'equipment');
+        }
+      }
 
       return slot;
     } catch (e) {
