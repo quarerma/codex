@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Character, Class, Subclass } from '@prisma/client';
 import { DataBaseService } from 'src/database/database.service';
-import { CharacterFeatsService } from './character.feats';
+import { CharacterFeatsService } from './character.feats.service';
 
 @Injectable()
 export class CharacterClassService {

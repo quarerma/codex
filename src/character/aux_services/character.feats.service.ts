@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
-import { CharacterUpgradesService } from './character.upgrades';
+import { CharacterUpgradesService } from './character.upgrades.service';
 
 @Injectable()
 export class CharacterFeatsService {
@@ -32,7 +32,7 @@ export class CharacterFeatsService {
 
       // apply upgrades
       for (const upgrade of upgrades) {
-        await this.upgradesService.applyUpgrade(createdFeat.character, upgrade, createdFeat.feat);
+        await this.upgradesService.applyUpgrade(characterId, upgrade, createdFeat.feat);
       }
     } catch (error) {
       throw error;

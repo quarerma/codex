@@ -57,6 +57,7 @@ export class FeatsService {
     try {
       return await this.dataBaseService.subclassFeats.create({
         data: {
+          levelRequired: data.levelRequired,
           subclass: {
             connect: { id: subclassId },
           },

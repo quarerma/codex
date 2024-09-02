@@ -9,4 +9,5 @@ export class CreateFeatDto {
   element: Element;
   afinity?: string;
   afinityUpgrades?: CharacterUpgrade[];
+  levelRequired?: number;
 }

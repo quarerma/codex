@@ -5,13 +5,15 @@ import { DataBaseService } from 'src/database/database.service';
 import { SkillService } from 'src/skill/skill.service';
 import { CharacterSkillsService } from './aux_services/character.skills.service';
 import { CharacterAttacksService } from './aux_services/character.attacks.service';
-import { CharacterUpgradesService } from './aux_services/character.upgrades';
+import { CharacterUpgradesService } from './aux_services/character.upgrades.service';
 import { CharacterClassService } from './aux_services/character.class.service';
-import { CharacterFeatsService } from './aux_services/character.feats';
+import { CharacterFeatsService } from './aux_services/character.feats.service';
 import { InventoryService } from 'src/inventory/inventory.service';
+import { CharacterAtributesService } from './aux_services/character.atributes.service';
+import { WeapondAddService } from 'src/inventory/aux-services/weapond-add-service';
 
 @Module({
   controllers: [CharacterController],
-  providers: [CharacterService, DataBaseService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService, InventoryService],
+  providers: [CharacterService, DataBaseService, WeapondAddService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterAtributesService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService, InventoryService],
 })
 export class CharacterModule {}

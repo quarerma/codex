@@ -23,10 +23,11 @@ export class SubClassService {
     }
   }
 
-  async assignSubClassFeat(subclassId: string, featId: string) {
+  async assignSubClassFeat(subclassId: string, featId: string, levelRequired) {
     try {
       return await this.dataBaseService.subclassFeats.create({
         data: {
+          levelRequired: levelRequired,
           subclass: {
             connect: { id: subclassId },
           },

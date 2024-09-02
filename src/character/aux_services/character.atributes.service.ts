@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AtributesJson, StatusJson, updateAtributeDTO } from '../dto/create-character-dto';
+import { AtributesJson, updateAtributeDTO } from '../dto/create-character-dto';
 import { DataBaseService } from 'src/database/database.service';
 
 @Injectable()
@@ -70,22 +70,17 @@ export class CharacterAtributesService {
         where: { id: characterId },
       });
 
-      const healthInfo = character.healthInfo as StatusJson;
-      const previewMaxValue = character.max_health;
-      const initialHealth = character.max_health - previewValue - (character.level - 1) * healthInfo.valuePerLevel;
-
-      healthInfo.valuePerLevel += value - previewValue;
-
-      character.max_health = initialHealth + value + (character.level - 1) * healthInfo.valuePerLevel;
-
-      character.current_health += character.max_health - previewMaxValue;
+      const valueToIncrement = (value - previewValue) * character.level;
 
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {
-          current_health: character.current_health,
-          max_health: character.max_health,
-          healthInfo: healthInfo,
+          current_health: {
+            increment: valueToIncrement,
+          },
+          max_health: {
+            increment: valueToIncrement,
+          },
         },
       });
     } catch (error) {
@@ -99,22 +94,17 @@ export class CharacterAtributesService {
         where: { id: characterId },
       });
 
-      const effortInfo = character.effortInfo as StatusJson;
-      const previewMaxValue = character.max_effort;
-      const initialHealth = character.max_effort - previewValue - (character.level - 1) * effortInfo.valuePerLevel;
-
-      effortInfo.valuePerLevel += value - previewValue;
-
-      character.max_effort = initialHealth + value + (character.level - 1) * effortInfo.valuePerLevel;
-
-      character.current_effort += character.max_effort - previewMaxValue;
+      const valueToIncrement = (value - previewValue) * character.level;
 
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {
-          current_effort: character.current_effort,
-          max_effort: character.max_effort,
-          healthInfo: effortInfo,
+          current_effort: {
+            increment: valueToIncrement,
+          },
+          max_effort: {
+            increment: valueToIncrement,
+          },
         },
       });
     } catch (error) {

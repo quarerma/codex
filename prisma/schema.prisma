@@ -98,8 +98,8 @@ model Character {
   max_sanity Int
   max_effort Int
 
-  // speed Int
-  // defense Int
+  speed Int
+  defense Int
   
   healthInfo Json @map("health_info")
   effortInfo Json @map("effort_info")

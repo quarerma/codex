@@ -4,7 +4,7 @@ import { AtributesJson, CreateCharacterDTO, StatusJson } from './dto/create-char
 import { CharacterSkillsService } from './aux_services/character.skills.service';
 import { CharacterClassService } from './aux_services/character.class.service';
 import { InventoryService } from 'src/inventory/inventory.service';
-import { CharacterFeatsService } from './aux_services/character.feats';
+import { CharacterFeatsService } from './aux_services/character.feats.service';
 
 @Injectable()
 export class CharacterService {
@@ -58,11 +58,15 @@ export class CharacterService {
 
       const skills = await this.characterSkillsService.assignBasicSkills();
 
+      const speed = 9;
+      const defense = 10 + atributes.dexterity;
+
       const createdCharacter = await this.dataBaseService.character.create({
         data: {
           name: data.name,
           level: data.level,
-
+          speed,
+          defense,
           current_effort: currentEffort,
           max_effort: maxEffort,
           current_health: currentHealth,

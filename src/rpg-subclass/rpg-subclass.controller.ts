@@ -17,9 +17,9 @@ export class SubClassController {
   }
 
   @Patch('assign-feat/:subclassId/:featId')
-  async assignSubClassFeat(subclassId: string, featId: string) {
+  async assignSubClassFeat(@Body() levelrequired: number, subclassId: string, featId: string) {
     try {
-      return await this.rpgSubclassService.assignSubClassFeat(subclassId, featId);
+      return await this.rpgSubclassService.assignSubClassFeat(subclassId, featId, levelrequired);
     } catch (error) {
       throw new Error(error);
     }

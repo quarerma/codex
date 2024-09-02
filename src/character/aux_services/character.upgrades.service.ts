@@ -14,7 +14,8 @@ export class CharacterUpgradesService {
     private readonly atributesService: CharacterAtributesService,
   ) {}
 
-  async applyUpgrade(character: Character, upgrade: CharacterUpgrade, feat: Feat) {
+  async applyUpgrade(characterId: string, upgrade: CharacterUpgrade, feat: Feat) {
+    const character = await this.dataBaseService.character.findUnique({ where: { id: characterId } });
     switch (upgrade.type) {
       case CharacterUpgradeType.PERICIA:
         await this.skillUpgrade(character, upgrade, feat);
@@ -26,7 +27,7 @@ export class CharacterUpgradesService {
         await this.atributeUpgrade(character, upgrade, feat);
         break;
       case CharacterUpgradeType.DEFESA:
-        // Implementar lógica para DEFESA
+        await this.defenseUpgrade(character, upgrade);
         break;
       case CharacterUpgradeType.PROFICIENCIA:
         await this.proficienciaUpgrade(character, upgrade);
@@ -53,7 +54,7 @@ export class CharacterUpgradesService {
         await this.maxStatusUpgrade(character, upgrade, 'health');
         break;
       case CharacterUpgradeType.PE_P_NEX:
-        // Implementar lógica para PE_P_NEX
+        await this.statusPerLevelUpgrade(character, upgrade, 'effort', feat);
         break;
       case CharacterUpgradeType.PE_MAX:
         await this.maxStatusUpgrade(character, upgrade, 'effort');
@@ -74,7 +75,7 @@ export class CharacterUpgradesService {
         // Implementar lógica para INT_NO_DANO
         break;
       case CharacterUpgradeType.DESLOCAMENTO:
-        // Implementar lógica para DESLOCAMENTO
+        await this.speedUpgrade(character, upgrade);
         break;
       default:
         throw new Error(`Unknown upgrade type: ${upgrade.type}`);
@@ -118,23 +119,23 @@ export class CharacterUpgradesService {
 
       switch (upgrade.upgradeTarget) {
         case 'strenght':
-          this.atributesService.onStreghthUpdate(character.id, upgrade.upgradeValue);
+          this.atributesService.onStreghthUpdate(character.id, upgrade.upgradeValue + atribute.strenght);
           atribute.strenght += upgrade.upgradeValue;
           break;
         case 'dexterity':
-          this.atributesService.onDexterityUpdate(character.id, upgrade.upgradeValue);
+          this.atributesService.onDexterityUpdate(character.id, upgrade.upgradeValue + atribute.dexterity);
           atribute.dexterity += upgrade.upgradeValue;
           break;
         case 'vitality':
-          this.atributesService.onVitalityUpdate(character.id, upgrade.upgradeValue, atribute.vitality);
+          this.atributesService.onVitalityUpdate(character.id, upgrade.upgradeValue, atribute.vitality + upgrade.upgradeValue);
           atribute.vitality += upgrade.upgradeValue;
           break;
         case 'intelligence':
-          this.atributesService.onIntelligenceUpdate(character.id, upgrade.upgradeValue);
+          this.atributesService.onIntelligenceUpdate(character.id, upgrade.upgradeValue + atribute.intelligence);
           atribute.intelligence += upgrade.upgradeValue;
           break;
         case 'presence':
-          this.atributesService.onPresenceUpdate(character.id, upgrade.upgradeValue, atribute.presence);
+          this.atributesService.onPresenceUpdate(character.id, upgrade.upgradeValue, atribute.presence + upgrade.upgradeValue);
           atribute.presence += upgrade.upgradeValue;
           break;
         default:
@@ -156,6 +157,21 @@ export class CharacterUpgradesService {
       });
     } catch (error) {
       throw new Error('Error applying atribute upgrade');
+    }
+  }
+
+  async defenseUpgrade(character: Character, upgrade: CharacterUpgrade) {
+    try {
+      await this.dataBaseService.character.update({
+        where: { id: character.id },
+        data: {
+          defense: {
+            increment: upgrade.upgradeValue,
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error('Error applying defense upgrade');
     }
   }
 
@@ -291,6 +307,21 @@ export class CharacterUpgradesService {
       }
     } catch (error) {
       throw new Error('Error applying status per level upgrade');
+    }
+  }
+
+  async speedUpgrade(character: Character, upgrade: CharacterUpgrade) {
+    try {
+      await this.dataBaseService.character.update({
+        where: { id: character.id },
+        data: {
+          speed: {
+            increment: upgrade.upgradeValue,
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error('Error applying speed upgrade');
     }
   }
 }
