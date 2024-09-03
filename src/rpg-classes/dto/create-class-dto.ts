@@ -10,6 +10,8 @@ export class CreateClassDTO {
   SanityPointsPerLevel: number;
   effortPointsPerLevel: number;
 
+  number_of_skills: number;
+
   initialHealth: number;
   initialSanity: number;
   initialEffort: number;

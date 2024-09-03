@@ -15,6 +15,7 @@ export type CreateRitualDto = {
   element: Element;
   is_custom: boolean;
   type: RitualType;
+  conditions: string[];
 
   // DamageRitual attributes
   normalCastDamageType?: DamageType;

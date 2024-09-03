@@ -28,6 +28,14 @@ export class RitualService {
         },
       });
 
+      if (data.conditions.length > 0) {
+        this.dataBaseService.ritualCondition.createMany({
+          data: data.conditions.map((condition) => ({
+            conditionId: condition,
+            ritualId: ritual.id,
+          })),
+        });
+      }
       if (data.type === 'DAMAGE') {
         await this.dataBaseService.damageRitual.create({
           data: {
@@ -52,6 +60,13 @@ export class RitualService {
     try {
       return await this.dataBaseService.ritual.findMany({
         where: { is_custom: false },
+        include: {
+          conditions: {
+            select: {
+              condition: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error('Error getting core rituals');
@@ -62,6 +77,13 @@ export class RitualService {
     try {
       return await this.dataBaseService.ritual.findMany({
         where: { element: element },
+        include: {
+          conditions: {
+            select: {
+              condition: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error('Error getting rituals by element');

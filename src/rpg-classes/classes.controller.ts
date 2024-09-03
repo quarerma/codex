@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/co
 import { ClassesService } from './classes.service';
 import { CreateClassDTO } from './dto/create-class-dto';
 import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { CreateFeatDto } from 'src/feats/dto/create-feat-dto';
 
 @Controller('classes')
 export class ClassesController {
@@ -27,10 +28,10 @@ export class ClassesController {
     }
   }
 
-  @Patch('assign-starter-feat/:classId/:featId')
-  async assignClassFeat(@Param('classId') classId: string, @Param('featId') featId: string) {
+  @Patch('assign-starter-feat/:classId')
+  async assignClassFeat(@Param('classId') classId: string, @Body() feat: CreateFeatDto) {
     try {
-      return await this.classesService.assignStarterClassFeat(classId, featId);
+      return await this.classesService.createInitialClassFeat(classId, feat);
     } catch (error) {
       throw new Error(error);
     }

@@ -34,6 +34,15 @@ export class CustomRitualService {
         },
       });
 
+      if (data.conditions.length > 0) {
+        this.dataBaseService.ritualCondition.createMany({
+          data: data.conditions.map((condition) => ({
+            conditionId: condition,
+            ritualId: ritual.ritualId,
+          })),
+        });
+      }
+
       if (data.type === 'DAMAGE') {
         await this.dataBaseService.damageRitual.create({
           data: {
@@ -56,12 +65,16 @@ export class CustomRitualService {
 
   async getCampaignCustomRituals(campaignId: string) {
     try {
-      return await this.dataBaseService.campaign.findUnique({
-        where: { id: campaignId },
+      return await this.dataBaseService.campaignRitual.findFirst({
+        where: { campaignId },
         select: {
-          customRituals: {
-            select: {
-              ritual: true,
+          ritual: {
+            include: {
+              conditions: {
+                select: {
+                  condition: true,
+                },
+              },
             },
           },
         },
@@ -90,6 +103,7 @@ export class CustomRitualService {
           },
         });
       }
+
       await this.dataBaseService.campaignRitual.delete({
         where: {
           campaignId_ritualId: {
@@ -101,6 +115,14 @@ export class CustomRitualService {
 
       await this.dataBaseService.ritual.delete({
         where: { id: ritualId },
+      });
+
+      await this.dataBaseService.damageRitual.delete({
+        where: { ritualId },
+      });
+
+      await this.dataBaseService.ritualCondition.deleteMany({
+        where: { ritualId },
       });
     } catch (error) {
       throw new Error('Error deleting custom ritual');

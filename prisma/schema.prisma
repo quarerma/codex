@@ -119,6 +119,8 @@ model Character {
 
   proficiencies Proficiency[]
 
+  conditions CharacterCondition[]
+
   origin Origin? @relation(fields: [originId], references: [id])
   originId String @map("origin_id")
 }
@@ -164,6 +166,32 @@ model InventorySlot {
   alterations Json[]
 
 }
+///////////////////////////////////////////// Tabela de Condições /////////////////////////////////////////////
+model Condition {
+  id String @id @default(cuid())
+  name String @db.VarChar(50)
+  description String @db.Text
+  is_custom Boolean
+  character CharacterCondition[]
+  ritual RitualCondition[]
+}
+
+model RitualCondition {
+  ritual Ritual @relation(fields: [ritualId], references: [id])
+  ritualId String @map("ritual_id")
+  condition Condition @relation(fields: [conditionId], references: [id])
+  conditionId String @map("condition_id")
+
+  @@unique([ritualId, conditionId])
+}
+model CharacterCondition {
+  character Character @relation(fields: [characterId], references: [id])
+  characterId String @map("character_id")
+  condition Condition @relation(fields: [conditionId], references: [id])
+  conditionId String @map("condition_id")
+
+  @@unique([characterId, conditionId])
+}
 
 ///////////////////////////////////////////// Tabela de Classes /////////////////////////////////////////////
 model Class {
@@ -179,6 +207,7 @@ model Class {
   initialSanity Int
   initialEffort Int
 
+  number_of_skills Int @default(0)
   initialFeats String[]
   proficiencies Proficiency[]
 
@@ -317,7 +346,6 @@ model Ritual {
   trueCost Int
 
   ritualLevel Int
-
   exectutionTime String
   range Range
   target String
@@ -326,6 +354,7 @@ model Ritual {
 
   is_custom Boolean
   damageRitual DamageRitual?
+  conditions RitualCondition[]
 
   type RitualType
   character CharacterRitual[]

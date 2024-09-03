@@ -14,7 +14,7 @@ export class CharacterUpgradesService {
     private readonly atributesService: CharacterAtributesService,
   ) {}
 
-  async applyUpgrade(characterId: string, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
+  async applyUpgrade(characterId: string, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification', inventorySlot?: string) {
     const character = await this.dataBaseService.character.findUnique({ where: { id: characterId } });
     switch (upgrade.type) {
       case CharacterUpgradeType.PERICIA:
@@ -36,7 +36,7 @@ export class CharacterUpgradesService {
         // Implementar lógica para RESISTENCIA
         break;
       case CharacterUpgradeType.MARGEM_DE_CRITICO:
-        // Implementar lógica para MARGEM_DE_CRITICO
+        console.log(inventorySlot);
         break;
       case CharacterUpgradeType.MULTIPLCADOR_CRITICO_SOMA:
         // Implementar lógica para MULTIPLCADOR_CRITICO_SOMA
@@ -334,7 +334,7 @@ export class CharacterUpgradesService {
       case 'modification':
         return {
           modification: object.id as string,
-          modificartionName: object.name,
+          modificationName: object.name,
         };
       default:
         throw new Error('Unknown upgrade source');

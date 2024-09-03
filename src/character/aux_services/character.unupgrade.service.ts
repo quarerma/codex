@@ -317,15 +317,22 @@ export class CharacterUnUpgradesService {
   }
 
   filterAlterations(alteration: SkillAlterationObject[] | AlterationObject[], object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
+    let index: number;
+
     switch (upgradeSource) {
       case 'feat':
-        return alteration.filter((alteration) => alteration.feat !== (object.id as string));
+        index = alteration.findIndex((alteration) => alteration.feat === (object.id as string));
+        break;
       case 'equipment':
-        return alteration.filter((alteration) => alteration.item !== (object.id as number));
+        index = alteration.findIndex((alteration) => alteration.item === (object.id as number));
+        break;
       case 'modification':
-        return alteration.filter((alteration) => alteration.modification !== (object.id as string));
+        index = alteration.findIndex((alteration) => alteration.modification === (object.id as string));
+        break;
       default:
         throw new Error('Upgrade source not found');
     }
+
+    return index >= 0 ? [...alteration.slice(0, index), ...alteration.slice(index + 1)] : alteration;
   }
 }

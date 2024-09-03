@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateClassDTO } from './dto/create-class-dto';
 import { DataBaseService } from 'src/database/database.service';
 import { Class, Proficiency } from '@prisma/client';
+import { CreateFeatDto } from 'src/feats/dto/create-feat-dto';
 
 @Injectable()
 export class ClassesService {
@@ -21,6 +22,7 @@ export class ClassesService {
           initialHealth: data.initialHealth,
           initialSanity: data.initialSanity,
           initialEffort: data.initialEffort,
+          number_of_skills: data.number_of_skills,
 
           proficiencies: enumProficiencies,
         },
@@ -30,15 +32,23 @@ export class ClassesService {
     }
   }
 
-  async assignStarterClassFeat(classId: string, featId: string) {
+  async createInitialClassFeat(classId: string, feat: CreateFeatDto) {
     try {
-      await this.dataBaseService.classFeats.create({
+      const createFeat = await this.dataBaseService.classFeats.create({
         data: {
           class: {
             connect: { id: classId },
           },
           feat: {
-            connect: { id: featId },
+            create: {
+              name: feat.name,
+              description: feat.description,
+              prerequisites: feat.prerequisites,
+              element: feat.element,
+              type: 'CLASS',
+              afinity: feat.afinity,
+              afinityUpgrades: feat.afinityUpgrades,
+            },
           },
         },
       });
@@ -47,7 +57,7 @@ export class ClassesService {
         where: { id: classId },
         data: {
           initialFeats: {
-            push: featId,
+            push: createFeat.featId,
           },
         },
       });
