@@ -78,7 +78,7 @@ export class CharacterUpgradesService {
         await this.speedUpgrade(character, upgrade);
         break;
       default:
-        throw new Error(`Unknown upgrade type: ${upgrade.type}`);
+        throw new Error('Unknown upgrade type: ${upgrade.type}');
     }
   }
 

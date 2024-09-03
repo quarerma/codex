@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
 import { CharacterUpgradesService } from './character.upgrades.service';
+import { CharacterUnUpgradesService } from './character.unupgrade.service';
 
 @Injectable()
 export class CharacterFeatsService {
   constructor(
     private readonly dataBaseService: DataBaseService,
     private readonly upgradesService: CharacterUpgradesService,
+    private readonly unUpgradeService: CharacterUnUpgradesService,
   ) {}
 
   async assignFeat(characterId: string, featId: string) {
@@ -39,6 +41,34 @@ export class CharacterFeatsService {
     }
   }
 
+  async removeFeat(characterId: string, featId: string) {
+    try {
+      const deletedFeat = await this.dataBaseService.characterFeat.delete({
+        where: { characterId_featId: { characterId, featId } },
+        select: {
+          feat: true,
+          usingAfinity: true,
+        },
+      });
+
+      if (!deletedFeat || deletedFeat.feat.characterUpgrades.length <= 0) {
+        return;
+      }
+
+      if (deletedFeat.usingAfinity) {
+        for (const upgrade of deletedFeat.feat.afinityUpgrades as CharacterUpgrade[]) {
+          await this.unUpgradeService.unApplyUpgrades(characterId, upgrade, deletedFeat.feat, 'feat');
+        }
+      }
+
+      for (const upgrade of deletedFeat.feat.characterUpgrades as CharacterUpgrade[]) {
+        await this.unUpgradeService.unApplyUpgrades(characterId, upgrade, deletedFeat.feat, 'feat');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async useFeatAfinity(characterId: string, featId: string) {
     try {
       const feat = await this.dataBaseService.characterFeat.update({
@@ -57,6 +87,30 @@ export class CharacterFeatsService {
 
       for (const upgrade of feat.feat.afinityUpgrades as CharacterUpgrade[]) {
         await this.upgradesService.applyUpgrade(characterId, upgrade, feat.feat, 'feat');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async unCheckFeatAfinity(characterId: string, featId: string) {
+    try {
+      const feat = await this.dataBaseService.characterFeat.update({
+        where: { characterId_featId: { characterId, featId } },
+        data: {
+          usingAfinity: false,
+        },
+        select: {
+          feat: true,
+        },
+      });
+
+      if (!feat || feat.feat.afinityUpgrades.length <= 0) {
+        return;
+      }
+
+      for (const upgrade of feat.feat.afinityUpgrades as CharacterUpgrade[]) {
+        await this.unUpgradeService.unApplyUpgrades(characterId, upgrade, feat.feat, 'feat');
       }
     } catch (error) {
       throw error;

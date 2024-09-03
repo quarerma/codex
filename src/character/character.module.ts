@@ -11,9 +11,10 @@ import { CharacterFeatsService } from './aux_services/character.feats.service';
 import { InventoryService } from 'src/inventory/inventory.service';
 import { CharacterAtributesService } from './aux_services/character.atributes.service';
 import { WeapondAddService } from 'src/inventory/aux-services/weapond-add-service';
+import { CharacterUnUpgradesService } from './aux_services/character.unupgrade.service';
 
 @Module({
   controllers: [CharacterController],
-  providers: [CharacterService, DataBaseService, WeapondAddService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterAtributesService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService, InventoryService],
+  providers: [CharacterService, DataBaseService, WeapondAddService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterAtributesService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService, InventoryService, CharacterUnUpgradesService],
 })
 export class CharacterModule {}

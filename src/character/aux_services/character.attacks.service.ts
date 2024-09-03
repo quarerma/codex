@@ -14,6 +14,12 @@ export class CharacterAttacksService {
       }
 
       // TODO: check character feats to see if attack changes
+      // const feats = await this.dataBaseService.characterFeat.findMany({
+      //   where: { characterId },
+      //   select: {
+      //     feat: true,
+      //   },
+      // });
 
       await this.dataBaseService.character.update({
         where: { id: characterId },

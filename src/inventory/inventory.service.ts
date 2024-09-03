@@ -3,6 +3,7 @@ import { DataBaseService } from 'src/database/database.service';
 import { WeapondAddService } from './aux-services/weapond-add-service';
 import { CharacterUpgradesService } from 'src/character/aux_services/character.upgrades.service';
 import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
+import { CharacterUnUpgradesService } from 'src/character/aux_services/character.unupgrade.service';
 
 @Injectable()
 export class InventoryService {
@@ -10,6 +11,7 @@ export class InventoryService {
     private readonly dataBaseService: DataBaseService,
     private readonly weaponService: WeapondAddService,
     private readonly characterUpgradesService: CharacterUpgradesService,
+    private readonly unUpgradeService: CharacterUnUpgradesService,
   ) {}
 
   async addItemToInventory(item_id: number, characterId: string) {
@@ -90,6 +92,11 @@ export class InventoryService {
       }
 
       // TODO: remove item influence on character stats
+      if (item.characterUpgrades.length > 0) {
+        for (const upgrade of item.characterUpgrades as CharacterUpgrade[]) {
+          await this.unUpgradeService.unApplyUpgrades(characterId, upgrade, item, 'equipment');
+        }
+      }
 
       return await this.dataBaseService.inventory.update({
         where: {
