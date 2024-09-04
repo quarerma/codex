@@ -58,7 +58,7 @@ export class RitualService {
 
   async getCoreRituals() {
     try {
-      return await this.dataBaseService.ritual.findMany({
+      const rituals = await this.dataBaseService.ritual.findMany({
         where: { is_custom: false },
         include: {
           conditions: {
@@ -68,6 +68,11 @@ export class RitualService {
           },
         },
       });
+
+      return rituals.map((ritual) => ({
+        ...ritual,
+        conditions: ritual.conditions.map((c) => c.condition),
+      }));
     } catch (error) {
       throw new Error('Error getting core rituals');
     }
@@ -75,7 +80,7 @@ export class RitualService {
 
   async filterRitualsByElement(element: Element) {
     try {
-      return await this.dataBaseService.ritual.findMany({
+      const rituals = await this.dataBaseService.ritual.findMany({
         where: { element: element },
         include: {
           conditions: {
@@ -85,6 +90,11 @@ export class RitualService {
           },
         },
       });
+
+      return rituals.map((ritual) => ({
+        ...ritual,
+        conditions: ritual.conditions.map((c) => c.condition),
+      }));
     } catch (error) {
       throw new Error('Error getting rituals by element');
     }

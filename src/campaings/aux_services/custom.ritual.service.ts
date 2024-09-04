@@ -65,7 +65,7 @@ export class CustomRitualService {
 
   async getCampaignCustomRituals(campaignId: string) {
     try {
-      return await this.dataBaseService.campaignRitual.findFirst({
+      const campaignRituals = await this.dataBaseService.campaignRitual.findMany({
         where: { campaignId },
         select: {
           ritual: {
@@ -79,6 +79,12 @@ export class CustomRitualService {
           },
         },
       });
+
+      // Mapear para remover a camada extra das conditions
+      return campaignRituals.map((campaignRitual) => ({
+        ...campaignRitual.ritual,
+        conditions: campaignRitual.ritual.conditions.map((c) => c.condition),
+      }));
     } catch (error) {
       throw new Error('Error getting custom rituals');
     }
