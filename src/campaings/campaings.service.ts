@@ -47,4 +47,33 @@ export class CampaingsService {
 
     return hash;
   }
+
+  async joinCampaign(data: { campaignId: string; password: string }, userId: string) {
+    try {
+      const campaign = await this.dataBaseService.campaign.findUnique({
+        where: { id: data.campaignId },
+        select: {
+          id: true,
+          password: true,
+        },
+      });
+
+      if (campaign.password) {
+        const isPasswordCorrect = await bcrypt.compare(data.password, campaign.password);
+
+        if (!isPasswordCorrect) {
+          throw new Error('Incorrect password');
+        }
+      }
+
+      return await this.dataBaseService.playerOnCampaign.create({
+        data: {
+          player: { connect: { id: userId } },
+          campaign: { connect: { id: data.campaignId } },
+        },
+      });
+    } catch (error) {
+      throw new Error('Error joining campaign');
+    }
+  }
 }

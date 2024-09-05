@@ -18,4 +18,15 @@ export class CampaingsController {
       throw new Error('Error creating campaign');
     }
   }
+
+  @Post('join')
+  @UseGuards(JwtAuthGuards)
+  async joinCampaign(@Body() data: { campaignId: string; password: string }, @Req() req: Request) {
+    try {
+      const user = req.user as UserRequest;
+      return await this.campaingsService.joinCampaign(data, user.id);
+    } catch (error) {
+      throw new Error('Error joining campaign');
+    }
+  }
 }

@@ -122,23 +122,6 @@ export class UserService {
     }
   }
 
-  async joinCampaign(userId: string, campaignId: string) {
-    try {
-      return this.dataBaseService.playerOnCampaign.create({
-        data: {
-          player: {
-            connect: { id: userId },
-          },
-          campaign: {
-            connect: { id: campaignId },
-          },
-        },
-      });
-    } catch (error) {
-      console.log('erro ao conectar usuario a campanha');
-    }
-  }
-
   async getUserCampaigns(userId: string) {
     try {
       const campaigns = await this.dataBaseService.user.findUnique({
