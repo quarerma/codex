@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateCampaignDTO } from './dto/create-campaign-dto';
 import * as bcrypt from 'bcrypt';
@@ -58,6 +58,52 @@ export class CampaingsService {
         },
       });
 
+      if (!campaign) {
+        throw new HttpException(
+          {
+            status: 'campaignError',
+            message: 'Campaign not found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      // check if user is already in campaign
+      const playerOnCampaign = await this.dataBaseService.playerOnCampaign.findFirst({
+        where: {
+          campaignId: data.campaignId,
+          playerId: userId,
+        },
+      });
+
+      if (playerOnCampaign) {
+        throw new HttpException(
+          {
+            status: 'campaignError',
+            message: 'You already ar on this campaign',
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      // check if is the owner of the campaign
+      const isOwner = await this.dataBaseService.campaign.findFirst({
+        where: {
+          id: data.campaignId,
+          ownerId: userId,
+        },
+      });
+
+      if (isOwner) {
+        throw new HttpException(
+          {
+            status: 'campaignError',
+            message: 'You are the owner of this campaign',
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+
       if (campaign.password) {
         const isPasswordCorrect = await bcrypt.compare(data.password, campaign.password);
 
@@ -65,15 +111,32 @@ export class CampaingsService {
           throw new Error('Incorrect password');
         }
       }
-
-      return await this.dataBaseService.playerOnCampaign.create({
+      const joinObject = await this.dataBaseService.playerOnCampaign.create({
         data: {
           player: { connect: { id: userId } },
           campaign: { connect: { id: data.campaignId } },
         },
+        select: {
+          campaign: {
+            select: {
+              createdAt: true,
+              id: true,
+              name: true,
+              description: true,
+              owner: {
+                select: {
+                  id: true,
+                  username: true,
+                },
+              },
+            },
+          },
+        },
       });
+
+      return joinObject.campaign;
     } catch (error) {
-      throw new Error('Error joining campaign');
+      throw error;
     }
   }
 }

@@ -15,7 +15,7 @@ export class CampaingsController {
       const user = req.user as UserRequest;
       return await this.campaingsService.createCampaign(data, user.id);
     } catch (error) {
-      throw new Error('Error creating campaign');
+      throw error;
     }
   }
 
@@ -26,7 +26,8 @@ export class CampaingsController {
       const user = req.user as UserRequest;
       return await this.campaingsService.joinCampaign(data, user.id);
     } catch (error) {
-      throw new Error('Error joining campaign');
+      console.log('error', error);
+      throw error;
     }
   }
 }
