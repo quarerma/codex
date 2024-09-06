@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateSubClassDto } from './dto/create-subclass-dto';
+import { CreateFeatDto } from 'src/feats/dto/create-feat-dto';
 
 @Injectable()
 export class SubClassService {
@@ -23,7 +24,7 @@ export class SubClassService {
     }
   }
 
-  async assignSubClassFeat(subclassId: string, featId: string, levelRequired) {
+  async assignSubClassFeat(subclassId: string, feat: CreateFeatDto, levelRequired: number) {
     try {
       return await this.dataBaseService.subclassFeats.create({
         data: {
@@ -32,7 +33,13 @@ export class SubClassService {
             connect: { id: subclassId },
           },
           feat: {
-            connect: { id: featId },
+            create: {
+              name: feat.name,
+              description: feat.description,
+              prerequisites: feat.prerequisites,
+              element: feat.element,
+              type: 'SUBCLASS',
+            },
           },
         },
       });
@@ -68,13 +75,34 @@ export class SubClassService {
 
   async getAllSubclasses() {
     try {
-      return await this.dataBaseService.subclass.findMany({
+      const subclasses = await this.dataBaseService.subclass.findMany({
         select: {
           id: true,
           name: true,
           description: true,
           class: true,
+          subclassFeats: {
+            select: {
+              feat: true,
+              levelRequired: true,
+            },
+          },
         },
+      });
+
+      return subclasses.map((subclass) => {
+        return {
+          id: subclass.id,
+          name: subclass.name,
+          description: subclass.description,
+          class: subclass.class,
+          subclassFeats: subclass.subclassFeats.map((subclassFeat) => {
+            return {
+              feat: subclassFeat.feat,
+              levelRequired: subclassFeat.levelRequired,
+            };
+          }),
+        };
       });
     } catch (error) {
       throw new Error(error);

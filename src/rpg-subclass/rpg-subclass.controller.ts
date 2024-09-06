@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { SubClassService } from './rpg-subclass.service';
 import { CreateSubClassDto } from './dto/create-subclass-dto';
 import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { AssignFeatDto } from './dto/assign.feat.dto';
 
 @Controller('rpg-subclass')
 export class SubClassController {
@@ -16,10 +17,11 @@ export class SubClassController {
     }
   }
 
-  @Patch('assign-feat/:subclassId/:featId')
-  async assignSubClassFeat(@Body() levelrequired: number, subclassId: string, featId: string) {
+  @Post('assign-feat/:subclassId')
+  async assignSubClassFeat(@Body() data: AssignFeatDto, @Param('subclassId') subclassId: string) {
     try {
-      return await this.rpgSubclassService.assignSubClassFeat(subclassId, featId, levelrequired);
+      console.log(data);
+      return await this.rpgSubclassService.assignSubClassFeat(subclassId, data.feat, data.levelRequired);
     } catch (error) {
       throw new Error(error);
     }

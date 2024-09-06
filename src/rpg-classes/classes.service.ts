@@ -91,6 +91,24 @@ export class ClassesService {
     }
   }
 
+  async getSubClasses(classId: string) {
+    try {
+      return await this.dataBaseService.class.findMany({
+        where: { id: classId },
+        select: {
+          subclasses: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
   async getClasses() {
     try {
       return await this.dataBaseService.class.findMany();
