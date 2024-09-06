@@ -12,6 +12,7 @@ export class OriginsService {
         data: {
           name: data.name,
           description: data.description,
+
           is_custom: false,
           skills: data.skills,
           feats: {
@@ -24,9 +25,12 @@ export class OriginsService {
             },
           },
         },
+        include: {
+          feats: true,
+        },
       });
     } catch (error) {
-      throw new Error('Error creating origin');
+      console.log(error);
     }
   }
 
@@ -34,11 +38,8 @@ export class OriginsService {
     try {
       return await this.dataBaseService.origin.findMany({
         where: { is_custom: false },
-        select: {
+        include: {
           feats: true,
-          name: true,
-          skills: true,
-          description: true,
         },
       });
     } catch (error) {
