@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { CreateClassDTO } from './dto/create-class-dto';
 import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
@@ -28,10 +28,19 @@ export class ClassesController {
     }
   }
 
-  @Patch('assign-starter-feat/:classId')
+  @Post('assign-initial-feat/:classId')
   async assignClassFeat(@Param('classId') classId: string, @Body() feat: CreateFeatDto) {
     try {
       return await this.classesService.createInitialClassFeat(classId, feat);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  @Post('assign-feat/:classId')
+  async assignFeat(@Param('classId') classId: string, @Body() feat: CreateFeatDto) {
+    try {
+      return await this.classesService.createClassFeat(feat, classId);
     } catch (error) {
       throw new Error(error);
     }
@@ -41,6 +50,15 @@ export class ClassesController {
   async getClassFeats(@Param('classId') classId: string) {
     try {
       return await this.classesService.getClassFeats(classId);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  @Get('initial-feats/:classId')
+  async getInitialFeats(@Param('classId') classId: string) {
+    try {
+      return await this.classesService.getInitialFeats(classId);
     } catch (error) {
       throw new Error(error);
     }

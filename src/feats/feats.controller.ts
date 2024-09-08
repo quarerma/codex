@@ -15,16 +15,6 @@ export class FeatsController {
     }
   }
 
-  @Post('class-feat/:classId')
-  async createClassFeat(@Body() data: CreateFeatDto, classId: string) {
-    return await this.featsService.createClassFeat(data, classId);
-  }
-
-  @Post('subclass-feat/:subclassId')
-  async createSubClassFeat(@Body() data: CreateFeatDto, subclassId: string) {
-    return await this.featsService.createSubClassFeat(data, subclassId);
-  }
-
   @Get('general-feat')
   async getGeneralFeats() {
     return await this.featsService.getGeneralFeats();

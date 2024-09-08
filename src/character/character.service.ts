@@ -127,13 +127,14 @@ export class CharacterService {
       await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsId);
 
       // TODO: assign origin on create
+
       for (const skill of createdCharacter.origin.skills) {
         await this.characterSkillsService.editCharacterSkillTraining(createdCharacter.id, skill, 'trained');
       }
       await this.characterFeatsService.assignFeat(createdCharacter.origin.featId, createdCharacter.id);
 
       // TODO: assign class, subclass and feats on create
-      await this.characterClassService.assignInitialClassAtributes(createdCharacter.class, createdCharacter);
+      await this.characterClassService.assignInitialClassAtributes(createdCharacter.class, createdCharacter, createdCharacter.origin.skills.length);
       await this.characterClassService.assignInitialSubClassFeats(createdCharacter.subclass, createdCharacter);
 
       for (const featId of data.featsId) {

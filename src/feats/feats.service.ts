@@ -8,7 +8,7 @@ export class FeatsService {
 
   async createGeneralFeat(data: CreateFeatDto) {
     try {
-      return await this.dataBaseService.generalFeats.create({
+      const created = await this.dataBaseService.generalFeats.create({
         data: {
           feat: {
             create: {
@@ -23,58 +23,23 @@ export class FeatsService {
             },
           },
         },
+        select: {
+          feat: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              prerequisites: true,
+              element: true,
+              afinity: true,
+            },
+          },
+        },
       });
+
+      return created.feat;
     } catch (error) {
       throw new Error('Error creating general feat');
-    }
-  }
-
-  async createClassFeat(data: CreateFeatDto, classId: string) {
-    try {
-      return await this.dataBaseService.classFeats.create({
-        data: {
-          class: {
-            connect: { id: classId },
-          },
-          feat: {
-            create: {
-              name: data.name,
-              description: data.description,
-              prerequisites: data.prerequisites,
-              characterUpgrades: data.characterUpgrade,
-              type: 'CLASS',
-              element: data.element,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error('Error creating class feat');
-    }
-  }
-
-  async createSubClassFeat(data: CreateFeatDto, subclassId: string) {
-    try {
-      return await this.dataBaseService.subclassFeats.create({
-        data: {
-          levelRequired: data.levelRequired,
-          subclass: {
-            connect: { id: subclassId },
-          },
-          feat: {
-            create: {
-              name: data.name,
-              description: data.description,
-              prerequisites: data.prerequisites,
-              characterUpgrades: data.characterUpgrade,
-              type: 'SUBCLASS',
-              element: data.element,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error('Error creating subclass feat');
     }
   }
 
@@ -95,8 +60,7 @@ export class FeatsService {
         },
       });
 
-      // concatenate afinity and feat data
-      return general_feats;
+      return general_feats.map((feat) => feat.feat);
     } catch (error) {
       throw new Error('Error getting general feats');
     }

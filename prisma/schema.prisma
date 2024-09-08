@@ -100,6 +100,7 @@ model Character {
 
   speed Int
   defense Int
+  num_of_skills Int @default(0)
   
   healthInfo Json @map("health_info")
   effortInfo Json @map("effort_info")

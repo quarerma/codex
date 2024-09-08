@@ -10,8 +10,14 @@ export class CharacterClassService {
     private readonly characterFeatsService: CharacterFeatsService,
   ) {}
 
-  async assignInitialClassAtributes(character_class: Class, character: Character) {
+  async assignInitialClassAtributes(character_class: Class, character: Character, num_of_origin_skills: number) {
     try {
+      await this.dataBaseService.character.update({
+        where: { id: character.id },
+        data: {
+          num_of_skills: character_class.number_of_skills + num_of_origin_skills,
+        },
+      });
       for (const classFeats of character_class.initialFeats) {
         await this.characterFeatsService.assignFeat(character.id, classFeats);
       }
