@@ -1,4 +1,4 @@
-import { Atribute } from '@prisma/client';
+import { Atribute, Patent } from '@prisma/client';
 import { Max, MaxLength, Min } from 'class-validator';
 
 export class CreateCharacterDTO {
@@ -14,6 +14,7 @@ export class CreateCharacterDTO {
     message: 'Level is too high',
   })
   level: number;
+  patent: Patent;
 
   ownerId: string;
   campaignId: string;
@@ -27,7 +28,6 @@ export class CreateCharacterDTO {
   presence: number;
 
   ritualsId: string[];
-  itemsId: number[];
 
   featsId: string[];
   originId: string;

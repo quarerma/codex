@@ -116,6 +116,7 @@ export class CharacterService {
           character: {
             connect: { id: createdCharacter.id },
           },
+          patent: data.patent,
           maxValue: carryInfo.maxValue,
           currentValue: carryInfo.currentValue,
           alterations: carryInfo.alterations,
@@ -124,11 +125,6 @@ export class CharacterService {
 
       // TODO: assign rituals
       await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsId);
-
-      // TODO: assign items
-      for (const item_id of data.itemsId) {
-        await this.inventoryService.addItemToInventory(item_id, createdCharacter.id);
-      }
 
       // TODO: assign origin on create
       for (const skill of createdCharacter.origin.skills) {

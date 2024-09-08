@@ -146,8 +146,17 @@ model Inventory {
   maxValue Int
   alterations Json[]
 
+  patent Patent
   slots InventorySlot[]
   credit Credit @default(LOW)
+}
+
+enum Patent {
+  ROOKIE
+  OPERATOR
+  SPECIAL_AGENT
+  OPERATION_OFFICER
+  ELITE_AGENT
 }
 
 model InventorySlot {
