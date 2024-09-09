@@ -139,4 +139,32 @@ export class CampaingsService {
       throw error;
     }
   }
+
+  async leaveCampaign(userId: string, campaignId: string) {
+    // TODO delete character
+    try {
+      const participation = await this.dataBaseService.playerOnCampaign.findUnique({
+        where: {
+          campaignId_playerId: {
+            campaignId: campaignId,
+            playerId: userId,
+          },
+        },
+      });
+
+      if (!participation) {
+        throw new Error('User is not in this campaign');
+      }
+      await this.dataBaseService.playerOnCampaign.delete({
+        where: {
+          campaignId_playerId: {
+            campaignId: campaignId,
+            playerId: userId,
+          },
+        },
+      });
+    } catch (error) {
+      console.log('Error leaving the campaign:', error.message);
+    }
+  }
 }

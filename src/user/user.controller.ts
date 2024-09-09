@@ -95,4 +95,21 @@ export class UserController {
       );
     }
   }
+
+  @Get('campaigns-player')
+  @UseGuards(JwtAuthGuards)
+  async getUserCampaignsPlayer(@Req() req: Request) {
+    try {
+      const user = req.user as UserRequest;
+      return await this.userService.getUserCampaignsAsPlayer(user.id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 'userError',
+          message: 'Usuário não encontrado',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 }

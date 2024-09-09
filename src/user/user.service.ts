@@ -175,31 +175,35 @@ export class UserService {
     }
   }
 
-  async leaveCampaign(userId: string, campaignId: string) {
-    // TODO delete character
+  async getUserCampaignsAsPlayer(userId: string) {
     try {
-      const participation = await this.dataBaseService.playerOnCampaign.findUnique({
-        where: {
-          campaignId_playerId: {
-            campaignId: campaignId,
-            playerId: userId,
+      const campaigns = await this.dataBaseService.user.findUnique({
+        where: { id: userId },
+        select: {
+          campaigns_player: {
+            select: {
+              campaign: {
+                select: {
+                  id: true,
+                  createdAt: true,
+                  name: true,
+                  description: true,
+                  owner: {
+                    select: {
+                      id: true,
+                      username: true,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       });
 
-      if (!participation) {
-        throw new Error('User is not in this campaign');
-      }
-      await this.dataBaseService.playerOnCampaign.delete({
-        where: {
-          campaignId_playerId: {
-            campaignId: campaignId,
-            playerId: userId,
-          },
-        },
-      });
+      return campaigns.campaigns_player.map((campaign) => campaign.campaign);
     } catch (error) {
-      console.log('Error leaving the campaign:', error.message);
+      console.log('erro ao buscar campanhas do usuario');
     }
   }
 }
