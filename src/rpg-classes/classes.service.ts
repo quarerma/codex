@@ -125,7 +125,7 @@ export class ClassesService {
 
   async getSubClasses(classId: string) {
     try {
-      return await this.dataBaseService.class.findMany({
+      const subclass = await this.dataBaseService.class.findUnique({
         where: { id: classId },
         select: {
           subclasses: {
@@ -133,10 +133,18 @@ export class ClassesService {
               id: true,
               name: true,
               description: true,
+              subclassFeats: {
+                select: {
+                  levelRequired: true,
+                  feat: true,
+                },
+              },
             },
           },
         },
       });
+
+      return subclass.subclasses;
     } catch (error) {
       throw new Error(error);
     }

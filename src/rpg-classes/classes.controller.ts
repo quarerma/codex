@@ -63,4 +63,14 @@ export class ClassesController {
       throw new Error(error);
     }
   }
+
+  @Get('/subclasses/:classId')
+  @UseGuards(JwtAuthGuards)
+  async getSubClasses(@Param('classId') classId: string) {
+    try {
+      return await this.classesService.getSubClasses(classId);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
