@@ -65,4 +65,107 @@ export class FeatsService {
       throw new Error('Error getting general feats');
     }
   }
+
+  async getClassesFeats() {
+    try {
+      return await this.dataBaseService.feat.findMany({
+        where: {
+          type: 'CLASS',
+          classFeats: {
+            none: {
+              isStarterFeat: true,
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prerequisites: true,
+          element: true,
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting class feats');
+    }
+  }
+
+  async getSubClassesFeats() {
+    try {
+      return await this.dataBaseService.feat.findMany({
+        where: {
+          type: 'SUBCLASS',
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prerequisites: true,
+          element: true,
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting subclass feats');
+    }
+  }
+
+  async filterSubClassesFeats(subclassId: string) {
+    try {
+      const feats = await this.dataBaseService.subclassFeats.findMany({
+        where: {
+          subclassId,
+        },
+        select: {
+          feat: true,
+        },
+      });
+
+      return feats.map((feat) => feat.feat);
+    } catch (error) {
+      throw new Error('Error getting subclass feats');
+    }
+  }
+
+  async filterClassFeats(classId: string) {
+    try {
+      const feats = await this.dataBaseService.classFeats.findMany({
+        where: {
+          classId,
+          isStarterFeat: false,
+        },
+        select: {
+          feat: true,
+        },
+      });
+
+      return feats.map((feat) => feat.feat);
+    } catch (error) {
+      throw new Error('Error getting class feats');
+    }
+  }
+  async getNonCustomFeats() {
+    try {
+      return await this.dataBaseService.feat.findMany({
+        where: {
+          type: {
+            not: 'CUSTOM',
+          },
+          classFeats: {
+            none: {
+              isStarterFeat: true,
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prerequisites: true,
+          element: true,
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting non custom feats');
+    }
+  }
 }

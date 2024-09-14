@@ -270,6 +270,7 @@ model ClassFeats {
   featId String
   class Class @relation(fields: [classId], references: [id])
   classId String
+  isStarterFeat Boolean @default(false)
 
   @@unique([featId, classId])
 }

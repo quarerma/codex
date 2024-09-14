@@ -58,11 +58,12 @@ export class ClassesService {
 
   async createInitialClassFeat(classId: string, feat: CreateFeatDto) {
     try {
-      const createFeat = await this.dataBaseService.classFeats.create({
+      return await this.dataBaseService.classFeats.create({
         data: {
           class: {
             connect: { id: classId },
           },
+          isStarterFeat: true,
           feat: {
             create: {
               name: feat.name,
@@ -76,15 +77,6 @@ export class ClassesService {
           },
         },
       });
-
-      await this.dataBaseService.class.update({
-        where: { id: classId },
-        data: {
-          initialFeats: {
-            push: createFeat.featId,
-          },
-        },
-      });
     } catch (error) {
       throw new Error(error);
     }
@@ -93,7 +85,14 @@ export class ClassesService {
   async getClassFeats(classId: string) {
     try {
       const classFeats = await this.dataBaseService.class.findUnique({
-        where: { id: classId },
+        where: {
+          id: classId,
+          classFeats: {
+            none: {
+              isStarterFeat: true,
+            },
+          },
+        },
         select: {
           initialFeats: true,
           classFeats: {
@@ -112,12 +111,7 @@ export class ClassesService {
         },
       });
 
-      const feats = classFeats.classFeats.map((feat) => feat.feat);
-
-      // remove initial feats from class feats
-      const initialFeats = classFeats.initialFeats as string[];
-
-      return feats.filter((feat) => !initialFeats.includes(feat.id));
+      return classFeats.classFeats.map((feat) => feat.feat);
     } catch (error) {
       throw new Error(error);
     }
