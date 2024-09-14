@@ -14,6 +14,7 @@ export class RitualService {
           name: data.name,
           normalCastDescription: data.normalCastDescription,
           normalCost: data.normalCost,
+          resistence: data.resistance,
           discentCastDescription: data.discentCastDescription,
           discentCost: data.discentCost,
           trueCastDescription: data.trueCastDescription,
@@ -71,15 +72,16 @@ export class RitualService {
         },
       });
 
+      console.log(rituals);
       return rituals.map(({ damageRitual, ...ritual }) => ({
         ...ritual,
-        normalCastDamageType: damageRitual.normalCastDamageType,
-        discentCastDamageType: damageRitual.discentCastDamageType,
-        trueCastDamageType: damageRitual.trueCastDamageType,
-        normalCastDamage: damageRitual.normalCastDamage,
-        discentCastDamage: damageRitual.discentCastDamage,
-        trueCastDamage: damageRitual.trueCastDamage,
-        conditions: ritual.conditions.map((c) => c.condition),
+        normalCastDamageType: damageRitual && damageRitual.normalCastDamageType,
+        discentCastDamageType: damageRitual && damageRitual.discentCastDamageType,
+        trueCastDamageType: damageRitual && damageRitual.trueCastDamageType,
+        normalCastDamage: damageRitual && damageRitual.normalCastDamage,
+        discentCastDamage: damageRitual && damageRitual.discentCastDamage,
+        trueCastDamage: damageRitual && damageRitual.trueCastDamage,
+        conditions: ritual.conditions ? ritual.conditions.map((c) => c.condition) : [],
       }));
     } catch (error) {
       throw new Error('Error getting core rituals');
@@ -102,12 +104,12 @@ export class RitualService {
 
       return rituals.map(({ damageRitual, ...ritual }) => ({
         ...ritual,
-        normalCastDamageType: damageRitual.normalCastDamageType,
-        discentCastDamageType: damageRitual.discentCastDamageType,
-        trueCastDamageType: damageRitual.trueCastDamageType,
-        normalCastDamage: damageRitual.normalCastDamage,
-        discentCastDamage: damageRitual.discentCastDamage,
-        trueCastDamage: damageRitual.trueCastDamage,
+        normalCastDamageType: damageRitual && damageRitual.normalCastDamageType,
+        discentCastDamageType: damageRitual && damageRitual.discentCastDamageType,
+        trueCastDamageType: damageRitual && damageRitual.trueCastDamageType,
+        normalCastDamage: damageRitual && damageRitual.normalCastDamage,
+        discentCastDamage: damageRitual && damageRitual.discentCastDamage,
+        trueCastDamage: damageRitual && damageRitual.trueCastDamage,
         conditions: ritual.conditions.map((c) => c.condition),
       }));
     } catch (error) {

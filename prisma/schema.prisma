@@ -363,6 +363,7 @@ model Ritual {
   target String
   duration String
   element Element
+  resistence String
 
   is_custom Boolean
   damageRitual DamageRitual?
@@ -388,13 +389,13 @@ model CharacterRitual {
 model DamageRitual {
   ritual Ritual @relation(fields: [ritualId], references: [id])
   ritualId String @id
-  normalCastDamageType DamageType[]
-  discentCastDamageType DamageType[]
-  trueCastDamageType DamageType[]
+  normalCastDamageType DamageType
+  discentCastDamageType DamageType
+  trueCastDamageType DamageType
 
-  normalCastDamage String[]
-  discentCastDamage String[]
-  trueCastDamage String[]
+  normalCastDamage String
+  discentCastDamage String
+  trueCastDamage String
 }
 enum RitualType {
   EFFECT
@@ -579,7 +580,7 @@ enum DamageType {
   KNOWLEDGE
   DEATH
   ENERGY
-
+  ELETRIC
 }
 
 enum FeatType {
