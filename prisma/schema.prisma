@@ -349,12 +349,13 @@ model Ritual {
   name String 
 
   normalCastDescription String @db.Text
+  normalCost Int
 
-  discentCastDescription String @db.Text
-  discentCost Int
+  discentCastDescription String? @db.Text
+  discentCost Int?
 
-  trueCastDescription String @db.Text
-  trueCost Int
+  trueCastDescription String? @db.Text
+  trueCost Int?
 
   ritualLevel Int
   exectutionTime String
@@ -387,13 +388,13 @@ model CharacterRitual {
 model DamageRitual {
   ritual Ritual @relation(fields: [ritualId], references: [id])
   ritualId String @id
-  normalCastDamageType DamageType
-  discentCastDamageType DamageType
-  trueCastDamageType DamageType
+  normalCastDamageType DamageType[]
+  discentCastDamageType DamageType[]
+  trueCastDamageType DamageType[]
 
-  normalCastDamage String
-  discentCastDamage String
-  trueCastDamage String
+  normalCastDamage String[]
+  discentCastDamage String[]
+  trueCastDamage String[]
 }
 enum RitualType {
   EFFECT
@@ -555,9 +556,13 @@ enum ItemType {
 }
 
 enum Range {
+  SELF
+  TOUCH
   MELEE
   SHORT
   MEDIUM
+  EXTREME
+  UNLIMITED
   LONG
 }
 

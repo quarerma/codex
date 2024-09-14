@@ -3,10 +3,11 @@ import { DamageType, Element, Range, RitualType } from '@prisma/client';
 export type CreateRitualDto = {
   name: string;
   normalCastDescription: string;
-  discentCastDescription: string;
-  discentCost: number;
-  trueCastDescription: string;
-  trueCost: number;
+  normalCost: number;
+  discentCastDescription?: string;
+  discentCost?: number;
+  trueCastDescription?: string;
+  trueCost?: number;
   ritualLevel: number;
   exectutionTime: string;
   range: Range;
@@ -18,11 +19,11 @@ export type CreateRitualDto = {
   conditions: string[];
 
   // DamageRitual attributes
-  normalCastDamageType?: DamageType;
-  discentCastDamageType?: DamageType;
-  trueCastDamageType?: DamageType;
+  normalCastDamageType?: DamageType[];
+  discentCastDamageType?: DamageType[];
+  trueCastDamageType?: DamageType[];
 
-  normalCastDamage?: string;
-  discentCastDamage?: string;
-  trueCastDamage?: string;
+  normalCastDamage?: string[];
+  discentCastDamage?: string[];
+  trueCastDamage?: string[];
 };

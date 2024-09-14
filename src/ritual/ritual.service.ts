@@ -13,6 +13,7 @@ export class RitualService {
         data: {
           name: data.name,
           normalCastDescription: data.normalCastDescription,
+          normalCost: data.normalCost,
           discentCastDescription: data.discentCastDescription,
           discentCost: data.discentCost,
           trueCastDescription: data.trueCastDescription,
@@ -23,7 +24,7 @@ export class RitualService {
           target: data.target,
           duration: data.duration,
           element: data.element,
-          is_custom: true,
+          is_custom: false,
           type: data.type,
         },
       });
@@ -61,6 +62,7 @@ export class RitualService {
       const rituals = await this.dataBaseService.ritual.findMany({
         where: { is_custom: false },
         include: {
+          damageRitual: true,
           conditions: {
             select: {
               condition: true,
@@ -69,8 +71,14 @@ export class RitualService {
         },
       });
 
-      return rituals.map((ritual) => ({
+      return rituals.map(({ damageRitual, ...ritual }) => ({
         ...ritual,
+        normalCastDamageType: damageRitual.normalCastDamageType,
+        discentCastDamageType: damageRitual.discentCastDamageType,
+        trueCastDamageType: damageRitual.trueCastDamageType,
+        normalCastDamage: damageRitual.normalCastDamage,
+        discentCastDamage: damageRitual.discentCastDamage,
+        trueCastDamage: damageRitual.trueCastDamage,
         conditions: ritual.conditions.map((c) => c.condition),
       }));
     } catch (error) {
@@ -83,6 +91,7 @@ export class RitualService {
       const rituals = await this.dataBaseService.ritual.findMany({
         where: { element: element },
         include: {
+          damageRitual: true,
           conditions: {
             select: {
               condition: true,
@@ -91,8 +100,14 @@ export class RitualService {
         },
       });
 
-      return rituals.map((ritual) => ({
+      return rituals.map(({ damageRitual, ...ritual }) => ({
         ...ritual,
+        normalCastDamageType: damageRitual.normalCastDamageType,
+        discentCastDamageType: damageRitual.discentCastDamageType,
+        trueCastDamageType: damageRitual.trueCastDamageType,
+        normalCastDamage: damageRitual.normalCastDamage,
+        discentCastDamage: damageRitual.discentCastDamage,
+        trueCastDamage: damageRitual.trueCastDamage,
         conditions: ritual.conditions.map((c) => c.condition),
       }));
     } catch (error) {

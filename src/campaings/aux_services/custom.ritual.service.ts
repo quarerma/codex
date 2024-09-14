@@ -16,6 +16,7 @@ export class CustomRitualService {
           ritual: {
             create: {
               name: data.name,
+              normalCost: data.normalCost,
               normalCastDescription: data.normalCastDescription,
               discentCastDescription: data.discentCastDescription,
               discentCost: data.discentCost,
