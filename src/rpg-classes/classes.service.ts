@@ -84,34 +84,19 @@ export class ClassesService {
 
   async getClassFeats(classId: string) {
     try {
-      const classFeats = await this.dataBaseService.class.findUnique({
-        where: {
-          id: classId,
-          classFeats: {
-            none: {
-              isStarterFeat: true,
-            },
-          },
-        },
+      const classFeats = await this.dataBaseService.classFeats.findMany({
+        where: { classId, isStarterFeat: false },
         select: {
-          initialFeats: true,
-          classFeats: {
-            select: {
-              feat: {
-                select: {
-                  id: true,
-                  name: true,
-                  description: true,
-                  prerequisites: true,
-                  element: true,
-                },
-              },
-            },
+          feat: true,
+        },
+        orderBy: {
+          feat: {
+            name: 'asc',
           },
         },
       });
 
-      return classFeats.classFeats.map((feat) => feat.feat);
+      return classFeats.map((feat) => feat.feat);
     } catch (error) {
       throw new Error(error);
     }
@@ -165,6 +150,11 @@ export class ClassesService {
         },
         select: {
           feat: true,
+        },
+        orderBy: {
+          feat: {
+            name: 'asc',
+          },
         },
       });
 

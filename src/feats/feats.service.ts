@@ -58,6 +58,11 @@ export class FeatsService {
             },
           },
         },
+        orderBy: {
+          feat: {
+            name: 'asc',
+          },
+        },
       });
 
       return general_feats.map((feat) => feat.feat);
@@ -84,6 +89,9 @@ export class FeatsService {
           prerequisites: true,
           element: true,
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } catch (error) {
       throw new Error('Error getting class feats');
@@ -103,6 +111,9 @@ export class FeatsService {
           prerequisites: true,
           element: true,
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } catch (error) {
       throw new Error('Error getting subclass feats');
@@ -117,6 +128,11 @@ export class FeatsService {
         },
         select: {
           feat: true,
+        },
+        orderBy: {
+          feat: {
+            name: 'asc',
+          },
         },
       });
 
@@ -135,6 +151,11 @@ export class FeatsService {
         },
         select: {
           feat: true,
+        },
+        orderBy: {
+          feat: {
+            name: 'asc',
+          },
         },
       });
 
@@ -162,6 +183,9 @@ export class FeatsService {
           description: true,
           prerequisites: true,
           element: true,
+        },
+        orderBy: {
+          name: 'asc',
         },
       });
     } catch (error) {

@@ -218,7 +218,6 @@ model Class {
   initialEffort Int
 
   number_of_skills Int @default(0)
-  initialFeats String[]
   proficiencies Proficiency[]
 
   subclasses Subclass[]

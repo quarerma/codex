@@ -18,7 +18,21 @@ export class CharacterClassService {
           num_of_skills: character_class.number_of_skills + num_of_origin_skills,
         },
       });
-      for (const classFeats of character_class.initialFeats) {
+
+      const classFeats_id = await this.dataBaseService.classFeats.findMany({
+        where: {
+          classId: character_class.id,
+          isStarterFeat: true,
+        },
+        select: {
+          feat: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+      for (const classFeats of classFeats_id.map((classFeat) => classFeat.feat.id)) {
         await this.characterFeatsService.assignFeat(character.id, classFeats);
       }
     } catch (error) {

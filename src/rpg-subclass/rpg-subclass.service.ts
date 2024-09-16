@@ -50,22 +50,22 @@ export class SubClassService {
 
   async getSubClassesFeats(subclassId: string) {
     try {
-      return await this.dataBaseService.subclass.findMany({
-        where: { id: subclassId },
+      return await this.dataBaseService.subclassFeats.findMany({
+        where: { subclassId: subclassId },
         select: {
-          subclassFeats: {
+          levelRequired: true,
+          feat: {
             select: {
-              feat: {
-                select: {
-                  id: true,
-                  name: true,
-                  description: true,
-                  prerequisites: true,
-                  element: true,
-                },
-              },
+              id: true,
+              name: true,
+              description: true,
+              prerequisites: true,
+              element: true,
             },
           },
+        },
+        orderBy: {
+          levelRequired: 'asc',
         },
       });
     } catch (error) {
@@ -87,6 +87,9 @@ export class SubClassService {
               levelRequired: true,
             },
           },
+        },
+        orderBy: {
+          name: 'asc',
         },
       });
 
