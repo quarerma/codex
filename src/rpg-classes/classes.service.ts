@@ -158,27 +158,13 @@ export class ClassesService {
 
   async getInitialFeats(classId: string) {
     try {
-      const classFeats = await this.dataBaseService.class.findUnique({
-        where: { id: classId },
-        select: {
-          initialFeats: true,
-        },
-      });
-
-      const initialFeats = classFeats.initialFeats as string[];
-
       const feats = await this.dataBaseService.classFeats.findMany({
-        where: { featId: { in: initialFeats } },
+        where: {
+          classId: classId,
+          isStarterFeat: true,
+        },
         select: {
-          feat: {
-            select: {
-              id: true,
-              name: true,
-              description: true,
-              prerequisites: true,
-              element: true,
-            },
-          },
+          feat: true,
         },
       });
 

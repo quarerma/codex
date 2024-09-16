@@ -59,8 +59,11 @@ export class CharacterUnUpgradesService {
       case CharacterUpgradeType.PE_MAX:
         await this.maxStatusUpgrade(character, upgrade, 'effort');
         break;
-      case CharacterUpgradeType.MESMO_DADO_DE_DANO_MELEE:
+      case CharacterUpgradeType.GLOBAL_MESMO_DADO_DE_DANO_MELEE:
         // Implementar lógica para MESMO_DADO_DE_DANO_MELEE
+        break;
+      case CharacterUpgradeType.ITEM_MESMO_DADO_DE_DANO_MELEE:
+        // Implementar lógica para ITEM_MESMO_DADO_DE_DANO_MELEE
         break;
       case CharacterUpgradeType.DADO_DE_DANO:
         // Implementar lógica para DADO_DE_DANO
