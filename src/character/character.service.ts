@@ -264,8 +264,14 @@ export class CharacterService {
 
   async deleteCharacter(characterId: string) {
     try {
-      await this.dataBaseService.character.delete({
-        where: { id: characterId },
+      // delete character feats
+      await this.dataBaseService.characterFeat.deleteMany({
+        where: { characterId },
+      });
+
+      // delete character rituals
+      await this.dataBaseService.characterRitual.deleteMany({
+        where: { characterId },
       });
 
       // delete all character inventory
@@ -276,6 +282,11 @@ export class CharacterService {
       // delete all inventory slots
       await this.dataBaseService.inventorySlot.deleteMany({
         where: { inventory: { characterId } },
+      });
+
+      // delete all character skills
+      await this.dataBaseService.character.delete({
+        where: { id: characterId },
       });
     } catch (error) {
       throw new Error('Error deleting character');

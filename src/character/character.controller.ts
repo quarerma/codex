@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CharacterService } from './character.service';
 import { CreateCharacterDTO } from './dto/create-character-dto';
 
@@ -23,6 +23,15 @@ export class CharacterController {
       return await this.characterService.getCharacter(id);
     } catch (error) {
       throw new Error('Error getting character');
+    }
+  }
+
+  @Delete('/:id')
+  async deleteCharacter(@Param('id') id: string) {
+    try {
+      return await this.characterService.deleteCharacter(id);
+    } catch (error) {
+      throw new Error('Error deleting character');
     }
   }
 }
