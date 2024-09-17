@@ -5,6 +5,7 @@ import { CharacterSkillsService } from './aux_services/character.skills.service'
 import { CharacterClassService } from './aux_services/character.class.service';
 import { InventoryService } from 'src/inventory/inventory.service';
 import { CharacterFeatsService } from './aux_services/character.feats.service';
+import { Credit } from '@prisma/client';
 
 @Injectable()
 export class CharacterService {
@@ -31,20 +32,19 @@ export class CharacterService {
         alterations: [],
       } as AtributesJson;
 
-      const currentHealth = characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel;
-      const maxHealth = characterClass.initialHealth + data.vitality + (data.level - 1) * characterClass.hitPointsPerLevel;
       const healthInfo = {
-        valuePerLevel: characterClass.hitPointsPerLevel,
+        valuePerLevel: characterClass.hitPointsPerLevel + data.vitality,
         alterations: [],
       } as StatusJson;
-
-      const currentEffort = characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel;
-      const maxEffort = characterClass.initialEffort + data.presence + (data.level - 1) * characterClass.effortPointsPerLevel;
+      const currentHealth = characterClass.initialHealth + data.vitality + (data.level - 1) * healthInfo.valuePerLevel;
+      const maxHealth = characterClass.initialHealth + data.vitality + (data.level - 1) * healthInfo.valuePerLevel;
 
       const effortInfo = {
-        valuePerLevel: characterClass.effortPointsPerLevel,
+        valuePerLevel: characterClass.effortPointsPerLevel + data.presence,
         alterations: [],
       } as StatusJson;
+      const currentEffort = characterClass.initialEffort + data.presence + (data.level - 1) * effortInfo.valuePerLevel;
+      const maxEffort = characterClass.initialEffort + data.presence + (data.level - 1) * effortInfo.valuePerLevel;
 
       const currentSanity = characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel;
       const maxSanity = characterClass.initialSanity + (data.level - 1) * characterClass.SanityPointsPerLevel;
@@ -92,10 +92,13 @@ export class CharacterService {
           },
 
           subclass: {
-            connect: { id: data.subClassId },
+            connect: { id: data.subclassId },
           },
 
           skills,
+          origin: {
+            connect: { id: data.originId },
+          },
         },
         include: {
           class: true,
@@ -111,12 +114,32 @@ export class CharacterService {
       };
 
       // create inventory
+      let credit: Credit;
+
+      switch (data.patent) {
+        case 'ROOKIE':
+          credit = 'LOW';
+          break;
+        case 'OPERATOR':
+          credit = 'MEDIUM';
+          break;
+        case 'SPECIAL_AGENT':
+          credit = 'MEDIUM';
+          break;
+        case 'OPERATION_OFFICER':
+          credit = 'HIGH';
+          break;
+        case 'ELITE_AGENT':
+          credit = 'UNLIMITED';
+          break;
+      }
       await this.dataBaseService.inventory.create({
         data: {
           character: {
             connect: { id: createdCharacter.id },
           },
           patent: data.patent,
+          credit,
           maxValue: carryInfo.maxValue,
           currentValue: carryInfo.currentValue,
           alterations: carryInfo.alterations,
@@ -124,7 +147,7 @@ export class CharacterService {
       });
 
       // TODO: assign rituals
-      await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsId);
+      await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsIds);
 
       // TODO: assign origin on create
 
@@ -142,11 +165,17 @@ export class CharacterService {
       }
 
       return createdCharacter;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      throw new Error('Error creating character');
+    }
   }
 
   async assignRitualsOnCreate(characterId: string, ritualsId: string[]) {
     try {
+      if (!ritualsId) {
+        return;
+      }
       const rituals = await this.dataBaseService.ritual.findMany({
         where: { id: { in: ritualsId } },
       });
@@ -190,6 +219,43 @@ export class CharacterService {
     try {
       return await this.dataBaseService.character.findUnique({
         where: { id: characterId },
+        include: {
+          rituals: {
+            select: {
+              ritual: true,
+              ritual_cost: true,
+            },
+          },
+          class: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          subclass: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          owner: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+          feats: {
+            select: {
+              feat: true,
+              usingAfinity: true,
+            },
+          },
+          origin: {
+            include: {
+              feats: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error('Error getting character');

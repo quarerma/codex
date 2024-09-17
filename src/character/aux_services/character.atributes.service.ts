@@ -17,6 +17,7 @@ export class CharacterAtributesService {
 
       const atributes = character.atributes as AtributesJson;
 
+      console.log(atribute);
       switch (atribute.atribute) {
         case 'STRENGTH':
           this.onStreghthUpdate(characterId, atribute.value);

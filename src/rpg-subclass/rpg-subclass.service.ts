@@ -35,6 +35,7 @@ export class SubClassService {
           feat: {
             create: {
               name: feat.name,
+              characterUpgrades: feat.characterUpgrade,
               description: feat.description,
               prerequisites: feat.prerequisites,
               element: feat.element,

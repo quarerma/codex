@@ -379,7 +379,7 @@ model CharacterRitual {
   characterId String @map("character_id")
   ritual Ritual @relation(fields: [ritualId], references: [id])
   ritualId String @map("ritual_id")
-  isUsingAfinity Boolean @default(false)
+
   ritual_cost Int
   alterations Json[]
   @@unique([characterId, ritualId])

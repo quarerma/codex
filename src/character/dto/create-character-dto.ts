@@ -19,7 +19,7 @@ export class CreateCharacterDTO {
   ownerId: string;
   campaignId: string;
   classId: string;
-  subClassId: string;
+  subclassId: string;
 
   strenght: number;
   dexterity: number;
@@ -27,7 +27,7 @@ export class CreateCharacterDTO {
   intelligence: number;
   presence: number;
 
-  ritualsId: string[];
+  ritualsIds: string[];
 
   featsId: string[];
   originId: string;

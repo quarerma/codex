@@ -206,4 +206,57 @@ export class UserService {
       console.log('erro ao buscar campanhas do usuario');
     }
   }
+
+  async getUserCharacters(userId: string) {
+    try {
+      return await this.dataBaseService.character.findMany({
+        where: { ownerId: userId },
+        include: {
+          campaign: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          rituals: {
+            select: {
+              ritual: true,
+              ritual_cost: true,
+            },
+          },
+          class: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          subclass: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          owner: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+          feats: {
+            select: {
+              feat: true,
+              usingAfinity: true,
+            },
+          },
+          origin: {
+            include: {
+              feats: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.log('erro ao buscar personagens do usuario');
+    }
+  }
 }

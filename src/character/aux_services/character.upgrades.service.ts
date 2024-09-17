@@ -16,6 +16,7 @@ export class CharacterUpgradesService {
 
   async applyUpgrade(characterId: string, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification', inventorySlot?: string) {
     const character = await this.dataBaseService.character.findUnique({ where: { id: characterId } });
+
     switch (upgrade.type) {
       case CharacterUpgradeType.PERICIA:
         await this.skillUpgrade(character, upgrade, object, upgradeSource);
@@ -81,7 +82,7 @@ export class CharacterUpgradesService {
         await this.speedUpgrade(character, upgrade);
         break;
       default:
-        throw new Error('Unknown upgrade type: ${upgrade.type}');
+        break;
     }
   }
 
@@ -120,24 +121,24 @@ export class CharacterUpgradesService {
       const atribute = character.atributes as AtributesJson;
 
       switch (upgrade.upgradeTarget) {
-        case 'strenght':
+        case 'STRENGTH':
           this.atributesService.onStreghthUpdate(character.id, upgrade.upgradeValue + atribute.strenght);
           atribute.strenght += upgrade.upgradeValue;
           break;
-        case 'dexterity':
+        case 'DEXTERITY':
           this.atributesService.onDexterityUpdate(character.id, upgrade.upgradeValue + atribute.dexterity);
           atribute.dexterity += upgrade.upgradeValue;
           break;
-        case 'vitality':
-          this.atributesService.onVitalityUpdate(character.id, upgrade.upgradeValue, atribute.vitality + upgrade.upgradeValue);
+        case 'VITALITY':
+          this.atributesService.onVitalityUpdate(character.id, upgrade.upgradeValue + atribute.vitality, atribute.vitality);
           atribute.vitality += upgrade.upgradeValue;
           break;
-        case 'intelligence':
+        case 'INTELLIGENCE':
           this.atributesService.onIntelligenceUpdate(character.id, upgrade.upgradeValue + atribute.intelligence);
           atribute.intelligence += upgrade.upgradeValue;
           break;
-        case 'presence':
-          this.atributesService.onPresenceUpdate(character.id, upgrade.upgradeValue, atribute.presence + upgrade.upgradeValue);
+        case 'PRESENCE':
+          this.atributesService.onPresenceUpdate(character.id, upgrade.upgradeValue + atribute.presence, atribute.presence);
           atribute.presence += upgrade.upgradeValue;
           break;
         default:
@@ -246,9 +247,8 @@ export class CharacterUpgradesService {
       switch (status) {
         case 'health':
           // calculate the life to increment
-          const healthInfo = character.healthInfo as StatusJson;
-          const valueDiff = upgrade.upgradeValue - healthInfo.valuePerLevel;
-          const valueToIncrement = valueDiff * character.level;
+
+          const valueToIncrement = upgrade.upgradeValue * character.level;
 
           await this.dataBaseService.character.update({
             where: { id: character.id },

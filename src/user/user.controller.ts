@@ -112,4 +112,21 @@ export class UserController {
       );
     }
   }
+
+  @Get('characters')
+  @UseGuards(JwtAuthGuards)
+  async getUserCharacters(@Req() req: Request) {
+    try {
+      const user = req.user as UserRequest;
+      return await this.userService.getUserCharacters(user.id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 'userError',
+          message: 'Usuário não encontrado',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 }

@@ -12,12 +12,16 @@ export class CharacterFeatsService {
     private readonly unUpgradeService: CharacterUnUpgradesService,
   ) {}
 
-  async assignFeat(characterId: string, featId: string) {
+  async assignFeat(featId: string, characterId: string) {
     try {
       const createdFeat = await this.dataBaseService.characterFeat.create({
         data: {
-          characterId,
-          featId,
+          character: {
+            connect: { id: characterId },
+          },
+          feat: {
+            connect: { id: featId },
+          },
         },
         select: {
           feat: true,

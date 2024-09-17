@@ -33,7 +33,7 @@ export class CharacterClassService {
         },
       });
       for (const classFeats of classFeats_id.map((classFeat) => classFeat.feat.id)) {
-        await this.characterFeatsService.assignFeat(character.id, classFeats);
+        await this.characterFeatsService.assignFeat(classFeats, character.id);
       }
     } catch (error) {
       throw new Error(error.message);
@@ -52,7 +52,7 @@ export class CharacterClassService {
 
       for (const subclassFeat of subclassFeats) {
         if (subclassFeat.levelRequired <= character.level) {
-          await this.characterFeatsService.assignFeat(character.id, subclassFeat.feat.id);
+          await this.characterFeatsService.assignFeat(subclassFeat.feat.id, character.id);
         }
       }
     } catch (error) {
