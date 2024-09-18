@@ -9,6 +9,7 @@ export class RitualService {
 
   async create(data: CreateRitualDto) {
     try {
+      console.log(data);
       const ritual = await this.dataBaseService.ritual.create({
         data: {
           name: data.name,
@@ -31,12 +32,18 @@ export class RitualService {
       });
 
       if (data.conditions.length > 0) {
-        this.dataBaseService.ritualCondition.createMany({
-          data: data.conditions.map((condition) => ({
-            conditionId: condition,
-            ritualId: ritual.id,
-          })),
-        });
+        for (let i = 0; i < data.conditions.length; i++) {
+          await this.dataBaseService.ritualCondition.create({
+            data: {
+              condition: {
+                connect: { id: data.conditions[i] },
+              },
+              ritual: {
+                connect: { id: ritual.id },
+              },
+            },
+          });
+        }
       }
       if (data.type === 'DAMAGE') {
         await this.dataBaseService.damageRitual.create({
@@ -54,13 +61,13 @@ export class RitualService {
         });
       }
     } catch (error) {
-      throw new Error('Error creating custom ritual');
+      console.log(error);
     }
   }
 
   async getCoreRituals() {
     try {
-      const rituals = await this.dataBaseService.ritual.findMany({
+      return await this.dataBaseService.ritual.findMany({
         where: { is_custom: false },
         include: {
           damageRitual: true,
@@ -71,18 +78,6 @@ export class RitualService {
           },
         },
       });
-
-      console.log(rituals);
-      return rituals.map(({ damageRitual, ...ritual }) => ({
-        ...ritual,
-        normalCastDamageType: damageRitual && damageRitual.normalCastDamageType,
-        discentCastDamageType: damageRitual && damageRitual.discentCastDamageType,
-        trueCastDamageType: damageRitual && damageRitual.trueCastDamageType,
-        normalCastDamage: damageRitual && damageRitual.normalCastDamage,
-        discentCastDamage: damageRitual && damageRitual.discentCastDamage,
-        trueCastDamage: damageRitual && damageRitual.trueCastDamage,
-        conditions: ritual.conditions ? ritual.conditions.map((c) => c.condition) : [],
-      }));
     } catch (error) {
       throw new Error('Error getting core rituals');
     }
@@ -90,7 +85,7 @@ export class RitualService {
 
   async filterRitualsByElement(element: Element) {
     try {
-      const rituals = await this.dataBaseService.ritual.findMany({
+      return await this.dataBaseService.ritual.findMany({
         where: { element: element },
         include: {
           damageRitual: true,
@@ -101,17 +96,6 @@ export class RitualService {
           },
         },
       });
-
-      return rituals.map(({ damageRitual, ...ritual }) => ({
-        ...ritual,
-        normalCastDamageType: damageRitual && damageRitual.normalCastDamageType,
-        discentCastDamageType: damageRitual && damageRitual.discentCastDamageType,
-        trueCastDamageType: damageRitual && damageRitual.trueCastDamageType,
-        normalCastDamage: damageRitual && damageRitual.normalCastDamage,
-        discentCastDamage: damageRitual && damageRitual.discentCastDamage,
-        trueCastDamage: damageRitual && damageRitual.trueCastDamage,
-        conditions: ritual.conditions.map((c) => c.condition),
-      }));
     } catch (error) {
       throw new Error('Error getting rituals by element');
     }

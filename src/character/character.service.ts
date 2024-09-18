@@ -225,6 +225,17 @@ export class CharacterService {
               ritual: {
                 include: {
                   damageRitual: true,
+                  conditions: {
+                    select: {
+                      condition: {
+                        select: {
+                          id: true,
+                          name: true,
+                          description: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
               ritual_cost: true,
