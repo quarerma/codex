@@ -222,7 +222,11 @@ export class CharacterService {
         include: {
           rituals: {
             select: {
-              ritual: true,
+              ritual: {
+                include: {
+                  damageRitual: true,
+                },
+              },
               ritual_cost: true,
             },
           },
@@ -248,6 +252,11 @@ export class CharacterService {
             select: {
               feat: true,
               usingAfinity: true,
+            },
+            orderBy: {
+              feat: {
+                name: 'asc',
+              },
             },
           },
           origin: {
