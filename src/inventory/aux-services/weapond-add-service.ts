@@ -22,11 +22,11 @@ export class WeapondAddService {
       const newAttack: Attack = {
         critical_margin: weapon.critical_range,
         critical_multiplier: weapon.critical_multiplier,
-        damaga_dies: weapon.damage,
+        damage_dies: [weapon.damage as string],
         extra_damage: [],
         local_id: slot_id,
         name: item.name,
-        skill: weapon.range == 'MELEE' ? 'Luta' : 'Pontaria',
+        skill: weapon.range === 'MELEE' ? 'Luta' : 'Pontaria',
         alterations: [],
       };
 

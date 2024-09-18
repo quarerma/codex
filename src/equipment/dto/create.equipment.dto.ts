@@ -11,7 +11,7 @@ export class CreateItemDto {
   num_of_uses: number;
   characterUpgrades: CharacterUpgrade[];
   // Weapon variables
-  damage?: string[];
+  damage?: string;
   critical_range?: number;
   critical_multiplier?: number;
   range?: Range;

@@ -465,7 +465,7 @@ model CampaignEquipment {
 model Weapon {
   Equipment Equipment @relation(fields: [equipmentId], references: [id])
   equipmentId Int @id
-  damage String[]
+  damage String
   critical_multiplier Int
   critical_range Int
   range Range
