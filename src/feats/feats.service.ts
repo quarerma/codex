@@ -32,6 +32,7 @@ export class FeatsService {
               prerequisites: true,
               element: true,
               afinity: true,
+              type: true,
             },
           },
         },
@@ -55,6 +56,7 @@ export class FeatsService {
               prerequisites: true,
               element: true,
               afinity: true,
+              type: true,
             },
           },
         },
@@ -88,6 +90,7 @@ export class FeatsService {
           description: true,
           prerequisites: true,
           element: true,
+          type: true,
         },
         orderBy: {
           name: 'asc',
@@ -110,6 +113,7 @@ export class FeatsService {
           description: true,
           prerequisites: true,
           element: true,
+          type: true,
         },
         orderBy: {
           name: 'asc',
@@ -183,6 +187,7 @@ export class FeatsService {
           description: true,
           prerequisites: true,
           element: true,
+          type: true,
         },
         orderBy: {
           name: 'asc',
