@@ -197,4 +197,59 @@ export class FeatsService {
       throw new Error('Error getting non custom feats');
     }
   }
+
+  async getPossibleCampaignFeats(campaignId: string) {
+    try {
+      return await this.dataBaseService.feat.findMany({
+        where: {
+          OR: [
+            {
+              type: 'CUSTOM',
+              campaignFeats: {
+                some: {
+                  campaignId: campaignId,
+                },
+              },
+            },
+            {
+              type: {
+                not: 'CUSTOM',
+              },
+            },
+          ],
+          AND: {
+            classFeats: {
+              none: {
+                isStarterFeat: true,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prerequisites: true,
+          element: true,
+          type: true,
+        },
+      });
+
+      //SELECT feat.id, feat.name, feat.description, feat.prerequisites, feat.element, feat.type
+      // FROM feat
+      // LEFT JOIN campaignFeats ON feat.id = campaignFeats.featId
+      // WHERE (
+      //     (feat.type = 'CUSTOM' AND campaignFeats.campaignId = :campaignId)
+      //     OR (feat.type != 'CUSTOM')
+      // )
+      // AND NOT EXISTS (
+      //     SELECT 1
+      //     FROM classFeats
+      //     WHERE classFeats.featId = feat.id
+      //     AND classFeats.isStarterFeat = true
+      // );
+    } catch (error) {
+      throw new Error('Error getting possible campaign feats');
+    }
+  }
 }

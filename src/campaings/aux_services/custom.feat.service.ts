@@ -34,7 +34,7 @@ export class CustomFeatService {
 
   async getCampaignCustomFeats(campaignId: string) {
     try {
-      return await this.dataBaseService.campaign.findUnique({
+      const customFeats = await this.dataBaseService.campaign.findUnique({
         where: { id: campaignId },
         select: {
           customFeat: {
@@ -47,12 +47,15 @@ export class CustomFeatService {
                   description: true,
                   prerequisites: true,
                   element: true,
+                  type: true,
                 },
               },
             },
           },
         },
       });
+
+      return customFeats.customFeat.map((feat) => feat.feat);
     } catch (error) {
       throw new Error('Error getting custom feats');
     }

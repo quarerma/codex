@@ -50,4 +50,13 @@ export class FeatsController {
       throw new HttpException(error.message, error.status);
     }
   }
+
+  @Get('campaign-possible-feats/:id')
+  async getCampaignPossibleFeats(@Param('id') id: string) {
+    try {
+      return await this.featsService.getPossibleCampaignFeats(id);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
 }
