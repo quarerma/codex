@@ -15,6 +15,38 @@ export class InventoryService {
     private readonly unUpgradeService: CharacterUnUpgradesService,
   ) {}
 
+  async getInventory(characterId: string) {
+    try {
+      const inventory = await this.dataBaseService.inventory.findUnique({
+        where: {
+          characterId: characterId,
+        },
+        select: {
+          characterId: true,
+          credit: true,
+          alterations: true,
+          currentValue: true,
+          maxValue: true,
+          patent: true,
+          slots: {
+            select: {
+              equipment: true,
+              category: true,
+              alterations: true,
+              id: true,
+              is_equipped: true,
+              local_name: true,
+              uses: true,
+            },
+          },
+        },
+      });
+
+      return inventory;
+    } catch (e) {
+      console.error(e);
+    }
+  }
   async addItemToInventory(item_id: number, characterId: string) {
     try {
       const item = await this.dataBaseService.equipment.findUnique({

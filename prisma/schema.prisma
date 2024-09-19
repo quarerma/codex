@@ -553,6 +553,7 @@ enum ItemType {
   PARANORMAL_EQUIPMENT
   CURSED_ITEM
   DEFAULT
+
 }
 
 enum Range {

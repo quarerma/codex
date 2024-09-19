@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateItemDto } from './dto/create.equipment.dto';
+import { Element } from '@prisma/client';
 
 @Injectable()
 export class EquipmentService {
@@ -44,6 +45,7 @@ export class EquipmentService {
         case 'OPERATIONAL_EQUIPMENT':
         case 'PARANORMAL_EQUIPMENT':
         case 'ACESSORY':
+        case 'CUSTOM':
         case 'ARMOR':
           equipment = await this.dataBaseService.equipment.findUnique({
             where: { id },
@@ -73,6 +75,7 @@ export class EquipmentService {
 
       return equipment;
     } catch (error) {
+      console.log(error);
       throw new Error('Error to get equipment');
     }
   }
@@ -94,7 +97,7 @@ export class EquipmentService {
         num_of_uses: data.num_of_uses,
         CursedItem: {
           create: {
-            element: data.element,
+            element: data.element as Element,
           },
         },
       },
@@ -138,6 +141,55 @@ export class EquipmentService {
         is_custom: data.is_custom,
         num_of_uses: data.num_of_uses,
         characterUpgrades: data.characterUpgrades,
+      },
+    });
+  }
+
+  async getPossibleEquipmentsForCampaign(campaignId: string) {
+    return this.dataBaseService.equipment.findMany({
+      where: {
+        OR: [
+          {},
+          {
+            is_custom: true,
+            CampaignEquipment: {
+              some: {
+                campaignId: campaignId,
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        Weapon: true,
+        CursedItem: true,
+        id: true,
+        name: true,
+        description: true,
+        is_custom: true,
+        characterUpgrades: true,
+        category: true,
+        type: true,
+        weight: true,
+        num_of_uses: true,
+      },
+    });
+  }
+
+  async getAllEquipments() {
+    return this.dataBaseService.equipment.findMany({
+      select: {
+        Weapon: true,
+        CursedItem: true,
+        id: true,
+        name: true,
+        description: true,
+        is_custom: true,
+        characterUpgrades: true,
+        category: true,
+        type: true,
+        weight: true,
+        num_of_uses: true,
       },
     });
   }
