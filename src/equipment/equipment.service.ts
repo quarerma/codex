@@ -146,10 +146,12 @@ export class EquipmentService {
   }
 
   async getPossibleEquipmentsForCampaign(campaignId: string) {
-    return this.dataBaseService.equipment.findMany({
+    return await this.dataBaseService.equipment.findMany({
       where: {
         OR: [
-          {},
+          {
+            is_custom: false,
+          },
           {
             is_custom: true,
             CampaignEquipment: {
