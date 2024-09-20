@@ -108,7 +108,7 @@ export class CharacterService {
       });
 
       const carryInfo = {
-        currentValue: data.strenght > 0 ? data.strenght * 5 : 2,
+        currentValue: 0,
         maxValue: data.strenght > 0 ? data.strenght * 5 : 2,
         alterations: [],
       };

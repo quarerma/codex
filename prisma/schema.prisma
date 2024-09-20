@@ -434,7 +434,7 @@ model CampaignModifications {
 
 model Equipment {
   id Int @id @default(autoincrement())
-  name String @unique
+  name String 
 
   num_of_uses Int
   description String
