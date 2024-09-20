@@ -30,7 +30,12 @@ export class InventoryService {
           patent: true,
           slots: {
             select: {
-              equipment: true,
+              equipment: {
+                include: {
+                  Weapon: true,
+                  CursedItem: true,
+                },
+              },
               category: true,
               alterations: true,
               id: true,
@@ -73,10 +78,14 @@ export class InventoryService {
           },
           category: item.category,
           local_name: item.name,
+          local_description: item.description,
           alterations: [],
           uses: item.num_of_uses,
+          is_equipped: false,
         },
       });
+
+      await this.equipItem(slot.id, characterId);
 
       return slot;
     } catch (e) {
@@ -84,7 +93,7 @@ export class InventoryService {
     }
   }
 
-  async removeItemFromInventory(item_id: number, characterId: string, slot_id: string) {
+  async removeItemFromInventory(characterId: string, slot_id: string) {
     try {
       this.unequipItem(slot_id, characterId);
 

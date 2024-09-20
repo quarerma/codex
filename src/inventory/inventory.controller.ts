@@ -8,7 +8,7 @@ export class InventoryController {
   @Patch('/add-item/:characterId/:id')
   async addItemToInventory(@Param('id') id: number, @Param('characterId') characterId: string) {
     try {
-      return this.inventoryService.addItemToInventory(id, characterId);
+      return this.inventoryService.addItemToInventory(Number(id), characterId);
     } catch (error) {
       throw new Error(error);
     }
@@ -18,6 +18,15 @@ export class InventoryController {
   async getInventory(@Param('characterId') characterId: string) {
     try {
       return this.inventoryService.getInventory(characterId);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  @Patch('/remove-item/:characterId/:slotId')
+  async removeItemFromInventory(@Param('slotId') slotId: string, @Param('characterId') characterId: string) {
+    try {
+      return this.inventoryService.removeItemFromInventory(characterId, slotId);
     } catch (error) {
       throw new Error(error);
     }

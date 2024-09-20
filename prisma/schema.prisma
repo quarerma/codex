@@ -171,6 +171,7 @@ model InventorySlot {
   uses Int @default(0)
   category Int
   local_name String
+  local_description String
   is_equipped Boolean @default(false)
 
   alterations Json[]
