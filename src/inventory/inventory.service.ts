@@ -95,7 +95,7 @@ export class InventoryService {
 
   async removeItemFromInventory(characterId: string, slot_id: string) {
     try {
-      this.unequipItem(slot_id, characterId);
+      await this.unequipItem(slot_id, characterId);
 
       await this.dataBaseService.inventorySlot.delete({
         where: {
@@ -186,6 +186,8 @@ export class InventoryService {
         }
       }
 
+      console.log('slot', slot);
+
       // remove modification alterations
       if (slot.alterations.length > 0) {
         for (const alteration of slot.alterations as AlterationObject[]) {
@@ -202,6 +204,7 @@ export class InventoryService {
         }
       }
     } catch (e) {
+      console.error(e);
       throw new Error(e);
     }
   }

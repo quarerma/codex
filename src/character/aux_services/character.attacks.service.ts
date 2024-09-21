@@ -50,9 +50,7 @@ export class CharacterAttacksService {
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {
-          attacks: {
-            set: updated_attacks,
-          },
+          attacks: updated_attacks,
         },
       });
     } catch (error) {
@@ -82,9 +80,7 @@ export class CharacterAttacksService {
       await this.dataBaseService.character.update({
         where: { id: characterId },
         data: {
-          attacks: {
-            set: attacks,
-          },
+          attacks: attacks,
         },
       });
     } catch (error) {

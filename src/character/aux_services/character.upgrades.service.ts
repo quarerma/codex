@@ -151,9 +151,7 @@ export class CharacterUpgradesService {
       await this.dataBaseService.character.update({
         where: { id: character.id },
         data: {
-          atributes: {
-            set: atribute,
-          },
+          atributes: atribute,
         },
       });
     } catch (error) {
@@ -248,6 +246,7 @@ export class CharacterUpgradesService {
         case 'health':
           // calculate the life to increment
 
+          const healthInfo = character.healthInfo as StatusJson;
           const valueToIncrement = upgrade.upgradeValue * character.level;
 
           await this.dataBaseService.character.update({
@@ -262,12 +261,8 @@ export class CharacterUpgradesService {
               },
 
               healthInfo: {
-                valuePerLevel: {
-                  increment: upgrade.upgradeValue,
-                },
-                alterations: {
-                  push: alterationObject,
-                },
+                valuePerLevel: healthInfo.valuePerLevel + upgrade.upgradeValue,
+                alterations: alterationObject,
               },
             },
           });
@@ -275,8 +270,8 @@ export class CharacterUpgradesService {
 
         case 'effort':
           const effortInfo = character.effortInfo as StatusJson;
-          const effortDiff = upgrade.upgradeValue - effortInfo.valuePerLevel;
-          const effortToIncrement = effortDiff * character.level;
+
+          const effortToIncrement = upgrade.upgradeValue * character.level;
 
           await this.dataBaseService.character.update({
             where: { id: character.id },
@@ -288,12 +283,9 @@ export class CharacterUpgradesService {
                 increment: effortToIncrement,
               },
               effortInfo: {
-                valuePerLevel: {
-                  increment: upgrade.upgradeValue,
-                },
-                alterations: {
-                  push: alterationObject,
-                },
+                valuePerLevel: effortInfo.valuePerLevel + upgrade.upgradeValue,
+
+                alterations: alterationObject,
               },
             },
           });

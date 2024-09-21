@@ -118,23 +118,23 @@ export class CharacterUnUpgradesService {
       const atribute = character.atributes as AtributesJson;
 
       switch (upgrade.upgradeTarget) {
-        case 'strenght':
+        case 'STRENTH':
           this.atributesService.onStreghthUpdate(character.id, atribute.strenght - upgrade.upgradeValue);
           atribute.strenght -= upgrade.upgradeValue;
           break;
-        case 'dexterity':
+        case 'DEXTERITY':
           this.atributesService.onDexterityUpdate(character.id, atribute.dexterity - upgrade.upgradeValue);
           atribute.dexterity -= upgrade.upgradeValue;
           break;
-        case 'vitality':
+        case 'VITALITY':
           this.atributesService.onVitalityUpdate(character.id, atribute.vitality - upgrade.upgradeValue, atribute.vitality);
           atribute.vitality -= upgrade.upgradeValue;
           break;
-        case 'intelligence':
+        case 'INTELLIGENCE':
           this.atributesService.onIntelligenceUpdate(character.id, atribute.intelligence - upgrade.upgradeValue + atribute.intelligence);
           atribute.intelligence -= upgrade.upgradeValue;
           break;
-        case 'presence':
+        case 'PRESENCE':
           this.atributesService.onPresenceUpdate(character.id, atribute.presence - upgrade.upgradeValue, atribute.presence);
           atribute.presence -= upgrade.upgradeValue;
           break;
@@ -147,9 +147,7 @@ export class CharacterUnUpgradesService {
       await this.dataBaseService.character.update({
         where: { id: character.id },
         data: {
-          atributes: {
-            set: atribute,
-          },
+          atributes: atribute,
         },
       });
     } catch (error) {
@@ -244,8 +242,11 @@ export class CharacterUnUpgradesService {
     try {
       // calculate the life to increment
       const healthInfo = character.healthInfo as StatusJson;
-      const valueDiff = healthInfo.valuePerLevel - upgrade.upgradeValue;
-      const valueToIncrement = valueDiff * character.level;
+      healthInfo.valuePerLevel -= upgrade.upgradeValue;
+
+      const valueToIncrement = -upgrade.upgradeValue * character.level;
+
+      console.log(valueToIncrement);
 
       healthInfo.alterations = this.filterAlterations(healthInfo.alterations, object, upgradeSource) as AlterationObject[];
       await this.dataBaseService.character.update({
@@ -260,12 +261,8 @@ export class CharacterUnUpgradesService {
           },
 
           healthInfo: {
-            valuePerLevel: {
-              increment: upgrade.upgradeValue,
-            },
-            alterations: {
-              push: healthInfo.alterations,
-            },
+            valuePerLevel: healthInfo.valuePerLevel - upgrade.upgradeValue,
+            alterations: healthInfo.alterations,
           },
         },
       });
@@ -275,11 +272,11 @@ export class CharacterUnUpgradesService {
   }
   async effortPerLevelUpgrade(character: Character, upgrade: CharacterUpgrade, object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
     try {
-      const sanityInfo = character.sanityInfo as StatusJson;
-      const sanityDiff = sanityInfo.valuePerLevel - upgrade.upgradeValue;
-      const sanityToIncrement = sanityDiff * character.level;
+      const effortInfo = character.effortInfo as StatusJson;
+      effortInfo.valuePerLevel -= upgrade.upgradeValue;
+      const sanityToIncrement = -upgrade.upgradeValue * character.level;
 
-      const alterationObject = this.filterAlterations(sanityInfo.alterations, object, upgradeSource) as AlterationObject[];
+      const alterationObject = this.filterAlterations(effortInfo.alterations, object, upgradeSource) as AlterationObject[];
       await this.dataBaseService.character.update({
         where: { id: character.id },
         data: {
@@ -289,13 +286,9 @@ export class CharacterUnUpgradesService {
           max_sanity: {
             increment: sanityToIncrement,
           },
-          sanityInfo: {
-            valuePerLevel: {
-              increment: upgrade.upgradeValue,
-            },
-            alterations: {
-              push: alterationObject,
-            },
+          effortInfo: {
+            valuePerLevel: effortInfo.valuePerLevel,
+            alterations: alterationObject,
           },
         },
       });

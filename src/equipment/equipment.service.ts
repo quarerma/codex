@@ -95,6 +95,7 @@ export class EquipmentService {
         type: data.type,
         is_custom: data.is_custom,
         num_of_uses: data.num_of_uses,
+        characterUpgrades: data.characterUpgrades,
         CursedItem: {
           create: {
             element: data.element as Element,
@@ -114,6 +115,7 @@ export class EquipmentService {
         type: data.type,
         is_custom: data.is_custom,
         num_of_uses: data.num_of_uses,
+        characterUpgrades: data.characterUpgrades,
         Weapon: {
           create: {
             damage: data.damage,

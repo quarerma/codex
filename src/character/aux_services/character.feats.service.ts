@@ -29,6 +29,7 @@ export class CharacterFeatsService {
         },
       });
 
+      console.log(createdFeat);
       // check if feat has upgrades
       const upgrades = createdFeat.feat.characterUpgrades as CharacterUpgrade[];
 
@@ -69,12 +70,14 @@ export class CharacterFeatsService {
         await this.unUpgradeService.unApplyUpgrades(characterId, upgrade, deletedFeat.feat, 'feat');
       }
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
 
   async useFeatAfinity(characterId: string, featId: string) {
     try {
+      console.log(featId, characterId);
       const feat = await this.dataBaseService.characterFeat.update({
         where: { characterId_featId: { characterId, featId } },
         data: {
@@ -85,6 +88,7 @@ export class CharacterFeatsService {
         },
       });
 
+      console.log(feat);
       if (!feat || feat.feat.afinityUpgrades.length <= 0) {
         return;
       }
@@ -93,6 +97,7 @@ export class CharacterFeatsService {
         await this.upgradesService.applyUpgrade(characterId, upgrade, feat.feat, 'feat');
       }
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

@@ -6,6 +6,7 @@ import { CharacterClassService } from './aux_services/character.class.service';
 import { InventoryService } from 'src/inventory/inventory.service';
 import { CharacterFeatsService } from './aux_services/character.feats.service';
 import { Credit } from '@prisma/client';
+import { CharacterRitualsService } from './aux_services/character.rituals.service';
 
 @Injectable()
 export class CharacterService {
@@ -15,6 +16,7 @@ export class CharacterService {
     private readonly characterClassService: CharacterClassService,
     private readonly inventoryService: InventoryService,
     private readonly characterFeatsService: CharacterFeatsService,
+    private readonly characterRitualsService: CharacterRitualsService,
   ) {}
 
   async createCharacter(data: CreateCharacterDTO) {
@@ -147,7 +149,7 @@ export class CharacterService {
       });
 
       // TODO: assign rituals
-      await this.assignRitualsOnCreate(createdCharacter.id, data.ritualsIds);
+      await this.characterRitualsService.assignRitualsOnCreate(createdCharacter.id, data.ritualsIds);
 
       // TODO: assign origin on create
 
@@ -168,50 +170,6 @@ export class CharacterService {
     } catch (error) {
       console.log(error);
       throw new Error('Error creating character');
-    }
-  }
-
-  async assignRitualsOnCreate(characterId: string, ritualsId: string[]) {
-    try {
-      if (!ritualsId) {
-        return;
-      }
-      const rituals = await this.dataBaseService.ritual.findMany({
-        where: { id: { in: ritualsId } },
-      });
-
-      for (const ritual of rituals) {
-        let ritual_cost;
-
-        switch (ritual.ritualLevel) {
-          case 1:
-            ritual_cost = 1;
-            break;
-          case 2:
-            ritual_cost = 3;
-            break;
-          case 3:
-            ritual_cost = 6;
-            break;
-          case 4:
-            ritual_cost = 9;
-            break;
-        }
-
-        await this.dataBaseService.characterRitual.create({
-          data: {
-            character: {
-              connect: { id: characterId },
-            },
-            ritual: {
-              connect: { id: ritual.id },
-            },
-            ritual_cost,
-          },
-        });
-      }
-    } catch (error) {
-      throw new Error('Error assigning rituals');
     }
   }
 
@@ -239,6 +197,12 @@ export class CharacterService {
                 },
               },
               ritual_cost: true,
+            },
+          },
+          campaign: {
+            select: {
+              id: true,
+              name: true,
             },
           },
           class: {
@@ -310,6 +274,39 @@ export class CharacterService {
       });
     } catch (error) {
       throw new Error('Error deleting character');
+    }
+  }
+
+  async updateStat(characterId: string, stat: string, value: number) {
+    try {
+      switch (stat) {
+        case 'HP':
+          await this.dataBaseService.character.update({
+            where: { id: characterId },
+            data: {
+              current_health: value,
+            },
+          });
+          break;
+        case 'PE':
+          await this.dataBaseService.character.update({
+            where: { id: characterId },
+            data: {
+              current_effort: value,
+            },
+          });
+          break;
+        case 'SAN':
+          await this.dataBaseService.character.update({
+            where: { id: characterId },
+            data: {
+              current_sanity: value,
+            },
+          });
+          break;
+      }
+    } catch (error) {
+      throw new Error('Error updating stat');
     }
   }
 }
