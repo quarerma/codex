@@ -16,6 +16,28 @@ export class SkillService {
     }
   }
 
+  async getPossibleCampaignSkills(campaignId: string) {
+    try {
+      return await this.dataBaseService.skill.findMany({
+        where: {
+          OR: [
+            {
+              campaignId,
+            },
+            {
+              is_custom: false,
+            },
+          ],
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting possible campaign skills');
+    }
+  }
+
   async getNonCustomSkills() {
     try {
       return await this.dataBaseService.skill.findMany({

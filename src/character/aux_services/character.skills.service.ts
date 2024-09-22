@@ -11,8 +11,8 @@ export class CharacterSkillsService {
     private readonly skillService: SkillService,
   ) {}
 
-  async assignBasicSkills() {
-    const basicSkills = await this.skillService.getNonCustomSkills();
+  async assignBasicSkills(campaignId: string) {
+    const basicSkills = await this.skillService.getPossibleCampaignSkills(campaignId);
 
     const characterSkills = [];
 

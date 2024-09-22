@@ -58,7 +58,7 @@ export class CharacterService {
         alterations: [],
       } as StatusJson;
 
-      const skills = await this.characterSkillsService.assignBasicSkills();
+      const skills = await this.characterSkillsService.assignBasicSkills(data.campaignId);
 
       const speed = 9;
       const defense = 10 + atributes.dexterity;
