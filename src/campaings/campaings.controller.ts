@@ -44,4 +44,24 @@ export class CampaingsController {
       throw error;
     }
   }
+
+  @Get('campaign-characters/:id')
+  @UseGuards(JwtAuthGuards)
+  async getCampaignCharacters(@Param('id') id: string) {
+    try {
+      return await this.campaingsService.getCampaignCharacters(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('byId/:id')
+  @UseGuards(JwtAuthGuards)
+  async getCampaignById(@Param('id') id: string) {
+    try {
+      return await this.campaingsService.getCampaignById(id);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -167,4 +167,53 @@ export class CampaingsService {
       console.log('Error leaving the campaign:', error.message);
     }
   }
+
+  async getCampaignCharacters(campaignId: string) {
+    try {
+      const characters = await this.dataBaseService.character.findMany({
+        where: {
+          campaignId: campaignId,
+        },
+      });
+
+      return characters;
+    } catch (error) {
+      throw new Error('Error getting characters');
+    }
+  }
+
+  async getCampaignById(campaignId: string) {
+    try {
+      const campaign = await this.dataBaseService.campaign.findUnique({
+        where: {
+          id: campaignId,
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          createdAt: true,
+          players: {
+            select: {
+              playerId: true,
+            },
+          },
+          owner: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      });
+
+      if (!campaign) {
+        throw new Error('Campaign not found');
+      }
+
+      return campaign;
+    } catch (error) {
+      throw new Error('Error getting campaign');
+    }
+  }
 }

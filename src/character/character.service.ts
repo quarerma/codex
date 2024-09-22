@@ -203,6 +203,7 @@ export class CharacterService {
             select: {
               id: true,
               name: true,
+              ownerId: true,
             },
           },
           class: {
