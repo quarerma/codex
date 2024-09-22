@@ -234,20 +234,6 @@ export class FeatsService {
           type: true,
         },
       });
-
-      //SELECT feat.id, feat.name, feat.description, feat.prerequisites, feat.element, feat.type
-      // FROM feat
-      // LEFT JOIN campaignFeats ON feat.id = campaignFeats.featId
-      // WHERE (
-      //     (feat.type = 'CUSTOM' AND campaignFeats.campaignId = :campaignId)
-      //     OR (feat.type != 'CUSTOM')
-      // )
-      // AND NOT EXISTS (
-      //     SELECT 1
-      //     FROM classFeats
-      //     WHERE classFeats.featId = feat.id
-      //     AND classFeats.isStarterFeat = true
-      // );
     } catch (error) {
       throw new Error('Error getting possible campaign feats');
     }

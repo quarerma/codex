@@ -100,4 +100,35 @@ export class RitualService {
       throw new Error('Error getting rituals by element');
     }
   }
+
+  async getPossibleCampaignRituals(campaignId: string) {
+    try {
+      return await this.dataBaseService.ritual.findMany({
+        where: {
+          OR: [
+            {
+              is_custom: false,
+            },
+            {
+              campaign: {
+                some: {
+                  campaignId: campaignId,
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          damageRitual: true,
+          conditions: {
+            select: {
+              condition: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting possible campaign rituals');
+    }
+  }
 }
