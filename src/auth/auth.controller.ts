@@ -1,6 +1,7 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuards } from './guards/jwt.guards';
 
 @Controller('auth')
 export class AuthController {
@@ -20,5 +21,11 @@ export class AuthController {
       console.log(error);
       throw error;
     }
+  }
+
+  @Get('/auth-token')
+  @UseGuards(JwtAuthGuards)
+  async auth() {
+    return { message: 'User is authenticated' };
   }
 }
