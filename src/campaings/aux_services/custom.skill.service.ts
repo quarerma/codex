@@ -15,7 +15,7 @@ export class CustomSkillService {
     try {
       const skill = await this.skillService.createSkill(data);
 
-      return await this.dataBaseService.campaign.update({
+      await this.dataBaseService.campaign.update({
         where: { id: campaignId },
         data: {
           customSkills: {
@@ -23,6 +23,30 @@ export class CustomSkillService {
           },
         },
       });
+
+      const skillJson = {
+        name: skill.name,
+        atribute: skill.atribute,
+        trainingLevel: 'none',
+        value: 0,
+        alterations: [],
+      } as SkillJson;
+
+      const characters = await this.dataBaseService.character.findMany({
+        where: { campaignId: campaignId },
+        select: { id: true, skills: true },
+      });
+
+      for (const character of characters) {
+        const updatedSkills = [...(character.skills as SkillJson[]), skillJson];
+
+        updatedSkills.sort((a, b) => a.name.localeCompare(b.name));
+
+        await this.dataBaseService.character.update({
+          where: { id: character.id },
+          data: { skills: updatedSkills },
+        });
+      }
     } catch (error) {
       throw new Error('Error creating skill');
     }

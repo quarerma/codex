@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RitualService } from './ritual.service';
 import { CreateRitualDto } from './dto/create.ritual';
 
@@ -18,5 +18,10 @@ export class RitualController {
   @Get()
   async findAll() {
     return this.ritualService.getCoreRituals();
+  }
+
+  @Get('campaign-possible-rituals/:id')
+  async getCampaignPossibleRituals(@Param('id') id: string) {
+    return this.ritualService.getPossibleCampaignRituals(id);
   }
 }

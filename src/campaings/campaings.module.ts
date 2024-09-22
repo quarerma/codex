@@ -7,9 +7,10 @@ import { EquipmentService } from 'src/equipment/equipment.service';
 import { SkillService } from 'src/skill/skill.service';
 import { CustomRitualService } from './aux_services/custom.ritual.service';
 import { CustomFeatService } from './aux_services/custom.feat.service';
+import { CustomSkillService } from './aux_services/custom.skill.service';
 
 @Module({
   controllers: [CampaingsController],
-  providers: [CampaingsService, DataBaseService, CustomItemService, EquipmentService, SkillService, CustomRitualService, CustomFeatService],
+  providers: [CampaingsService, DataBaseService, CustomItemService, EquipmentService, SkillService, CustomRitualService, CustomFeatService, CustomSkillService],
 })
 export class CampaingsModule {}

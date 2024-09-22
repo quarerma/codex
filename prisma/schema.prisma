@@ -18,6 +18,9 @@ model User {
   characters Character[]
   campaigns_dm Campaign[] @relation("CampaignDm")
   campaigns_player PlayerOnCampaign[] @relation("PlayerCampaigns")
+
+  @@index([username])
+  @@index([email])
 }
 
 enum Role {

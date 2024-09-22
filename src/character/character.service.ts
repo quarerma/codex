@@ -199,6 +199,7 @@ export class CharacterService {
               ritual_cost: true,
             },
           },
+
           campaign: {
             select: {
               id: true,
