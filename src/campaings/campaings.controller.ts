@@ -33,6 +33,16 @@ export class CampaingsController {
     }
   }
 
+  @Get('players/:id')
+  @UseGuards(JwtAuthGuards)
+  async getCampaignPlayers(@Param('id') id: string) {
+    try {
+      return await this.campaingsService.getCampaignPlayers(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Post('join')
   @UseGuards(JwtAuthGuards)
   async joinCampaign(@Body() data: { campaignId: string; password: string }, @Req() req: Request) {

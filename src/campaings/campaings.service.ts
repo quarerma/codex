@@ -174,6 +174,14 @@ export class CampaingsService {
         where: {
           campaignId: campaignId,
         },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
       });
 
       return characters;
@@ -214,6 +222,29 @@ export class CampaingsService {
       return campaign;
     } catch (error) {
       throw new Error('Error getting campaign');
+    }
+  }
+
+  async getCampaignPlayers(campaignId: string) {
+    try {
+      const players = await this.dataBaseService.playerOnCampaign.findMany({
+        where: {
+          campaignId: campaignId,
+        },
+        select: {
+          player: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+          joinedAt: true,
+        },
+      });
+
+      return players;
+    } catch (error) {
+      throw new Error('Error getting players');
     }
   }
 }
