@@ -52,4 +52,16 @@ export class SkillService {
       throw new Error('Error getting non custom skills');
     }
   }
+
+  async getSkillByName(name: string) {
+    try {
+      return await this.dataBaseService.skill.findUnique({
+        where: {
+          name,
+        },
+      });
+    } catch (error) {
+      throw new Error('Error getting skill by name');
+    }
+  }
 }

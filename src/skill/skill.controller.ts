@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, Query } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { CreateSkillDTO } from './dto/create.skill.dto';
 
@@ -21,6 +21,15 @@ export class SkillController {
       return await this.skillService.getNonCustomSkills();
     } catch (error) {
       throw new Error('Error getting non custom skills');
+    }
+  }
+
+  @Get('byName')
+  async getSkillByName(@Query('name') name: string) {
+    try {
+      return await this.skillService.getSkillByName(name);
+    } catch (error) {
+      throw new Error('Error getting skill by name');
     }
   }
 }
