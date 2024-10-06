@@ -119,8 +119,8 @@ export class CharacterUnUpgradesService {
 
       switch (upgrade.upgradeTarget) {
         case 'STRENTH':
-          this.atributesService.onStreghthUpdate(character.id, atribute.strenght - upgrade.upgradeValue);
-          atribute.strenght -= upgrade.upgradeValue;
+          this.atributesService.onStreghthUpdate(character.id, atribute.strangth - upgrade.upgradeValue);
+          atribute.strangth -= upgrade.upgradeValue;
           break;
         case 'DEXTERITY':
           this.atributesService.onDexterityUpdate(character.id, atribute.dexterity - upgrade.upgradeValue);

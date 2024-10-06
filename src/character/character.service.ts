@@ -26,7 +26,7 @@ export class CharacterService {
       });
 
       const atributes = {
-        strenght: data.strenght,
+        strangth: data.strangth,
         dexterity: data.dexterity,
         vitality: data.vitality,
         intelligence: data.intelligence,
@@ -111,7 +111,7 @@ export class CharacterService {
 
       const carryInfo = {
         currentValue: 0,
-        maxValue: data.strenght > 0 ? data.strenght * 5 : 2,
+        maxValue: data.strangth > 0 ? data.strangth * 5 : 2,
         alterations: [],
       };
 
