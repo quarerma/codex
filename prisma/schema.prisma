@@ -81,17 +81,6 @@ model Character {
 
   level Int
   
-  owner User @relation(fields: [ownerId], references: [id])
-  ownerId String @map("owner_id")
-  
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  
-  class Class @relation(fields: [classId], references: [id])
-  classId String @map("class_id")
-  
-  subclass Subclass @relation(fields: [subclassId], references: [id])
-  subclassId String @map("subclass_id")
 
   current_health Int
   current_sanity Int
@@ -115,6 +104,18 @@ model Character {
 
   attacks Json[]
 
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+  
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String @map("campaign_id")
+  
+  class Class @relation(fields: [classId], references: [id])
+  classId String @map("class_id")
+  
+  subclass Subclass @relation(fields: [subclassId], references: [id])
+  subclassId String @map("subclass_id")
+  
   Inventory Inventory?
 
   feats CharacterFeat[]
