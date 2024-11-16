@@ -21,7 +21,7 @@ export class CharacterAtributesService {
       switch (atribute.atribute) {
         case 'STRENGTH':
           this.onStreghthUpdate(characterId, atribute.value);
-          atributes.strenght = atribute.value;
+          atributes.strangth = atribute.value;
           break;
         case 'DEXTERITY':
           atributes.dexterity = atribute.value;
