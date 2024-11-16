@@ -9,6 +9,7 @@ export class AuthController {
 
   @Post('/auth-login')
   async login(@Body() body: LoginDto) {
+    console.log(body);
     try {
       const payload = await this.authService.login(body);
 
@@ -16,6 +17,7 @@ export class AuthController {
         throw new HttpException(payload.error, HttpStatus.UNAUTHORIZED);
       }
 
+      console.log(payload);
       return payload;
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Query, Post, HttpStatus } from '@nestjs/common';
 import { FeatsService } from './feats.service';
 import { CreateFeatDto } from './dto/create-feat-dto';
 
@@ -11,52 +11,70 @@ export class FeatsController {
     try {
       return await this.featsService.createGeneralFeat(data);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(`Error creating general feat: ${error.message}`, HttpStatus.BAD_REQUEST);
     }
   }
 
   @Get('general-feat')
   async getGeneralFeats() {
-    return await this.featsService.getGeneralFeats();
+    try {
+      return await this.featsService.getGeneralFeats();
+    } catch (error) {
+      throw new HttpException(`Error retrieving general feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get('classes-feats')
   async getClassFeats() {
-    return await this.featsService.getClassesFeats();
+    try {
+      return await this.featsService.getClassesFeats();
+    } catch (error) {
+      throw new HttpException(`Error retrieving class feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get('subclasses-feats')
   async getSubClassesFeats() {
-    return await this.featsService.getSubClassesFeats();
+    try {
+      return await this.featsService.getSubClassesFeats();
+    } catch (error) {
+      throw new HttpException(`Error retrieving subclass feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  @Get('filter-subclass-feats/:subclassId')
-  async getSubClassFeats(@Param('subclassId') subclassId: string) {
-    return await this.featsService.filterSubClassesFeats(subclassId);
+  @Get('filter-subclass-feats')
+  async getSubClassFeats(@Query('subclassId') subclassId: string) {
+    try {
+      return await this.featsService.filterSubClassesFeats(subclassId);
+    } catch (error) {
+      throw new HttpException(`Error filtering subclass feats: ${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Get('filter-class-feats/:classId')
-  async filterClassFeats(@Param('classId') classId: string) {
-    return await this.featsService.filterClassFeats(classId);
+  @Get('filter-class-feats')
+  async filterClassFeats(@Query('classId') classId: string) {
+    try {
+      return await this.featsService.filterClassFeats(classId);
+    } catch (error) {
+      throw new HttpException(`Error filtering class feats: ${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get('non-custom-feats')
   async getAllFeats() {
     try {
-      const feats = await this.featsService.getNonCustomFeats();
-      console.log(feats);
-      return feats;
+      return await this.featsService.getNonCustomFeats();
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(`Error retrieving non-custom feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Get('campaign-possible-feats/:id')
-  async getCampaignPossibleFeats(@Param('id') id: string) {
+  @Get('campaign-possible-feats')
+  async getCampaignPossibleFeats(@Query('id') id: string) {
     try {
       return await this.featsService.getPossibleCampaignFeats(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(`Error retrieving campaign possible feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

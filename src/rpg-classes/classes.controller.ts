@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Query, Post, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { CreateClassDTO } from './dto/create-class-dto';
 import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
@@ -14,7 +14,7 @@ export class ClassesController {
     try {
       return await this.classesService.getClasses();
     } catch (error) {
-      throw new Error('Error getting classes');
+      throw new HttpException('Error getting classes', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -24,53 +24,53 @@ export class ClassesController {
     try {
       return await this.classesService.createClass(data);
     } catch (error) {
-      throw new Error('Error creating class');
+      throw new HttpException('Error creating class', HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Post('assign-initial-feat/:classId')
-  async assignClassFeat(@Param('classId') classId: string, @Body() feat: CreateFeatDto) {
+  @Post('assign-initial-feat')
+  async assignClassFeat(@Query('classId') classId: string, @Body() feat: CreateFeatDto) {
     try {
       return await this.classesService.createInitialClassFeat(classId, feat);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error assigning initial feat: ${error.message}`, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Post('assign-feat/:classId')
-  async assignFeat(@Param('classId') classId: string, @Body() feat: CreateFeatDto) {
+  @Post('assign-feat')
+  async assignFeat(@Query('classId') classId: string, @Body() feat: CreateFeatDto) {
     try {
       return await this.classesService.createClassFeat(feat, classId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error assigning feat: ${error.message}`, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Get('get-feats/:classId')
-  async getClassFeats(@Param('classId') classId: string) {
+  @Get('get-feats')
+  async getClassFeats(@Query('classId') classId: string) {
     try {
       return await this.classesService.getClassFeats(classId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error getting class feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Get('initial-feats/:classId')
-  async getInitialFeats(@Param('classId') classId: string) {
+  @Get('initial-feats')
+  async getInitialFeats(@Query('classId') classId: string) {
     try {
       return await this.classesService.getInitialFeats(classId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error getting initial feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Get('/subclasses/:classId')
+  @Get('/subclasses')
   @UseGuards(JwtAuthGuards)
-  async getSubClasses(@Param('classId') classId: string) {
+  async getSubClasses(@Query('classId') classId: string) {
     try {
       return await this.classesService.getSubClasses(classId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error getting subclasses: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

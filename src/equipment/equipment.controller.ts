@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { EquipmentService } from './equipment.service';
 import { CreateItemDto } from './dto/create.equipment.dto';
 
@@ -9,19 +9,18 @@ export class EquipmentController {
   @Post()
   async createEquipment(@Body() data: CreateItemDto) {
     try {
-      console.log(data);
-      return this.equipmentService.createEquipment(data);
+      return await this.equipmentService.createEquipment(data);
     } catch (error) {
-      throw new Error(error);
+      throw new Error(`Error creating equipment: ${error.message}`);
     }
   }
 
-  @Get('/campaign-items/:id')
-  async getCampaignItems(@Param('id') id: string) {
+  @Get('campaign-items')
+  async getCampaignItems(@Query('campaignId') campaignId: string) {
     try {
-      return this.equipmentService.getPossibleEquipmentsForCampaign(id);
+      return await this.equipmentService.getPossibleEquipmentsForCampaign(campaignId);
     } catch (error) {
-      throw new Error(error);
+      throw new Error(`Error retrieving campaign items: ${error.message}`);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common';
 import { CharacterService } from './character.service';
 import { CreateCharacterDTO } from './dto/create-character-dto';
 import { CharacterFeatsService } from './aux_services/character.feats.service';
@@ -23,8 +23,8 @@ export class CharacterController {
     }
   }
 
-  @Get('/:id')
-  async getCharacter(@Param('id') id: string) {
+  @Get()
+  async getCharacter(@Query('id') id: string) {
     try {
       return await this.characterService.getCharacter(id);
     } catch (error) {
@@ -32,8 +32,8 @@ export class CharacterController {
     }
   }
 
-  @Delete('/:id')
-  async deleteCharacter(@Param('id') id: string) {
+  @Delete()
+  async deleteCharacter(@Query('id') id: string) {
     try {
       return await this.characterService.deleteCharacter(id);
     } catch (error) {
@@ -41,8 +41,8 @@ export class CharacterController {
     }
   }
 
-  @Post('assign-feat/:characterId/:featId')
-  async assignFeat(@Param('featId') featId: string, @Param('characterId') characterId: string) {
+  @Post('assign-feat')
+  async assignFeat(@Query('characterId') characterId: string, @Query('featId') featId: string) {
     try {
       return await this.characterFeatsService.assignFeat(featId, characterId);
     } catch (error) {
@@ -50,8 +50,8 @@ export class CharacterController {
     }
   }
 
-  @Delete('remove-feat/:characterId/:featId')
-  async removeFeat(@Param('featId') featId: string, @Param('characterId') characterId: string) {
+  @Delete('remove-feat')
+  async removeFeat(@Query('characterId') characterId: string, @Query('featId') featId: string) {
     try {
       return await this.characterFeatsService.removeFeat(characterId, featId);
     } catch (error) {
@@ -59,8 +59,8 @@ export class CharacterController {
     }
   }
 
-  @Patch('use-affinity/:characterId/:featId')
-  async useAffinity(@Param('featId') featId: string, @Param('characterId') characterId: string) {
+  @Patch('use-affinity')
+  async useAffinity(@Query('characterId') characterId: string, @Query('featId') featId: string) {
     try {
       return await this.characterFeatsService.useFeatAfinity(characterId, featId);
     } catch (error) {
@@ -68,8 +68,8 @@ export class CharacterController {
     }
   }
 
-  @Patch('un-use-affinity/:characterId/:featId')
-  async unUseAffinity(@Param('featId') featId: string, @Param('characterId') characterId: string) {
+  @Patch('un-use-affinity')
+  async unUseAffinity(@Query('characterId') characterId: string, @Query('featId') featId: string) {
     try {
       return await this.characterFeatsService.unCheckFeatAfinity(characterId, featId);
     } catch (error) {
@@ -77,8 +77,8 @@ export class CharacterController {
     }
   }
 
-  @Post('assign-ritual/:characterId/:ritualId')
-  async assignRitual(@Param('ritualId') ritualId: string, @Param('characterId') characterId: string) {
+  @Post('assign-ritual')
+  async assignRitual(@Query('characterId') characterId: string, @Query('ritualId') ritualId: string) {
     try {
       return await this.characterRitualsService.assignRitual(characterId, ritualId);
     } catch (error) {
@@ -86,8 +86,8 @@ export class CharacterController {
     }
   }
 
-  @Delete('remove-ritual/:characterId/:ritualId')
-  async removeRitual(@Param('ritualId') ritualId: string, @Param('characterId') characterId: string) {
+  @Delete('remove-ritual')
+  async removeRitual(@Query('characterId') characterId: string, @Query('ritualId') ritualId: string) {
     try {
       return await this.characterRitualsService.removeRitual(characterId, ritualId);
     } catch (error) {
@@ -95,8 +95,8 @@ export class CharacterController {
     }
   }
 
-  @Patch('update-stat/:characterId/:stat/:value')
-  async updateStat(@Param('characterId') characterId: string, @Param('stat') stat: string, @Param('value') value: string) {
+  @Patch('update-stat')
+  async updateStat(@Query('characterId') characterId: string, @Query('stat') stat: string, @Query('value') value: string) {
     try {
       return await this.characterService.updateStat(characterId, stat, Number(value));
     } catch (error) {

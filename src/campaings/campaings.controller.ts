@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { CampaingsService } from './campaings.service';
 import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
 import { CreateCampaignDTO } from './dto/create-campaign-dto';
@@ -12,6 +12,7 @@ import { CustomSkillService } from './aux_services/custom.skill.service';
 import { CreateItemDto } from 'src/equipment/dto/create.equipment.dto';
 import { CreateRitualDto } from 'src/ritual/dto/create.ritual';
 import { CreateSkillDTO } from 'src/skill/dto/create.skill.dto';
+
 @Controller('campaigns')
 export class CampaingsController {
   constructor(
@@ -25,132 +26,80 @@ export class CampaingsController {
   @Post('create')
   @UseGuards(JwtAuthGuards)
   async createCampaign(@Body() data: CreateCampaignDTO, @Req() req: Request) {
-    try {
-      const user = req.user as UserRequest;
-      return await this.campaingsService.createCampaign(data, user.id);
-    } catch (error) {
-      throw error;
-    }
+    const user = req.user as UserRequest;
+    return this.campaingsService.createCampaign(data, user.id);
   }
 
-  @Get('players/:id')
+  @Get('players')
   @UseGuards(JwtAuthGuards)
-  async getCampaignPlayers(@Param('id') id: string) {
-    try {
-      return await this.campaingsService.getCampaignPlayers(id);
-    } catch (error) {
-      throw error;
-    }
+  async getCampaignPlayers(@Query('id') id: string) {
+    return this.campaingsService.getCampaignPlayers(id);
   }
 
   @Post('join')
   @UseGuards(JwtAuthGuards)
   async joinCampaign(@Body() data: { campaignId: string; password: string }, @Req() req: Request) {
-    try {
-      const user = req.user as UserRequest;
-      return await this.campaingsService.joinCampaign(data, user.id);
-    } catch (error) {
-      console.log('error', error);
-      throw error;
-    }
+    const user = req.user as UserRequest;
+    return this.campaingsService.joinCampaign(data, user.id);
   }
 
-  @Get('campaign-characters/:id')
+  @Get('characters')
   @UseGuards(JwtAuthGuards)
-  async getCampaignCharacters(@Param('id') id: string) {
-    try {
-      return await this.campaingsService.getCampaignCharacters(id);
-    } catch (error) {
-      throw error;
-    }
+  async getCampaignCharacters(@Query('id') id: string) {
+    return this.campaingsService.getCampaignCharacters(id);
   }
 
-  @Get('byId/:id')
+  @Get('byId')
   @UseGuards(JwtAuthGuards)
-  async getCampaignById(@Param('id') id: string) {
-    try {
-      return await this.campaingsService.getCampaignById(id);
-    } catch (error) {
-      throw error;
-    }
-  }
-  @Get('campaign-feats/:id')
-  @UseGuards(JwtAuthGuards)
-  async getCampaignFeats(@Param('id') id: string) {
-    try {
-      return await this.customFeatsService.getCampaignCustomFeats(id);
-    } catch (error) {
-      throw error;
-    }
+  async getCampaignById(@Query('id') id: string) {
+    return this.campaingsService.getCampaignById(id);
   }
 
-  @Post('campaign-feats/:id')
+  @Get('feats')
   @UseGuards(JwtAuthGuards)
-  async createCampaignFeat(@Param('id') id: string, @Body() data: CreateFeatDto) {
-    try {
-      return await this.customFeatsService.createCustomFeat(data, id);
-    } catch (error) {
-      throw error;
-    }
+  async getCampaignFeats(@Query('id') id: string) {
+    return this.customFeatsService.getCampaignCustomFeats(id);
   }
 
-  @Post('campaign-equips/:id')
+  @Post('feats')
   @UseGuards(JwtAuthGuards)
-  async getCampaignEquips(@Param('id') id: string, @Body() data: CreateItemDto) {
-    try {
-      return await this.customItemsService.createCustomCampaignItem(data, id);
-    } catch (error) {
-      throw error;
-    }
+  async createCampaignFeat(@Query('id') id: string, @Body() data: CreateFeatDto) {
+    return this.customFeatsService.createCustomFeat(data, id);
   }
 
-  @Get('campaign-equips/:id')
+  @Post('equips')
   @UseGuards(JwtAuthGuards)
-  async createCampaignEquip(@Param('id') id: string) {
-    try {
-      return await this.customItemsService.getCampaignCustomItems(id);
-    } catch (error) {
-      throw error;
-    }
+  async createCampaignEquip(@Query('id') id: string, @Body() data: CreateItemDto) {
+    return this.customItemsService.createCustomCampaignItem(data, id);
   }
 
-  @Post('campaign-rituals/:id')
+  @Get('equips')
   @UseGuards(JwtAuthGuards)
-  async createCampaignRitual(@Param('id') id: string, @Body() data: CreateRitualDto) {
-    try {
-      return await this.customRitualsService.createCustomRitual(id, data);
-    } catch (error) {
-      throw error;
-    }
+  async getCampaignEquips(@Query('id') id: string) {
+    return this.customItemsService.getCampaignCustomItems(id);
   }
 
-  @Get('campaign-rituals/:id')
+  @Post('rituals')
   @UseGuards(JwtAuthGuards)
-  async getCampaignRituals(@Param('id') id: string) {
-    try {
-      return await this.customRitualsService.getCampaignCustomRituals(id);
-    } catch (error) {
-      throw error;
-    }
+  async createCampaignRitual(@Query('id') id: string, @Body() data: CreateRitualDto) {
+    return this.customRitualsService.createCustomRitual(id, data);
   }
 
-  @Post('campaign-skills/:id')
+  @Get('rituals')
   @UseGuards(JwtAuthGuards)
-  async createCampaignSkill(@Param('id') id: string, @Body() data: CreateSkillDTO) {
-    try {
-      return await this.customSkillService.createCustomSkill(data, id);
-    } catch (error) {
-      throw error;
-    }
+  async getCampaignRituals(@Query('id') id: string) {
+    return this.customRitualsService.getCampaignCustomRituals(id);
   }
 
-  @Get('campaign-skills/:id')
+  @Post('skills')
   @UseGuards(JwtAuthGuards)
-  async getCampaignSkills(@Param('id') id: string) {
-    try {
-      return await this.customSkillService.getCampaignCustomSkills(id);
-    } catch (error) {
-      throw error;
-    }
+  async createCampaignSkill(@Query('id') id: string, @Body() data: CreateSkillDTO) {
+    return this.customSkillService.createCustomSkill(data, id);
+  }
+
+  @Get('skills')
+  @UseGuards(JwtAuthGuards)
+  async getCampaignSkills(@Query('id') id: string) {
+    return this.customSkillService.getCampaignCustomSkills(id);
   }
 }

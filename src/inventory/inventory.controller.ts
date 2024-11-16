@@ -1,36 +1,34 @@
-import { Controller, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Query, Patch, HttpException, HttpStatus } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 
 @Controller('inventory')
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
-  @Patch('/add-item/:characterId/:id')
-  async addItemToInventory(@Param('id') id: number, @Param('characterId') characterId: string) {
+  @Patch('/add-item')
+  async addItemToInventory(@Query('id') id: string, @Query('characterId') characterId: string) {
     try {
-      return this.inventoryService.addItemToInventory(Number(id), characterId);
+      return await this.inventoryService.addItemToInventory(Number(id), characterId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error adding item to inventory: ${error}`, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Get('/:characterId')
-  async getInventory(@Param('characterId') characterId: string) {
+  @Get('/')
+  async getInventory(@Query('characterId') characterId: string) {
     try {
-      return this.inventoryService.getInventory(characterId);
+      return await this.inventoryService.getInventory(characterId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error retrieving inventory: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Patch('/remove-item/:characterId/:slotId')
-  async removeItemFromInventory(@Param('slotId') slotId: string, @Param('characterId') characterId: string) {
+  @Patch('/remove-item')
+  async removeItemFromInventory(@Query('slotId') slotId: string, @Query('characterId') characterId: string) {
     try {
-      console.log('slotId', slotId);
-      console.log('characterId', characterId);
-      return this.inventoryService.removeItemFromInventory(characterId, slotId);
+      return await this.inventoryService.removeItemFromInventory(characterId, slotId);
     } catch (error) {
-      throw new Error(error);
+      throw new HttpException(`Error removing item from inventory: ${error}`, HttpStatus.BAD_REQUEST);
     }
   }
 }

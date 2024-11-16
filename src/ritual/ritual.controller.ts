@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Query, Post, HttpException, HttpStatus } from '@nestjs/common';
 import { RitualService } from './ritual.service';
 import { CreateRitualDto } from './dto/create.ritual';
 
@@ -9,19 +9,27 @@ export class RitualController {
   @Post()
   async create(@Body() data: CreateRitualDto) {
     try {
-      return this.ritualService.create(data);
+      return await this.ritualService.create(data);
     } catch (error) {
-      throw new Error('Error creating custom ritual');
+      throw new HttpException('Error creating custom ritual', HttpStatus.BAD_REQUEST);
     }
   }
 
   @Get()
   async findAll() {
-    return this.ritualService.getCoreRituals();
+    try {
+      return await this.ritualService.getCoreRituals();
+    } catch (error) {
+      throw new HttpException('Error retrieving rituals', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  @Get('campaign-possible-rituals/:id')
-  async getCampaignPossibleRituals(@Param('id') id: string) {
-    return this.ritualService.getPossibleCampaignRituals(id);
+  @Get('campaign-possible-rituals')
+  async getCampaignPossibleRituals(@Query('id') id: string) {
+    try {
+      return await this.ritualService.getPossibleCampaignRituals(id);
+    } catch (error) {
+      throw new HttpException('Error retrieving possible campaign rituals', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
