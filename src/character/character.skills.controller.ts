@@ -1,4 +1,4 @@
-import { Controller, Param, Patch } from '@nestjs/common';
+import { Controller, Patch, Query } from '@nestjs/common';
 
 import { CharacterSkillsService } from './aux_services/character.skills.service';
 import { TrainingLevel } from 'src/types/skill-relates-types';
@@ -7,8 +7,8 @@ import { TrainingLevel } from 'src/types/skill-relates-types';
 export class CharacterskillsController {
   constructor(private readonly customSkillService: CharacterSkillsService) {}
 
-  @Patch('edit-skill-training-level/:characterId/:skillName/:trainingLevel')
-  async editSkillTrainingLevel(@Param('characterId') characterId: string, @Param('skillName') skillName: string, @Param('trainingLevel') trainingLevel: string) {
+  @Patch('edit-skill-training-level')
+  async editSkillTrainingLevel(@Query('characterId') characterId: string, @Query('skillId') skillName: string, @Query('traininglevel') trainingLevel: string) {
     try {
       return await this.customSkillService.editCharacterSkillTraining(characterId, skillName, trainingLevel as TrainingLevel);
     } catch (error) {
