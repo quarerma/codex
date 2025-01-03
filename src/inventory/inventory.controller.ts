@@ -14,7 +14,7 @@ export class InventoryController {
     }
   }
 
-  @Get('/')
+  @Get()
   async getInventory(@Query('characterId') characterId: string) {
     try {
       return await this.inventoryService.getInventory(characterId);
