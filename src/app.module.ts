@@ -13,12 +13,10 @@ import { RitualModule } from './ritual/ritual.module';
 import { AuthModule } from './auth/auth.module';
 import { OriginsModule } from './origins/origins.module';
 import { ConditionsModule } from './conditions/conditions.module';
-import { AppService } from './app.service';
-import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule, RitualModule, AuthModule, OriginsModule, ConditionsModule, ScheduleModule.forRoot()],
+  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule, RitualModule, AuthModule, OriginsModule, ConditionsModule],
   controllers: [],
-  providers: [DataBaseService, AppService],
+  providers: [DataBaseService],
 })
 export class AppModule {}
