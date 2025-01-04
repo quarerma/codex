@@ -21,7 +21,7 @@ export class CreateCharacterDTO {
   classId: string;
   subclassId: string;
 
-  strangth: number;
+  strength: number;
   dexterity: number;
   vitality: number;
   intelligence: number;
@@ -34,7 +34,7 @@ export class CreateCharacterDTO {
 }
 
 export type AtributesJson = {
-  strangth: number;
+  strength: number;
   dexterity: number;
   vitality: number;
   intelligence: number;
