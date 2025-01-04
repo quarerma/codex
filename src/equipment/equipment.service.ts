@@ -16,6 +16,7 @@ export class EquipmentService {
         case 'OPERATIONAL_EQUIPMENT':
         case 'PARANORMAL_EQUIPMENT':
         case 'ACESSORY':
+        case 'AMMO':
         case 'ARMOR':
           equipment = await this.createGeneralequipment(data);
           break;
