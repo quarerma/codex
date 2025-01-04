@@ -83,6 +83,21 @@ export class InventoryService {
           uses: item.num_of_uses,
           is_equipped: false,
         },
+        select: {
+           equipment: {
+                include: {
+                  Weapon: true,
+                  CursedItem: true,
+                  
+                },
+              },
+              category: true,
+              alterations: true,
+              id: true,
+              is_equipped: true,
+              local_name: true,
+              uses: true,
+        }
       });
 
       await this.equipItem(slot.id, characterId);
