@@ -246,9 +246,8 @@ export class CharacterUnUpgradesService {
 
       const valueToIncrement = -upgrade.upgradeValue * character.level;
 
-      console.log(valueToIncrement);
-
       healthInfo.alterations = this.filterAlterations(healthInfo.alterations, object, upgradeSource) as AlterationObject[];
+
       await this.dataBaseService.character.update({
         where: { id: character.id },
         data: {
@@ -267,6 +266,7 @@ export class CharacterUnUpgradesService {
         },
       });
     } catch (error) {
+      console.log(error);
       throw new Error('Error applying status per level upgrade');
     }
   }

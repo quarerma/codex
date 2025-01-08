@@ -242,6 +242,7 @@ export class CharacterUpgradesService {
   async statusPerLevelUpgrade(character: Character, upgrade: CharacterUpgrade, status: 'health' | 'effort', object: Feat | Equipment | Modification, upgradeSource: 'feat' | 'equipment' | 'modification') {
     try {
       const alterationObject = this.createAlterationObject(object, upgradeSource);
+      const alterationObjectArray = [alterationObject];
       switch (status) {
         case 'health':
           // calculate the life to increment
@@ -262,7 +263,7 @@ export class CharacterUpgradesService {
 
               healthInfo: {
                 valuePerLevel: healthInfo.valuePerLevel + upgrade.upgradeValue,
-                alterations: alterationObject,
+                alterations: alterationObjectArray,
               },
             },
           });
@@ -285,7 +286,7 @@ export class CharacterUpgradesService {
               effortInfo: {
                 valuePerLevel: effortInfo.valuePerLevel + upgrade.upgradeValue,
 
-                alterations: alterationObject,
+                alterations: alterationObjectArray,
               },
             },
           });
