@@ -250,6 +250,11 @@ export class CharacterService {
 
   async deleteCharacter(characterId: string) {
     try {
+      //delete notes
+      await this.dataBaseService.notes.deleteMany({
+        where: { characterId },
+      });
+
       // delete character feats
       await this.dataBaseService.characterFeat.deleteMany({
         where: { characterId },

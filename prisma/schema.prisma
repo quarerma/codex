@@ -70,6 +70,8 @@ model Campaign {
 
   customOrigins CampaignOrigin[]
 
+  notes Notes[]
+
 }
 
 
@@ -126,8 +128,11 @@ model Character {
 
   conditions CharacterCondition[]
 
+
   origin Origin? @relation(fields: [originId], references: [id])
   originId String @map("origin_id")
+
+  notes Notes[]
 }
 
 model CharacterFeat {
@@ -141,6 +146,17 @@ model CharacterFeat {
 }
 
 
+////////////////////////////////////////////// Tabela de Notas //////////////////////////////////////////////////
+
+model Notes {
+  id String @id @default(cuid())
+  title String @db.VarChar(50)
+  content String? @db.Text
+  character Character? @relation(fields: [characterId], references: [id])
+  characterId String? @map("character_id")
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String? @map("campaign_id")
+}
 ////////////////////////////////////////////// Tabela de Inventário /////////////////////////////////////////////
 
 model Inventory {
