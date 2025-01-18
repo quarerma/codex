@@ -24,6 +24,7 @@ migrations=(
   "20240919212849_revert_change"
   "20240920014945_remove_unique_from_name"
   "20240920142054_custom_description"
+  "20250113224034_optional_char_campaign_note"
 )
 
 for migration in "${migrations[@]}"; do

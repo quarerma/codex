@@ -110,7 +110,6 @@ export class CharacterService {
       });
 
       const carryInfo = {
-        currentValue: 0,
         maxValue: data.strength > 0 ? data.strength * 5 : 2,
         alterations: [],
       };
@@ -143,7 +142,6 @@ export class CharacterService {
           patent: data.patent,
           credit,
           maxValue: carryInfo.maxValue,
-          currentValue: carryInfo.currentValue,
           alterations: carryInfo.alterations,
         },
       });

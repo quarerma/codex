@@ -163,7 +163,6 @@ model Inventory {
   character Character @relation(fields: [characterId], references: [id])
   characterId String @id @map("character_id")
 
-  currentValue Int
   maxValue Int
   alterations Json[]
 
@@ -185,11 +184,12 @@ model InventorySlot {
   inventory Inventory @relation(fields: [inventoryId], references: [characterId])
   inventoryId String @map("inventory_id")
 
-  equipment Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId Int @map("equipment_id")
+  equipment Equipment? @relation(fields: [equipmentId], references: [id])
+  equipmentId Int? @map("equipment_id")
 
   uses Int @default(0)
   category Int
+  weight Int @default(0)
   local_name String
   local_description String
   is_equipped Boolean @default(false)

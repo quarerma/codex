@@ -25,7 +25,6 @@ export class InventoryService {
           characterId: true,
           credit: true,
           alterations: true,
-          currentValue: true,
           maxValue: true,
           patent: true,
           slots: {
@@ -76,6 +75,7 @@ export class InventoryService {
               characterId: characterId,
             },
           },
+          weight: item.weight,
           category: item.category,
           local_name: item.name,
           local_description: item.description,
@@ -84,20 +84,19 @@ export class InventoryService {
           is_equipped: false,
         },
         select: {
-           equipment: {
-                include: {
-                  Weapon: true,
-                  CursedItem: true,
-                  
-                },
-              },
-              category: true,
-              alterations: true,
-              id: true,
-              is_equipped: true,
-              local_name: true,
-              uses: true,
-        }
+          equipment: {
+            include: {
+              Weapon: true,
+              CursedItem: true,
+            },
+          },
+          category: true,
+          alterations: true,
+          id: true,
+          is_equipped: true,
+          local_name: true,
+          uses: true,
+        },
       });
 
       await this.equipItem(slot.id, characterId);
@@ -137,17 +136,6 @@ export class InventoryService {
         },
       });
 
-      await this.dataBaseService.inventory.update({
-        where: {
-          characterId: characterId,
-        },
-        data: {
-          currentValue: {
-            increment: slot.equipment.weight,
-          },
-        },
-      });
-
       // On weapon add -- add attack
       if (slot.equipment.type === 'WEAPON') {
         await this.weaponService.addWeapon(slot.equipment.id, characterId, slot.equipment, slot.id);
@@ -176,17 +164,6 @@ export class InventoryService {
           id: true,
           equipment: true,
           alterations: true,
-        },
-      });
-
-      await this.dataBaseService.inventory.update({
-        where: {
-          characterId: characterId,
-        },
-        data: {
-          currentValue: {
-            decrement: slot.equipment.weight,
-          },
         },
       });
 
