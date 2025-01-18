@@ -223,20 +223,10 @@ export class CharacterService {
               username: true,
             },
           },
-          feats: {
-            select: {
-              feat: true,
-              usingAfinity: true,
-            },
-            orderBy: {
-              feat: {
-                name: 'asc',
-              },
-            },
-          },
+
           origin: {
             include: {
-              feats: true,
+              feats: false,
             },
           },
         },

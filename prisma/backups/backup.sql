@@ -1,798 +1,11 @@
---
--- PostgreSQL database dump
---
+COPY public."User" (id, username, password, email, role) FROM stdin;
+cm1bc46xx0000knwbt37wqtvi	quarerma	$2b$10$MqArroBMznobLK3qd9pARO1FlBowQLZHaZCuWaJe/dw15vr3oI.Xa	gabriel.oliveira.quaresma@gmail.com	ADMIN
+cm5bmno2k0000n92qg3024kzq	pukA	$2b$10$wHOyJM0.dQp6Qidv2JlUo.XZm2kGOzA6Eb321EOwdlUqgWMSrD47S	eck.leal.39@gmail.com	USER
+cm5hc0bh900004p9wvlq38ry2	JoeBlossom	$2b$10$fzjGEGDWAOnKpzISnpqFbOYT2q3djWAPN0YfPBMF2PNHBDBbf89bS	snack9827@gmail.com	ADMIN
+cm5ieq8i70008xhvho01d3xkv	Gabili	$2b$10$I6vJs5oEBk8.BbwUOUaqE.zMGbi4eKVbDZhVhFVHLundSg7WMEOtu	g.vanzella1812@gmail.com	USER
+cm5jis4km0000pa9ew5i0gk3s	Danas	$2b$10$sSw5s3z10XE2jkcWRTG1K.5xx6fvF9fgzXa7f2S68NCbyIv0FcE9O	dsouzamiguelfaria@gmail.com	USER
+\.
 
--- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
--- Dumped by pg_dump version 16.6 (Ubuntu 16.6-0ubuntu0.24.04.1)
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Name: Atribute; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Atribute" AS ENUM (
-    'STRENGTH',
-    'DEXTERITY',
-    'VITALITY',
-    'INTELLIGENCE',
-    'PRESENCE'
-);
-
-
-ALTER TYPE public."Atribute" OWNER TO postgres;
-
---
--- Name: Credit; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Credit" AS ENUM (
-    'LOW',
-    'MEDIUM',
-    'HIGH',
-    'UNLIMITED'
-);
-
-
-ALTER TYPE public."Credit" OWNER TO postgres;
-
---
--- Name: DamageType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."DamageType" AS ENUM (
-    'PIERCING',
-    'BALISTIC',
-    'IMPACT',
-    'SLASHING',
-    'FIRE',
-    'CHEMICAL',
-    'POISON',
-    'BLOOD',
-    'FEAR',
-    'KNOWLEDGE',
-    'DEATH',
-    'ENERGY',
-    'ELETRIC'
-);
-
-
-ALTER TYPE public."DamageType" OWNER TO postgres;
-
---
--- Name: Element; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Element" AS ENUM (
-    'REALITY',
-    'FEAR',
-    'BLOOD',
-    'DEATH',
-    'ENERGY',
-    'KNOWLEDGE'
-);
-
-
-ALTER TYPE public."Element" OWNER TO postgres;
-
---
--- Name: FeatType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."FeatType" AS ENUM (
-    'ORIGIN',
-    'CUSTOM',
-    'CLASS',
-    'SUBCLASS',
-    'GENERAL'
-);
-
-
-ALTER TYPE public."FeatType" OWNER TO postgres;
-
---
--- Name: HandType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."HandType" AS ENUM (
-    'LIGHT',
-    'ONE_HANDED',
-    'TWO_HANDED'
-);
-
-
-ALTER TYPE public."HandType" OWNER TO postgres;
-
---
--- Name: ItemType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."ItemType" AS ENUM (
-    'WEAPON',
-    'ARMOR',
-    'AMMO',
-    'ACESSORY',
-    'EXPLOSIVE',
-    'OPERATIONAL_EQUIPMENT',
-    'PARANORMAL_EQUIPMENT',
-    'CURSED_ITEM',
-    'DEFAULT'
-);
-
-
-ALTER TYPE public."ItemType" OWNER TO postgres;
-
---
--- Name: ModificationType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."ModificationType" AS ENUM (
-    'MELEE_WEAPON',
-    'BULLET_WEAPON',
-    'BOLT_WEAPON',
-    'ARMOR',
-    'AMMO',
-    'ACESSORY'
-);
-
-
-ALTER TYPE public."ModificationType" OWNER TO postgres;
-
---
--- Name: Patent; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Patent" AS ENUM (
-    'ROOKIE',
-    'OPERATOR',
-    'SPECIAL_AGENT',
-    'OPERATION_OFFICER',
-    'ELITE_AGENT'
-);
-
-
-ALTER TYPE public."Patent" OWNER TO postgres;
-
---
--- Name: Proficiency; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Proficiency" AS ENUM (
-    'SIMPLE',
-    'TATICAL',
-    'HEAVY',
-    'LIGHT_ARMOR',
-    'HEAVY_ARMOR'
-);
-
-
-ALTER TYPE public."Proficiency" OWNER TO postgres;
-
---
--- Name: Range; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Range" AS ENUM (
-    'SELF',
-    'TOUCH',
-    'MELEE',
-    'SHORT',
-    'MEDIUM',
-    'EXTREME',
-    'UNLIMITED',
-    'LONG'
-);
-
-
-ALTER TYPE public."Range" OWNER TO postgres;
-
---
--- Name: RitualType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."RitualType" AS ENUM (
-    'EFFECT',
-    'DAMAGE'
-);
-
-
-ALTER TYPE public."RitualType" OWNER TO postgres;
-
---
--- Name: Role; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Role" AS ENUM (
-    'USER',
-    'ADMIN'
-);
-
-
-ALTER TYPE public."Role" OWNER TO postgres;
-
---
--- Name: WeaponCategory; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."WeaponCategory" AS ENUM (
-    'SIMPLE',
-    'TATICAL',
-    'HEAVY'
-);
-
-
-ALTER TYPE public."WeaponCategory" OWNER TO postgres;
-
---
--- Name: WeaponType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."WeaponType" AS ENUM (
-    'MELEE',
-    'BOLT',
-    'BULLET'
-);
-
-
-ALTER TYPE public."WeaponType" OWNER TO postgres;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- Name: Campaign; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Campaign" (
-    id text NOT NULL,
-    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    name character varying(50) NOT NULL,
-    description character varying(255) NOT NULL,
-    password text NOT NULL,
-    owner_id text NOT NULL
-);
-
-
-ALTER TABLE public."Campaign" OWNER TO postgres;
-
---
--- Name: CampaignEquipment; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignEquipment" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    equipment_id integer NOT NULL
-);
-
-
-ALTER TABLE public."CampaignEquipment" OWNER TO postgres;
-
---
--- Name: CampaignFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignFeats" (
-    "featId" text NOT NULL,
-    "campaignId" text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignFeats" OWNER TO postgres;
-
---
--- Name: CampaignModifications; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignModifications" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    modification_id text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignModifications" OWNER TO postgres;
-
---
--- Name: CampaignOrigin; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignOrigin" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    origin_id text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignOrigin" OWNER TO postgres;
-
---
--- Name: CampaignRitual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignRitual" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    ritual_id text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignRitual" OWNER TO postgres;
-
---
--- Name: Character; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Character" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    level integer NOT NULL,
-    owner_id text NOT NULL,
-    campaign_id text NOT NULL,
-    class_id text NOT NULL,
-    subclass_id text NOT NULL,
-    current_health integer NOT NULL,
-    current_sanity integer NOT NULL,
-    current_effort integer NOT NULL,
-    max_health integer NOT NULL,
-    max_sanity integer NOT NULL,
-    max_effort integer NOT NULL,
-    speed integer NOT NULL,
-    defense integer NOT NULL,
-    num_of_skills integer DEFAULT 0 NOT NULL,
-    health_info jsonb NOT NULL,
-    effort_info jsonb NOT NULL,
-    sanity_info jsonb NOT NULL,
-    atributes jsonb NOT NULL,
-    skills jsonb[],
-    attacks jsonb[],
-    proficiencies public."Proficiency"[],
-    origin_id text NOT NULL
-);
-
-
-ALTER TABLE public."Character" OWNER TO postgres;
-
---
--- Name: CharacterCondition; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CharacterCondition" (
-    character_id text NOT NULL,
-    condition_id text NOT NULL
-);
-
-
-ALTER TABLE public."CharacterCondition" OWNER TO postgres;
-
---
--- Name: CharacterFeat; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CharacterFeat" (
-    character_id text NOT NULL,
-    feat_id text NOT NULL,
-    "usingAfinity" boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE public."CharacterFeat" OWNER TO postgres;
-
---
--- Name: CharacterRitual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CharacterRitual" (
-    character_id text NOT NULL,
-    ritual_id text NOT NULL,
-    ritual_cost integer NOT NULL,
-    alterations jsonb[]
-);
-
-
-ALTER TABLE public."CharacterRitual" OWNER TO postgres;
-
---
--- Name: Class; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Class" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    description text NOT NULL,
-    "hitPointsPerLevel" integer NOT NULL,
-    "SanityPointsPerLevel" integer NOT NULL,
-    "effortPointsPerLevel" integer NOT NULL,
-    "initialHealth" integer NOT NULL,
-    "initialSanity" integer NOT NULL,
-    "initialEffort" integer NOT NULL,
-    number_of_skills integer DEFAULT 0 NOT NULL,
-    proficiencies public."Proficiency"[]
-);
-
-
-ALTER TABLE public."Class" OWNER TO postgres;
-
---
--- Name: ClassFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."ClassFeats" (
-    "featId" text NOT NULL,
-    "classId" text NOT NULL,
-    "isStarterFeat" boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE public."ClassFeats" OWNER TO postgres;
-
---
--- Name: Condition; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Condition" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    description text NOT NULL,
-    is_custom boolean NOT NULL
-);
-
-
-ALTER TABLE public."Condition" OWNER TO postgres;
-
---
--- Name: CursedItem; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CursedItem" (
-    "equipmentId" integer NOT NULL,
-    element public."Element" NOT NULL
-);
-
-
-ALTER TABLE public."CursedItem" OWNER TO postgres;
-
---
--- Name: DamageRitual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."DamageRitual" (
-    "ritualId" text NOT NULL,
-    "normalCastDamageType" public."DamageType",
-    "discentCastDamageType" public."DamageType",
-    "trueCastDamageType" public."DamageType",
-    "normalCastDamage" text,
-    "discentCastDamage" text,
-    "trueCastDamage" text
-);
-
-
-ALTER TABLE public."DamageRitual" OWNER TO postgres;
-
---
--- Name: Equipment; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Equipment" (
-    id integer NOT NULL,
-    name text NOT NULL,
-    num_of_uses integer NOT NULL,
-    description text NOT NULL,
-    weight integer NOT NULL,
-    category integer NOT NULL,
-    type public."ItemType" NOT NULL,
-    is_custom boolean NOT NULL,
-    "characterUpgrades" jsonb[]
-);
-
-
-ALTER TABLE public."Equipment" OWNER TO postgres;
-
---
--- Name: Equipment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public."Equipment_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."Equipment_id_seq" OWNER TO postgres;
-
---
--- Name: Equipment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public."Equipment_id_seq" OWNED BY public."Equipment".id;
-
-
---
--- Name: Feat; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Feat" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    description text NOT NULL,
-    prerequisites text,
-    "characterUpgrades" jsonb[],
-    type public."FeatType" NOT NULL,
-    afinity text,
-    "afinityUpgrades" jsonb[],
-    element public."Element" NOT NULL
-);
-
-
-ALTER TABLE public."Feat" OWNER TO postgres;
-
---
--- Name: GeneralFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."GeneralFeats" (
-    id text NOT NULL,
-    "featId" text NOT NULL
-);
-
-
-ALTER TABLE public."GeneralFeats" OWNER TO postgres;
-
---
--- Name: Inventory; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Inventory" (
-    character_id text NOT NULL,
-    "currentValue" integer NOT NULL,
-    "maxValue" integer NOT NULL,
-    alterations jsonb[],
-    patent public."Patent" NOT NULL,
-    credit public."Credit" DEFAULT 'LOW'::public."Credit" NOT NULL
-);
-
-
-ALTER TABLE public."Inventory" OWNER TO postgres;
-
---
--- Name: InventorySlot; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."InventorySlot" (
-    id text NOT NULL,
-    inventory_id text NOT NULL,
-    equipment_id integer NOT NULL,
-    uses integer DEFAULT 0 NOT NULL,
-    category integer NOT NULL,
-    local_name text NOT NULL,
-    local_description text NOT NULL,
-    is_equipped boolean DEFAULT false NOT NULL,
-    alterations jsonb[]
-);
-
-
-ALTER TABLE public."InventorySlot" OWNER TO postgres;
-
---
--- Name: Modification; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Modification" (
-    id text NOT NULL,
-    name text NOT NULL,
-    type public."ModificationType"[],
-    element public."Element" NOT NULL,
-    "characterUpgrades" jsonb[],
-    description text NOT NULL,
-    is_custom boolean NOT NULL
-);
-
-
-ALTER TABLE public."Modification" OWNER TO postgres;
-
---
--- Name: Notes; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Notes" (
-    id text NOT NULL,
-    title character varying(50) NOT NULL,
-    character_id text,
-    campaign_id text,
-    content text
-);
-
-
-ALTER TABLE public."Notes" OWNER TO postgres;
-
---
--- Name: Origin; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Origin" (
-    id text NOT NULL,
-    name text NOT NULL,
-    description text NOT NULL,
-    is_custom boolean NOT NULL,
-    feat_id text NOT NULL,
-    skills text[]
-);
-
-
-ALTER TABLE public."Origin" OWNER TO postgres;
-
---
--- Name: PlayerOnCampaign; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."PlayerOnCampaign" (
-    campaign_id text NOT NULL,
-    player_id text NOT NULL,
-    joined_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
-ALTER TABLE public."PlayerOnCampaign" OWNER TO postgres;
-
---
--- Name: Ritual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Ritual" (
-    id text NOT NULL,
-    name text NOT NULL,
-    "normalCastDescription" text NOT NULL,
-    "normalCost" integer NOT NULL,
-    "discentCastDescription" text,
-    "discentCost" integer,
-    "trueCastDescription" text,
-    "trueCost" integer,
-    "ritualLevel" integer NOT NULL,
-    "exectutionTime" text NOT NULL,
-    range public."Range" NOT NULL,
-    target text NOT NULL,
-    duration text NOT NULL,
-    element public."Element" NOT NULL,
-    resistence text NOT NULL,
-    is_custom boolean NOT NULL,
-    type public."RitualType" NOT NULL
-);
-
-
-ALTER TABLE public."Ritual" OWNER TO postgres;
-
---
--- Name: RitualCondition; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."RitualCondition" (
-    ritual_id text NOT NULL,
-    condition_id text NOT NULL
-);
-
-
-ALTER TABLE public."RitualCondition" OWNER TO postgres;
-
---
--- Name: Skill; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Skill" (
-    name text NOT NULL,
-    atribute public."Atribute" NOT NULL,
-    description text NOT NULL,
-    only_trained boolean NOT NULL,
-    carry_peanalty boolean NOT NULL,
-    needs_kit boolean NOT NULL,
-    is_custom boolean NOT NULL,
-    campaign_id text
-);
-
-
-ALTER TABLE public."Skill" OWNER TO postgres;
-
---
--- Name: Subclass; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Subclass" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    description text NOT NULL,
-    "classId" text NOT NULL
-);
-
-
-ALTER TABLE public."Subclass" OWNER TO postgres;
-
---
--- Name: SubclassFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."SubclassFeats" (
-    "featId" text NOT NULL,
-    "subclassId" text NOT NULL,
-    "levelRequired" integer NOT NULL
-);
-
-
-ALTER TABLE public."SubclassFeats" OWNER TO postgres;
-
---
--- Name: User; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."User" (
-    id text NOT NULL,
-    username character varying(50) NOT NULL,
-    password text NOT NULL,
-    email text NOT NULL,
-    role public."Role" DEFAULT 'USER'::public."Role" NOT NULL
-);
-
-
-ALTER TABLE public."User" OWNER TO postgres;
-
---
--- Name: Weapon; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Weapon" (
-    "equipmentId" integer NOT NULL,
-    damage text NOT NULL,
-    critical_multiplier integer NOT NULL,
-    critical_range integer NOT NULL,
-    range public."Range" NOT NULL,
-    damage_type public."DamageType" NOT NULL,
-    weapon_category public."WeaponCategory" NOT NULL,
-    weapon_type public."WeaponType" NOT NULL,
-    hand_type public."HandType" NOT NULL
-);
-
-
-ALTER TABLE public."Weapon" OWNER TO postgres;
-
---
--- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public._prisma_migrations (
-    id character varying(36) NOT NULL,
-    checksum character varying(64) NOT NULL,
-    finished_at timestamp with time zone,
-    migration_name character varying(255) NOT NULL,
-    logs text,
-    rolled_back_at timestamp with time zone,
-    started_at timestamp with time zone DEFAULT now() NOT NULL,
-    applied_steps_count integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public._prisma_migrations OWNER TO postgres;
-
---
--- Name: Equipment id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Equipment" ALTER COLUMN id SET DEFAULT nextval('public."Equipment_id_seq"'::regclass);
-
-
---
--- Data for Name: Campaign; Type: TABLE DATA; Schema: public; Owner: postgres
---
 
 COPY public."Campaign" (id, "createdAt", name, description, password, owner_id) FROM stdin;
 cm5hc4i6z00014p9wyqal4c7k	2025-01-03 22:36:52.311	Olhos do Passado	Lugar onde todos te observam	$2b$10$3mIZN.0qJDRgQnLm.hHNNu66PX4wjNnMhVzM95bS/jLyrR3N5fPMK	cm5hc0bh900004p9wvlq38ry2
@@ -804,10 +17,6 @@ cm5hjm9hj0000147bc51q2l0p	2025-01-04 02:06:38.142	Pesadelos	História de uma mul
 -- Data for Name: CampaignEquipment; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."CampaignEquipment" (id, campaign_id, equipment_id) FROM stdin;
-cm5hc9w6g00024p9wzf2szlrl	cm5hc4i6z00014p9wyqal4c7k	8
-cm5j13jff000311umdb5zms2f	cm5hc4i6z00014p9wyqal4c7k	18
-\.
 
 
 --
@@ -845,6 +54,124 @@ COPY public."CampaignRitual" (id, campaign_id, ritual_id) FROM stdin;
 --
 -- Data for Name: Character; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+--
+-- Data for Name: Class; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Class" (id, name, description, "hitPointsPerLevel", "SanityPointsPerLevel", "effortPointsPerLevel", "initialHealth", "initialSanity", "initialEffort", number_of_skills, proficiencies) FROM stdin;
+cm1beidgp0001knwb86n0e6w6	Combatente	<p>Treinado para lutar com todo tipo de armas, e com a força e a coragem para encarar os perigos de frente, É o tipo de agente que prefere abordagens mais diretas e costuma atirar primeiro e perguntar depois. </p><p><br></p><p>Do mercenário especialista em armas de fogo até o perito em espadas, combatentes apresentam uma gama enorme de habilidades e técnicas especiais que aprimoram sua eficiência no campo de batalha, tornando-os membros essenciais em qualquer missão de extermínio. </p><p><br></p><p>Além de treinar seu corpo, o combatente também é perito em liderar seus aliados em batalha e cuidar de seu equipamento de combate, sempre preparado para assumir a linha de frente quando a coisa fica feia</p>	4	3	2	20	12	2	3	{SIMPLE,TATICAL,LIGHT_ARMOR}
+cm1bejpao0002knwbwlri6asv	Especialista	<p>Um agente que confia mais em esperteza do que em força bruta. Um especialista se vale de conhecimento técnico, raciocínio rápido ou mesmo lábia para resolver mistérios e enfrentar o paranormal. </p><p><br></p><p>Cientistas, inventores, pesquisadores e técnicos de vários tipos são exemplos de especialistas, que são tão variados quanto as áreas do conhecimento e da tecnologia. Alguns ainda preferem estudar engenharia social e se tornam excelentes espiões infiltrados, ou mesmo estudam técnicas especiais de combate como artes marciais e tiro a distância, aliando conhecimento técnico e habilidade. </p><p><br></p><p>O que une todos os especialistas é sua incrível capacidade de aprender e improvisar usando seu intelecto e conhecimento avançado, que pode tirar o grupo todo dos mais diversos tipos de enrascadas.</p>	3	4	3	16	16	3	7	{SIMPLE,LIGHT_ARMOR}
+cm1bekpmk0003knwbdi0gscjk	Ocultista	<p>O Outro Lado é misterioso, perigoso e, de certa forma, cativante. Muitos estudiosos das entidades se perdem em seus reinos obscuros em busca de poder, mas existem aqueles que visam compreender e dominar os mistérios paranormais para usá-los para combater o próprio Outro Lado. Esse tipo de agente não é apenas um conhecedor do oculto, como também possui talento para se conectar com elementos paranormais. </p><p><br></p><p>Ao contrário da crendice popular, ocultistas não são intrinsecamente malignos. Seria como dizer que o cientista que inventou a pólvora é culpado pelo assassino que disparou o revólver. Para a Ordem, o paranormal é uma força que pode ser usada para os mais diversos propósitos, de acordo com a intenção de seu usuário. </p><p><br></p><p>Ocultistas aplicam seu conhecimento acadêmico e suas capacidades de conjuração de rituais em missões para investigar e combater o paranormal em todas as suas formas, principalmente quando munição convencional não é o suficiente para lidar com a tarefa.</p>	2	5	4	12	20	4	5	{SIMPLE}
+\.
+
+
+COPY public."Feat" (id, name, description, prerequisites, "characterUpgrades", type, afinity, "afinityUpgrades", element) FROM stdin;
+cm1bfssqn000jknwbawu9pgbz	Ataque Especial	<p>Quando faz um ataque, você pode gastar 2 PE para receber +5 no teste de ataque ou na rolagem de dano. Conforme avança de NEX, você pode gastar +1 PE para receber mais bônus de +5. Você pode aplicar cada bônus de +5 em ataque ou dano. Por exemplo, em NEX 55%, você pode gastar 4 PE para receber +5 no teste de ataque e +10 na rolagem de dano.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bftmrr000kknwbl8q2s9fj	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de combatente e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfv6cs000lknwbgjqn1nhu	Poder de Combatente	<p>Em NEX 15%, você recebe um poder de combatente à sua escolha. Você recebe um novo poder de combatente em NEX 30% e a cada 15% de NEX subsequentes.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfvj04000mknwbs9slbd5b	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfw2ms000oknwb2tkpjazy	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de combatente ou o primeiro poder de uma trilha de combatente que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfx0pa000pknwbzwqgwclv	Eclético	<p>Quando faz um teste de uma perícia, você pode gastar 2 PE para receber os benefícios de ser treinado nesta perícia.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfxgsu000qknwb3jpzo5vq	Perito	<p>Escolha duas perícias nas quais você é treinado (exceto Luta e Pontaria). Quando faz um teste de uma dessas perícias, você pode gastar 2 PE para somar +1d6 no resultado do teste. Conforme avança de NEX, você pode gastar +1 PE para aumentar o dado de bônus. Por exemplo, em NEX 55%, pode gastar 4 PE para receber +1d10 no teste.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfxvxs000rknwbia2ih4x9	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de especialista disponíveis e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida respectivamente em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfyank000sknwbleo6wjpg	Poder de Especialista	<p>Em NEX 15%, você recebe um poder de especialista à sua escolha. Você recebe um novo poder de especialista em NEX 30% e a cada 15% de NEX subsequentes.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfyrr8000tknwbkrmeojn5	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfz1p5000uknwbot9tihzq	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 5 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfz8y0000vknwbpc0dxs1e	Engenhosidade	<p>Em NEX 40%, quando usa sua habilidade Eclético, você pode gastar 2 PE adicionais para receber os benefícios de ser veterano na perícia. Em NEX 75%, pode gastar 4 PE adicionais para receber os benefícios de ser expert na perícia.&nbsp;</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bfzgle000wknwbw1gur7q4	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de especialista ou o primeiro poder de uma trilha de especialista que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg0k4z000xknwbkageq1ce	Escolhido pelo Outro Lado	<p>Você teve uma experiência paranormal e foi marcado pelo Outro Lado, absorvendo o conhecimento e poder necessários para realizar rituais. Você pode lançar rituais de 1º círculo. À medida que aumenta seu NEX, pode lançar rituais de círculos maiores (2º círculo em NEX 25%, 3º círculo em NEX 55% e 4º círculo em NEX 85%). Você começa com três rituais de 1º círculo. Sempre que avança de NEX, aprende um ritual de qualquer círculo que possa lançar. Esses rituais não contam no seu limite de rituais conhecidos.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg0y38000yknwb81tyrw4g	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de ocultista disponíveis e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida respectivamente em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg1a61000zknwbdua7y664	Poder de Ocultista	<p>Em NEX 15%, você recebe um poder de ocultista à sua escolha. Você recebe um novo poder de ocultista em NEX 30% e a cada 15% de NEX subsequentes.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg1iej0010knwbmpve5htk	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg1s5g0011knwbia9jti9h	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 3 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg238j0012knwbc22hj7ko	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de ocultista ou o primeiro poder de uma trilha de ocultista que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm1bg55f10013knwbforr1pde	Técnica Letal	<p>Você recebe um aumento de +2 na margem de ameaça com todos os seus ataques corpo a corpo.</p>	\N	{"{\\"type\\": \\"MARGEM_DE_CRITICO\\", \\"upgradeValue\\": 2}"}	SUBCLASS	\N	\N	REALITY
+cm1bg5u690014knwbv0yo3wbz	Revidar	<p>Sempre que bloquear um ataque, você pode gastar uma reação e 2 PE para fazer um ataque corpo a corpo no inimigo que o atacou.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bg69z80015knwbavyay2zw	Força Opressora	<p>Quando acerta um ataque corpo a corpo, você pode gastar 1 PE para realizar uma manobra derrubar ou empurrar contra o alvo do ataque como ação livre. Se escolher empurrar, recebe um bônus de +5 para cada 10 pontos de dano que causou no alvo. Se escolher derrubar e vencer no teste oposto, você pode gastar 1 PE para fazer um ataque adicional contra o alvo caído.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bg6jw50016knwbpxevoa1k	Potência Máxima	<p>Quando usa seu Ataque Especial com armas corpo a corpo, todos os bônus numéricos são dobrados. Por exemplo, se usar 5 PE para receber +5 no ataque e +15 no dano, você recebe +10 no ataque e +30 no dano.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bg8yip0017knwb9a86ftbs	Ataque Furtivo	<p>Você sabe atingir os pontos vitais de um inimigo distraído. Uma vez por rodada, quando atinge um alvo desprevenido com um ataque corpo a corpo ou em alcance curto, ou um alvo que você esteja flanqueando, você pode gastar 1 PE para causar +1d6 pontos de dano do mesmo tipo da arma. Em NEX 40% o dano adicional aumenta para +2d6, em NEX 65% aumenta para +3d6 e em NEX 99% aumenta para +4d6.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bgad3a0018knwblw7ce5ty	Gatuno	<p>Você recebe +5 em Atletismo e Crime e pode percorrer seu deslocamento normal quando se esconder sem penalidade (veja a perícia Furtividade).</p>	\N	{"{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Crime\\"}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Atletismo\\"}"}	SUBCLASS	\N	\N	REALITY
+cm1bgappw0019knwbkx5f7drn	Assassinar	<p>Você pode gastar uma ação de movimento e 3 PE para analisar um alvo em alcance curto. Até o fim de seu próximo turno, seu primeiro Ataque Furtivo que causar dano a ele tem seus dados de dano extras dessa habilidade dobrados. Além disso, se sofrer dano de seu ataque, o alvo fica inconsciente ou morrendo, à sua escolha (Fortitude DT Agi evita).</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bgb2ow001aknwb944fcpfz	Sombra Fugaz	<p>Quando faz um teste de Furtividade após atacar ou fazer outra ação chamativa, você pode gastar 3 PE para não sofrer a penalidade de –15 no teste.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bgd3la001bknwbdjtvg63u	Ampliar Ritual	<p>Quando lança um ritual, você pode gastar +2 PE para aumentar seu alcance em um passo (de curto para médio, de médio para longo ou de longo para extremo) ou dobrar sua área de efeito.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bgdsfd001cknwbdaol9ytc	Acelerar Ritual	<p>Uma vez por rodada, você pode aumentar o custo de um ritual em 4 PE para conjurá-lo como uma ação livre.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bgemhg001dknwbjoved7i7	Anular Ritual	<p>Quando for alvo de um ritual, você pode gastar uma quantidade de PE igual ao custo pago por esse ritual e fazer um teste oposto de Ocultismo contra o conjurador. Se vencer, você anula o ritual, cancelando todos os seus efeitos.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bgeytz001eknwb5pr0w5bf	Canalizar o Medo	<p>Você aprende o ritual Canalizar o Medo.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm1bghpuz001gknwbrzirzrqa	Ferramentas Favoritas	<p>Um item a sua escolha (exceto armas) conta como uma categoria abaixo (por exemplo, um item de categoria II conta como categoria I para você).</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1bgin13001iknwb02cd504v	Ingrediente Secreto	<p>Em cenas de interlúdio, você pode fazer a ação alimentar-se para cozinhar um prato especial. Você, e todos os membros do grupo que fizeram a ação alimentar-se, recebem o benefício de dois pratos (caso o mesmo benefício seja escolhido duas vezes, seus efeitos se acumulam).</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1bgje25001kknwb410wk3fv	Magnum Opus	<p>Você é famoso por uma de suas obras. Uma vez por missão, pode determinar que um personagem envolvido em uma cena de interação o reconheça. Você recebe +5 em testes de Presença e de perícias baseadas em Presença contra aquele personagem. A critério do mestre, pode receber esses bônus em outras situações nas quais seria reconhecido.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1bgjzt5001mknwbkim3ntpu	Técnica Medicinal	<p>Sempre que cura um personagem, você adiciona seu Intelecto no total de PV curados.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1bgkq35001oknwb6zqls2m3	Saber é Poder	<p>Quando faz um teste usando Intelecto, você pode gastar 2 PE para receber +5 nesse teste.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1bglsmp001qknwb0b47de1w	Vislumbres do Passado	<p>Uma vez por sessão, você pode fazer um teste de Intelecto (DT 10) para reconhecer pessoas ou lugares familiares, que tenha encontrado antes de perder a memória. Se passar, recebe 1d4 PE temporários e, a critério do mestre, uma informação útil.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1bgmjke001sknwbvuxg4nku	110%	<p>Quando faz um teste de perícia usando Força ou Agilidade (exceto Luta e Pontaria) você pode gastar 2 PE para receber +5 nesse teste.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm1cftky30001rtj4n01adomh	Sangue de Ferro	<p>Seu sangue ferve e cria uma camada de proteção em seu corpo, recebe +2 PE por Nex</p>	\N	{"{\\"type\\": \\"VIDA_P_NEX\\", \\"upgradeValue\\": 2}"}	GENERAL	Imunidade a doenças e Fortitude +5	{"{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Fortitude\\"}"}	BLOOD
+cm1hxwcd30002p5u6f99vcy16	Poder de Pesadelos	<p>Descrição Padrão</p>	\N	{}	CUSTOM	\N	{}	REALITY
+cm5hkq8rp00006apb9o0gccm5	A Favorita	<p>Escolha uma arma para ser sua favorita, como katana ou fuzil de assalto. A categoria da arma escolhida é reduzida em I.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkrqj800016apbcwrpgkq3	Técnica Secreta	<p>A categoria da arma favorita passa a ser reduzida em II. Quando faz um ataque com ela, você pode gastar 2 PE para executar um dos efeitos abaixo como parte do ataque. Você pode adicionar mais efeitos gastando +2 PE por efeito adicional. </p><ul><li> Amplo. O ataque pode atingir um alvo adicional em seu alcance e adjacente ao original (use o mesmo teste de ataque para ambos). </li><li> Destruidor. Aumenta o multiplicador de crítico da arma em +1</li></ul>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hksk3w00026apbcmcdl2hw	Técnica Sublime	<p>Você adiciona os seguintes efeitos à lista de sua Técnica Secreta: </p><ul><li>Letal. Aumenta a margem de ameaça em +2. Você pode escolher este efeito duas vezes para aumentar a margem de ameaça em +5. b</li><li>Perfurante. Ignora até 5 pontos de resistência a dano de qualquer tipo do alvo.</li></ul>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkt3el00036apbq4spyc4f	Máquina de Matar	<p>A categoria da arma favorita passa a ser reduzida em III, ela recebe +2 na margem de ameaça e seu dano aumenta em um dado do mesmo tipo.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hktw6k00046apbwr56pqnk	Casca Grossa	<p>Você recebe +1 PV para cada 5% de NEX e, quando faz um bloqueio, soma seu Vigor na resistência a dano recebida.</p>	\N	{"{\\"type\\": \\"VIDA_P_NEX\\", \\"upgradeValue\\": 1}"}	SUBCLASS	\N	\N	REALITY
+cm5hkuox800056apb81oodk9y	Cai Dentro	<p>Sempre que um oponente em alcance curto ataca um de seus aliados, você pode gastar uma reação e 1 PE para fazer com que esse oponente faça um teste de Vontade (DT Vig). Se falhar, o oponente deve atacar você em vez de seu aliado. Este poder só funciona se você puder ser efetivamente atacado e estiver no alcance do ataque (por exemplo, adjacente a um oponente atacando em corpo a corpo ou dentro do alcance de uma arma de ataque à distância). Um oponente que passe no teste de Vontade não pode ser afetado por seu poder Cai Dentro até o final da cena.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkv69m00066apbe3uj442t	Duro de Matar	<p>Ao sofrer dano não paranormal, você pode gastar uma reação e 2 PE para reduzir esse dano à metade. Em NEX 85%, você pode usar esta habilidade para reduzir dano paranormal.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkvjyi00076apb5z6464fk	Inquebrável	<p>Enquanto estiver machucado, você recebe +5 na Defesa e resistência a dano 5. Enquanto estiver morrendo, em vez do normal, você não fica indefeso e ainda pode realizar ações. Você ainda segue as regras de morte normalmente</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkw49100086apb0f6iwu34	Eloquência	<p>Você pode usar uma ação completa e 1 PE por alvo em alcance curto para afetar outros personagens com sua fala. Faça um teste de Diplomacia, Enganação ou Intimidação contra a Vontade dos alvos. Se você vencer, os alvos ficam fascinados enquanto você se concentrar (uma ação padrão por rodada). Um alvo hostil ou que esteja envolvido em combate recebe +5 em seu teste de resistência e tem direito a um novo teste por rodada, sempre que você se concentrar Um personagem que passar no teste fica imune a este efeito por um dia.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkwr0h00096apbjd8jnjn8	Discurso Motivador	<p>Você pode gastar uma ação padrão e 4 PE para inspirar seus aliados com suas palavras. Você e todos os seus aliados em alcance curto ganham +1d20 em testes de perícia até o fim da cena. A partir de NEX 65%, você pode gastar 8 PE para fornecer um bônus total de +2d20.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkx5s9000a6apbasfrrgvh	Eu Conheço um Cara	<p>Uma vez por missão, você pode ativar sua rede de contatos para pedir um favor, como por exemplo trocar todo o equipamento do seu grupo (como se tivesse uma segunda fase de preparação de missão), conseguir um local de descanso ou mesmo ser resgatado de uma cena. O mestre tem a palavra final de quando é possível usar essa habilidade e quais favores podem ser obtidos.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkxkoa000b6apbiqnmubat	Truque de Mestre	<p>Acostumado a uma vida de fingimento e manipulação, você pode gastar 5 PE para simular o efeito de qualquer habilidade que você tenha visto um de seus aliados usar durante a cena. Você ignora os pré-requisitos da habilidade, mas ainda precisa pagar todos os seus custos, incluindo ações, PE e materiais, e ela usa os seus parâmetros de jogo, como se você estivesse usando a habilidade em questão.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
+cm5hkz485000d6apb0fck9bza	Sensitivo	<p>Você consegue sentir as emoções e intenções de outros personagens, como medo, raiva ou malícia, recebendo +5 em testes de Diplomacia, Intimidação e Intuição.</p>	\N	{"{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Diplomacia\\"}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Intimidação\\"}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Intuição\\"}"}	GENERAL	Quando você faz um teste oposto usando  uma dessas perícias, o oponente sofre –1d20.	{}	KNOWLEDGE
+cm5i9y1dk000111v8vbj4y1wo	Patrulha	<p>Você recebe +2 em Defesa</p>	\N	{"{\\"type\\": \\"DEFESA\\", \\"upgradeValue\\": 2}"}	ORIGIN	\N	\N	REALITY
+cm5i9zds6000311v8f4ybv8q5	Posição de Combate	<p>No primeiro turno de cada cena de ação, você pode gastar 2 PE para receber uma ação de movimento adicional.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm5ia5pp8000511v8w1wdr8db	Vitalidade Reforçada	<p>Você possui uma capacidade superior de suportar ferimentos. Você recebe +1 PV para cada 5% de NEX (ou para cada nível, se estiver usando a regra de nível de experiência) e +2 em Fortitude.</p>	Vigor 2	{"{\\"type\\": \\"VIDA_P_NEX\\", \\"upgradeValue\\": 1}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 2, \\"upgradeTarget\\": \\"Fortitude\\"}"}	GENERAL	\N	{}	REALITY
+cm5iaejay000611v86sv20smy	Primeira Impressão	<p>Você recebe +2d20 no primeiro teste de Diplomacia, Enganação, Intimidação ou Intuição que fizer em uma cena.</p>	\N	{}	CLASS	\N	\N	REALITY
+cm5ialr96000911v85d170hcm	Escolhido pelo Outro Lado	<p>Você teve uma experiência paranormal e foi marcado pelo Outro Lado, absorvendo o conhecimento e poder necessários para realizar rituais. Você pode lançar rituais de 1º círculo. À medida que aumenta seu NEX, pode lançar rituais de círculos maiores (2º círculo em NEX 25%,&nbsp;3º círculo em NEX 55% e 4º círculo em NEX 85%). Você começa com três rituais de 1º círculo. Sempre que avança de NEX, aprende um ritual de qualquer círculo que possa lançar. Esses rituais não contam no seu limite de rituais conhecidos.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm5iam940000a11v8oh0jmmzm	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de ocultista disponíveis e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida respectivamente em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm5iamiri000b11v8z3iidy73	Poder de Ocultista	<p>Em NEX 15%, você recebe um poder de ocultista à sua escolha. Você recebe um novo poder de ocultista em NEX 30% e a cada 15% de NEX subsequentes, conforme indicado na tabela. Veja a lista de poderes a seguir.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm5iamwhp000c11v8wvgxkdrl	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm5ianb2g000d11v8ogslnpeb	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 3 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
+cm5ianigo000e11v8i3wjxnxe	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de ocultista ou o primeiro poder de uma trilha de ocultista que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
+cm5icnn6v0006xhvh31qjz9rp	O Crime Compensa	<p>No final de uma missão, escolha um item encontrado na missão. Em sua próxima missão, você pode incluir esse item em seu inventário sem que ele conte em seu limite de itens por patente.</p>	\N	{}	ORIGIN	\N	\N	REALITY
+cm5icvvxv0007xhvhv5tdudy3	Golpe Pesado	<p>O dano de suas armas corpo a corpo aumenta em mais um dado do mesmo tipo.</p>	\N	{"{\\"type\\": \\"GLOBAL_MESMO_DADO_DE_DANO_MELEE\\"}"}	CLASS	\N	\N	REALITY
+cm1bfvswi000nknwbpgiv43gf	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 2 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
+\.
+
+
+
+
+COPY public."Origin" (id, name, description, is_custom, feat_id, skills) FROM stdin;
+cm1bghpuz001fknwbcape5u7o	Engenheiro	<p>Enquanto os acadêmicos estão preocupados com teorias, você colocar a mão na massa, seja como engenheiro profissional, seja como inventor de garagem. Provavelmente você criou algum dispositivo paranormal que chamou a atenção da Ordem.</p>	f	cm1bghpuz001gknwbrzirzrqa	{Profissão,Tecnologia}
+cm1bgin13001hknwb1dh5lqnb	Chef	<p>Você é um cozinheiro amador ou profissional. Talvez trabalhasse em um restaurante, talvez simplesmente gostasse de cozinhar para a família e amigos. Como sua comida fez com que você se envolvesse com o paranormal? Ninguém sabe. Mas os outros agentes adoram quando você vai para a missão!</p>	f	cm1bgin13001iknwb02cd504v	{Fortitude,Profissão}
+cm1bgje25001jknwb0be1qzbq	Artista	<p>Você era um ator, músico, escritor, dançarino, influenciador... Seu trabalho pode ter sido inspirado por uma experiência paranormal do passado e o que o público acha que é pura criatividade, a Ordem sabe que tem um lado mais sombrio.</p>	f	cm1bgje25001kknwb410wk3fv	{Artes,Enganação}
+cm1bgjzt5001lknwbydoyib7g	Agente de Saúde	<p>Você era um profissional da saúde como um enfermeiro, farmacêutico, médico, psicólogo ou socorrista, treinado no atendimento e cuidado de pessoas. Você pode ter sido surpreendido por um evento paranormal durante o trabalho ou mesmo cuidado de um agente da Ordem em uma emergência, que ficou surpreso com o quão bem você lidou com a situação.</p>	f	cm1bgjzt5001mknwbkim3ntpu	{Intuição,Medicina}
+cm1bgkq34001nknwbbjyyjucm	Acadêmico	<p>Você era um pesquisador ou professor universitário. De forma proposital ou não, seus estudos tocaram em assuntos misteriosos e chamaram a atenção da Ordo Realitas.</p>	f	cm1bgkq35001oknwb6zqls2m3	{Ciências,Investigação}
+cm1bglsmp001pknwbql2d9fw1	Amnésico	<p>Você perdeu a maior parte da memória. Sabe apenas o próprio nome, ou nem isso. Sua amnésia pode ser resultado de um trauma paranormal ou mesmo de um ritual. Talvez você tenha sido vítima de cultistas? Talvez você tenha sido um cultista? Seja como for, hoje a Ordem é a única família que conhece. Quem sabe, cumprindo missões, você descubra algo sobre seu passado.</p>	f	cm1bglsmp001qknwb0b47de1w	{}
+cm1bgmjke001rknwb56c0wsak	Atleta	<p>Você competia em um esporte individual ou por equipe, como natação ou futebol. Seu alto desempenho pode ser fruto de alguma influência paranormal que nem mesmo você conhecia ou você pode ter se envolvido em algum evento paranormal em uma de suas competições.</p>	f	cm1bgmjke001sknwbvuxg4nku	{Acrobacia,Atletismo}
+cm5i9y1dk000011v8dfwtxcvz	Policial	<p>Você fez parte de uma força de segurança pública, civil ou militar. Em alguma patrulha ou chamado se deparou com um caso paranormal e sobreviveu para contar a história</p>	f	cm5i9y1dk000111v8vbj4y1wo	{Pontaria,Percepção}
+cm5i9zds6000211v8aqqdm484	Mercenário	<p>Você é um soldado de aluguel, que trabalha sozinho ou como parte de alguma organização que vende serviços militares. Escoltas e assassinatos fizeram parte de sua rotina por tempo o suficiente para você se envolver em alguma situação com o paranormal.</p>	f	cm5i9zds6000311v8f4ybv8q5	{Iniciativa,Intimidação}
+cm5icnn6v0005xhvh67p6pkdp	Criminoso	<p><span style="color: rgb(250, 250, 249);">Você vivia uma vida fora da lei, seja como mero batedor de carteiras, seja como membro de uma facção criminosa. Em algum momento, você se envolveu em um assunto da Ordem talvez tenha roubado um item amaldiçoado? A organização, por sua vez, achou melhor recrutar seus talentos do que ter você como um estorvo.</span></p>	f	cm5icnn6v0006xhvh31qjz9rp	{Crime,Furtividade}
+\.
+
+--
+-- Data for Name: Subclass; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Subclass" (id, name, description, "classId") FROM stdin;
+cm1bely5b0004knwb1e1zi0hi	Aniquilador	<p>Você é treinado para abater alvos com eficiência e velocidade. Suas armas são suas melhores amigas e você cuida tão bem delas quanto de seus companheiros de equipe. Talvez até melhor.</p>	cm1beidgp0001knwb86n0e6w6
+cm1bem8q00005knwbvx4mshna	Comandante de Campo	<p>Sem um oficial uma batalha não passa de uma briga de bar. Você é treinado para coordenar e auxiliar seus companheiros em combate, tomando decisões 27 rápidas e tirando melhor proveito da situação e do talento de seus aliados.</p>	cm1beidgp0001knwb86n0e6w6
+cm1bemg2h0006knwbsqhi0w4c	Guerreiro	<p>Você treinou sua musculatura e movimentos a ponto de transformar seu corpo em uma verdadeira arma. Com golpes corpo a corpo tão poderosos quanto uma bala, você encara os perigos de frente.</p>	cm1beidgp0001knwb86n0e6w6
+cm1bemopb0007knwbqn26aktv	Operações Especiais	<p>Você é um combatente eficaz. Suas ações são calculadas e otimizadas, sempre antevendo os movimentos inimigos e se posicionando da maneira mais inteligente no campo de batalha.</p>	cm1beidgp0001knwb86n0e6w6
+cm1bemy380008knwbh8ht7a7b	Tropa de Choque	<p>Você é duro na queda. Treinou seu corpo para resistir a traumas físicos, tornando-o praticamente inquebrável, e por isso não teme se colocar entre seus aliados e o perigo.</p>	cm1beidgp0001knwb86n0e6w6
+cm1bena7w0009knwbg2hm9ply	Atirador de Elite	<p>Um tiro, uma morte. Ao contrário dos combatentes, você é perito em neutralizar ameaças de longe, terminando uma briga antes mesmo que ela comece. Você trata sua arma como uma ferramenta de precisão, sendo capaz de executar façanhas incríveis.</p>	cm1bejpao0002knwbwlri6asv
+cm1beng80000aknwb792uz6wm	Infiltrador	<p>Você é um perito em infiltração e sabe neutralizar alvos desprevenidos sem causar alarde. Combinando talento acrobático, destreza manual e conhecimento técnico você é capaz de superar qualquer barreira de defesa, mesmo quando a missão parece impossível</p>	cm1bejpao0002knwbwlri6asv
+cm1bennph000bknwb01zb8bq1	Médico de Campo	<p>Você é treinado em técnicas de primeiros socorros e tratamento de emergência, o que torna você um membro valioso para qualquer grupo de agentes. Ao contrário dos profissionais de saúde convencionais, você está acostumado com o campo de batalha e sabe tomar decisões rápidas no meio do caos</p>	cm1bejpao0002knwbwlri6asv
+cm1benvcd000cknwbwjc693zu	Negociador	<p>Você é um diplomata habilidoso e consegue influenciar outras pessoas, seja por lábia ou intimidação. Sua capacidade de avaliar situações com rapidez e eficiência pode tirar o grupo de apuros que nem a mais poderosa das armas poderia resolver.</p>	cm1bejpao0002knwbwlri6asv
+cm1beo416000dknwbkk2whchu	Técnico	<p>Sua principal habilidade é a manutenção e reparo do valioso equipamento que seu time carrega em missão. Seu conhecimento técnico também permite que improvise ferramentas com o que tiver à disposição e sabote os itens usados por seus inimigos.</p>	cm1bejpao0002knwbwlri6asv
+cm1beodck000eknwbtc0du48u	Conduíte	<p>Você domina os aspectos fundamentais da conjuração de rituais e é capaz de aumentar o alcance e velocidade de suas conjurações. Conforme sua conexão com as entidades paranormais aumenta você se torna capaz de interferir com os rituais de outros ocultistas.</p>	cm1bekpmk0003knwbdi0gscjk
+cm1beokwi000fknwbd903mrl4	Flagelador	<p>Dor é um poderoso catalisador paranormal e você aprendeu a transformá-la em poder para seus rituais. Quando se torna especialmente poderoso, consegue usar a dor e o sofrimento de seus inimigos como instrumento de seus rituais ocultistas.</p>	cm1bekpmk0003knwbdi0gscjk
+cm1beouk0000gknwbc5gi1wo8	Graduado	<p>Você foca seus estudos em se tornar um conjurador versátil e poderoso, conhecendo mais rituais que os outros ocultistas e sendo capaz de torná-los mais difíceis de serem resistidos. Seu objetivo é desvendar e dominar os segredos do Outro Lado, custe o que custar</p>	cm1bekpmk0003knwbdi0gscjk
+cm1bep1tp000hknwb4xjbo5wi	Intuitivo	<p>Assim como combatentes treinam seus corpos para resistir a traumas f ísicos, você preparou sua mente para resistir aos efeitos do Outro Lado. Seu foco e força de vontade fazem com que você expanda os limites de suas capacidades paranormais.</p>	cm1bekpmk0003knwbdi0gscjk
+cm1bep9u1000iknwb53ztxxq4	Lâmina Paranormal	<p>Alguns ocultistas preferem ficar fechados em suas bibliotecas estudando livros e rituais. Outros preferem investigar fenômenos paranormais em sua fonte. Já você, prefere usar o paranormal como uma arma. Você aprendeu e dominou técnicas de luta mesclando suas habilidades de conjuração com suas capacidades de combate.</p>	cm1bekpmk0003knwbdi0gscjk
+\.
+
 
 COPY public."Character" (id, name, level, owner_id, campaign_id, class_id, subclass_id, current_health, current_sanity, current_effort, max_health, max_sanity, max_effort, speed, defense, num_of_skills, health_info, effort_info, sanity_info, atributes, skills, attacks, proficiencies, origin_id) FROM stdin;
 cm5jiyyz20001pa9ebsck83xh	Giovanni Constanzo	4	cm5jis4km0000pa9ew5i0gk3s	cm5hc4i6z00014p9wyqal4c7k	cm1beidgp0001knwb86n0e6w6	cm1bely5b0004knwb1e1zi0hi	29	11	2	40	21	12	9	17	5	{"alterations": [], "valuePerLevel": 6}	{"alterations": [], "valuePerLevel": 3}	{"maxValue": 21, "alterations": [], "currentValue": 21, "valuePerLevel": 3}	{"presence": 1, "strength": 3, "vitality": 2, "dexterity": 2, "alterations": [], "intelligence": 1}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 5, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}"}	\N	{SIMPLE,TATICAL,LIGHT_ARMOR}	cm5icnn6v0005xhvh67p6pkdp
@@ -852,6 +179,7 @@ cm5ilwpxl0009b9sj0y59694c	Kleber Martins	4	cm5bmno2k0000n92qg3024kzq	cm5hc4i6z00
 cm5ieylye0009xhvh61qjflda	Kate Carter	4	cm5ieq8i70008xhvho01d3xkv	cm5hc4i6z00014p9wyqal4c7k	cm1bejpao0002knwbwlri6asv	cm1benvcd000cknwbwjc693zu	14	14	20	29	28	24	9	12	9	{"alterations": [], "valuePerLevel": 4}	{"alterations": [], "valuePerLevel": 6}	{"maxValue": 28, "alterations": [], "currentValue": 28, "valuePerLevel": 4}	{"presence": 3, "strength": 1, "vitality": 1, "dexterity": 2, "alterations": [], "intelligence": 3}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 0, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Fuzil de caça\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5j3ralf00005p0p2d69jw7h\\", \\"alterations\\": [], \\"damage_dies\\": [\\"2d8\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 3}"}	{SIMPLE,LIGHT_ARMOR}	cm1bgje25001jknwb0be1qzbq
 cm5iapljv000f11v8nsb6ew4j	Tobias Porto	4	cm1bc46xx0000knwbt37wqtvi	cm5hc4i6z00014p9wyqal4c7k	cm1bekpmk0003knwbdi0gscjk	cm1beodck000eknwbtc0du48u	15	15	23	22	30	32	9	12	7	{"alterations": [], "valuePerLevel": 4}	{"alterations": [], "valuePerLevel": 8}	{"maxValue": 35, "alterations": [], "currentValue": 35, "valuePerLevel": 5}	{"presence": 4, "strength": 0, "vitality": 1, "dexterity": 2, "alterations": [], "intelligence": 3}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 4, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 10, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [{\\"item\\": 8, \\"value\\": 5, \\"itemName\\": \\"Crucifixo Invertido\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Revólver\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5ilsiie0007b9sjpun1t6r1\\", \\"alterations\\": [], \\"damage_dies\\": [\\"2d6\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 3}","{\\"name\\": \\"Faca\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5j26eks000b11umy5lx534y\\", \\"alterations\\": [], \\"damage_dies\\": [\\"1d4\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 2}"}	{SIMPLE}	cm1bgje25001jknwb0be1qzbq
 \.
+
 
 
 --
@@ -914,6 +242,19 @@ cm5jiyyz20001pa9ebsck83xh	cm5icvvxv0007xhvhv5tdudy3	f
 \.
 
 
+COPY public."Ritual" (id, name, "normalCastDescription", "normalCost", "discentCastDescription", "discentCost", "trueCastDescription", "trueCost", "ritualLevel", "exectutionTime", range, target, duration, element, resistence, is_custom, type) FROM stdin;
+cm1bgryld001uknwbjhewmpq9	Eletrocussão	<p>Você manifesta e dispara uma corrente elétrica contra o alvo, que sofre 3d6 pontos de dano de eletricidade e fica vulnerável por uma rodada. Se passar no teste de resistência, sofre apenas metade do dano e evita a condição. Se usado contra objetos eletrônicos, este ritual causa o dobro de dano e ignora resistência.</p>	1	<p>Muda o alvo para “área: linha de 30m”. Você dispara um poderoso raio que causa 6d6 pontos de dano de Energia em todos os seres e objetos livres na área. Requer 2º círculo.</p>	2	<p>Muda a área para “alvos escolhidos”. Em vez do normal, você dispara vários relâmpagos, um para cada alvo escolhido, causando 8d6 pontos de dano de Energia em cada. Requer 3º círculo.</p>	5	1	Padrão	SHORT	1 ser ou objeto	Instantânea	ENERGY	Fortitude Parcial	f	DAMAGE
+cm1h5en9s000a12te7fbstxb5	Alterar Destino	<p>Você vislumbra seu futuro próximo, analisando milhões de possibilidades e escolhendo a melhor. Você recebe +15 em um teste de resistência ou na Defesa contra um ataque.</p>	9	\N	0	<p>Muda o alcance para “curto” e o alvo para “um aliado à sua escolha”</p>	5	4	Padrão	SELF	Você	Instantanea	ENERGY	Nenhuma	f	EFFECT
+cm1h5mbgq000c12teo5oqs450	Âncora Temporal	<p>Uma aura espiralada surge sobre o alvo. No início de cada turno dele, ele deve fazer um teste de Vontade. Se falhar, não poderá se deslocar naquele turno (ele ainda pode agir, só não pode se deslocar). Se o alvo passar nesse teste dois turnos seguidos o efeito termina.</p>	9	\N	0	<p>Muda o alvo para “seres à sua escolha”. Requer 4º círculo</p>	4	4	Padrão	MEDIUM	Você	Instantanea	DEATH	Nenhuma	f	EFFECT
+cm1h5py6b000f12tevm7nhzsq	Decadência	<p>Espirais de trevas envolvem sua mão e definham o alvo, que sofre 2d8+2 pontos de dano de Morte.</p>	1	<p>muda a resistência para “nenhuma” e o dano para 3d8+3. Como parte da execução do ritual, você transfere as espirais para uma arma e faz um ataque corpo a corpo contra o alvo com esta arma. Se acertar, causa o dano da arma e do ritual, somados.</p>	2	<p>&nbsp;muda o alcance para “pessoal” o alvo para “área: explosão com 6m de raio” e o dano para 8d8+8. As espirais afetam todos os seres na área. Requer 3º círculo.</p>	5	1	Padrão	TOUCH	1 ser	Instantanea	DEATH	Fortitude reduz à metade	f	DAMAGE
+cm5j19qq2000511umm0dq0rl6	Enfeitiçar	<p>Este ritual torna o alvo prestativo (veja a página 45). Ele não fica sob seu controle, mas percebe suas palavras e ações da maneira mais favorável possível. Você recebe um bônus de +10 em testes de Diplomacia com ele. Um alvo hostil ou que esteja envolvido em combate recebe +5 em seu teste de resistência. Se você ou seus aliados tomarem qualquer ação hostil contra o alvo, o efeito é dissipado e o alvo retorna à atitude que tinha antes (ou piorada, de acordo com o mestre).&nbsp;</p>	1	<p>Em vez do normal, você sugere uma ação para o alvo e ele obedece. A sugestão deve ser feita de modo que pareça aceitável, a critério do mestre. Pedir que o alvo atire em seu companheiro, por exemplo, dissipa o efeito. Já sugerir a um guarda que descanse um pouco, de modo que você e seus aliados passem por ele, é aceitável. Quando o alvo executa a ação, o efeito termina. Você pode determinar uma condição específica para a sugestão: por exemplo, que o policial prenda a próxima pessoa de casaco verde que ele encontrar. Requer 2º círculo.</p>	2	<p>Afeta todos os alvos dentro do alcance. Requer 3º círculo.</p>	5	1	Padrão	SHORT	1 pessoa	Cena	KNOWLEDGE	Vontade anula	f	EFFECT
+cm5j1cgnx000611um7acukdm2	Ouvir Sussurros	<p>O ritual conecta você com os sussurros, memórias ecoadas pelo Outro Lado, que você pode consultar para receber conhecimento proibido em relação a uma ação que tomará em breve. Ao usar este ritual, faça uma pergunta sobre um evento que você está prestes a fazer (na mesma cena) que possa ser respondida com “sim” ou “não”. O mestre rola 1d6 em segredo; com um resultado de 2 a 6, o ritual funciona e você recebe sua resposta, que pode ser “sim”, “não” ou “sim e não”. Com um resultado 1, o ritual falha e oferece o resultado “não”. Não há como saber se esse resultado foi dado porque o ritual falhou ou não. Lançar este ritual múltiplas vezes sobre o mesmo assunto gera sempre o primeiro resultado. Por exemplo, você está prestes a entrar em um prédio que pode ser o esconderijo de um cultista. Se você perguntar para os sussurros se o cultista está mesmo nesse local, a resposta pode ser “sim” (ele está no prédio), “não” (ele não está no prédio) ou “sim e não” (ele está no prédio, mas usou um ritual para se esconder seu corpo físico em uma dimensão do Outro Lado...). Isso é útil para saber se você deve (ou não) gastar recursos para um possível combate.</p>	1	<p>Muda a execução para 1 minuto. Em vez do normal, você pode consultar os ecos fazendo uma pergunta sobre um evento que poderá acontecer até um dia no futuro. O mestre rola a chance de falha; com um resultado de 2 a 6, você recebe uma resposta, desde uma simples frase até uma profecia ou enigma. Em geral, este uso oferece pistas, indicando um caminho a tomar para descobrir a resposta que se procura. Numa falha você não recebe resposta alguma. Requer 2º círculo.</p>	2	<p>Muda a execução para 10 minutos e a duração para 5 rodadas. Em vez do normal, você consulta os ecos, podendo fazer uma pergunta por rodada, desde que ela possa ser respondida com “sim”, “não” ou “ninguém sabe”. O mestre rola a chance de falha para cada pergunta. Em caso de falha, a resposta também é “ninguém sabe”. Requer 3º círculo.</p>	5	1	Completa	SELF	Você	Instantânea	KNOWLEDGE	Nenhuma	f	EFFECT
+cm5j1f7u9000711um2j4gis5o	Tecer Ilusões	<p>Este ritual cria uma ilusão visual (uma pessoa, uma parede...) ou sonora (um grito de socorro, um uivo assustador...). O ritual cria apenas imagens ou sons simples, com volume equivalente à voz de uma pessoa para cada cubo de 1,5m no efeito. Não é possível criar cheiros, texturas ou temperaturas, nem sons complexos, como uma música ou diálogo. Seres e objetos atravessam uma ilusão sem sofrer dano, mas o ritual pode, por exemplo, esconder uma armadilha ou emboscada. A ilusão é dissipada se você sair do alcance.</p>	1	<p>Muda o efeito para até 8 cubos de 1,5m e a duração para sustentada. Você pode criar ilusões de imagem e sons combinados, e pode criar sons complexos, odores e sensações térmicas. Também pode criar sensações táteis, como texturas; objetos ainda atravessam a ilusão, mas seres não conseguem atravessá-la sem passar em um teste de Vontade. A cada rodada, você pode usar uma ação livre para mover a imagem ou alterar o som, como aumentar o volume ou fazer com que pareça se afastar ou se aproximar, ainda dentro dos limites do efeito. Você pode, por exemplo, criar a ilusão de um fantasma que anda pela sala, controlando seus movimentos. A ilusão ainda é incapaz de causar ou sofrer dano. Quando você para de sustentar o ritual, a imagem ou som persistem por mais uma rodada antes do ritual se dissipar. Requer 2º círculo.</p>	2	<p>Você cria a ilusão de um perigo mortal. Quando o ritual é conjurado, e no início de cada um de seus turnos, um alvo interagindo com a ilusão deve fazer um teste de Vontade; se falhar, acredita que a ilusão é real e sofre 6d6 pontos de dano de Conhecimento. O alvo racionaliza o efeito sempre que falha no teste (por exemplo, acredita que o mesmo teto pode cair sobre ele várias vezes). Se um alvo passar em dois testes de Vontade seguidos, o efeito é anulado para ele. Requer 3º círculo</p>	5	1	Padrão	MEDIUM	Ilusão que se estende a até 4 cubos de 1,5m	Cena	KNOWLEDGE	Vontade desacredita	f	EFFECT
+cm5j1i8sf000811um31vh5nk2	Terceiro Olho	<p>Seus olhos se enchem de sigilos e você passa a enxergar auras paranormais em alcance longo. Rituais, itens amaldiçoados e criaturas emitem auras. Você sabe o elemento da aura e seu poder aproximado — rituais de 1º círculo e criaturas de VD até 80 emitem uma aura fraca; rituais de 2º e 3º círculos e criaturas de VD entre 81 e 280 emitem uma aura moderada, e rituais de 4º círculo e criaturas de VD 281 ou maior emitem uma aura poderosa. </p><p><br></p><p>Além disso, você pode gastar uma ação de movimento para descobrir se um ser que possa ver em alcance médio tem poderes paranormais ou se é capaz de conjurar rituais e de quais elementos.</p>	1	<p>Muda a duração para 1 dia.&nbsp;</p>	2	<p>Também pode enxergar objetos e seres invisíveis, que aparecem como formas translúcidas.&nbsp;</p>	5	1	Padrão	SELF	Você	Cena	KNOWLEDGE		f	EFFECT
+cm5j1kece000911umr28219vr	Embaralhar	<p>Você cria três cópias ilusórias suas, como hologramas extremamente realistas. As cópias ficam ao seu redor e imitam suas ações, tornando difícil para um inimigo saber quem é o verdadeiro. Você recebe +6 na Defesa. Cada vez que um ataque contra você erra, uma das imagens desaparece e o bônus na Defesa diminui em 2. Um oponente deve ver as cópias para ser confundido. Se você estiver invisível, ou o atacante fechar os olhos, você não recebe o bônus (mas o atacante sofre as penalidades normais por não enxergar).</p>	1	<p>Muda o número de cópias para 5 (e o bônus na Defesa para +10). Requer 2º círculo.</p>	2	<p>Muda o número de cópias para 8 (e o bônus na Defesa para +16). Além do normal, toda vez que uma cópia é destruída, emite um clarão de luz. O ser que destruiu a cópia fica ofuscada por uma rodada. Requer 3º círculo.</p>	5	1	Padrão	SELF	Você	Cena	ENERGY		f	EFFECT
+cm5j1npzn000a11umnpb5p836	Distorcer Aparência	<p>Você modifica sua aparência de modo a parecer outra pessoa. Isso inclui altura, peso, tom de pele, cor de cabelo, timbre de voz, impressão digital, córnea etc. Você recebe +10 em testes de Enganação para 131 disfarce, mas não recebe habilidades da nova forma nem modifica suas demais estatísticas.</p>	1	<p>Muda o alcance para “curto” e o alvo para “1 ser”. Um alvo involuntária pode anular o efeito com um teste de Vontade.</p>	2	<p>Como em Discente, mas muda o alvo para “seres escolhidos”. Requer 3º círculo.</p>	5	1	Padrão	SELF	Você	Cena	BLOOD	Vontade desacredita	f	EFFECT
+\.
+
 --
 -- Data for Name: CharacterRitual; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -929,15 +270,6 @@ cm5iapljv000f11v8nsb6ew4j	cm5j1kece000911umr28219vr	1	\N
 \.
 
 
---
--- Data for Name: Class; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Class" (id, name, description, "hitPointsPerLevel", "SanityPointsPerLevel", "effortPointsPerLevel", "initialHealth", "initialSanity", "initialEffort", number_of_skills, proficiencies) FROM stdin;
-cm1beidgp0001knwb86n0e6w6	Combatente	<p>Treinado para lutar com todo tipo de armas, e com a força e a coragem para encarar os perigos de frente, É o tipo de agente que prefere abordagens mais diretas e costuma atirar primeiro e perguntar depois. </p><p><br></p><p>Do mercenário especialista em armas de fogo até o perito em espadas, combatentes apresentam uma gama enorme de habilidades e técnicas especiais que aprimoram sua eficiência no campo de batalha, tornando-os membros essenciais em qualquer missão de extermínio. </p><p><br></p><p>Além de treinar seu corpo, o combatente também é perito em liderar seus aliados em batalha e cuidar de seu equipamento de combate, sempre preparado para assumir a linha de frente quando a coisa fica feia</p>	4	3	2	20	12	2	3	{SIMPLE,TATICAL,LIGHT_ARMOR}
-cm1bejpao0002knwbwlri6asv	Especialista	<p>Um agente que confia mais em esperteza do que em força bruta. Um especialista se vale de conhecimento técnico, raciocínio rápido ou mesmo lábia para resolver mistérios e enfrentar o paranormal. </p><p><br></p><p>Cientistas, inventores, pesquisadores e técnicos de vários tipos são exemplos de especialistas, que são tão variados quanto as áreas do conhecimento e da tecnologia. Alguns ainda preferem estudar engenharia social e se tornam excelentes espiões infiltrados, ou mesmo estudam técnicas especiais de combate como artes marciais e tiro a distância, aliando conhecimento técnico e habilidade. </p><p><br></p><p>O que une todos os especialistas é sua incrível capacidade de aprender e improvisar usando seu intelecto e conhecimento avançado, que pode tirar o grupo todo dos mais diversos tipos de enrascadas.</p>	3	4	3	16	16	3	7	{SIMPLE,LIGHT_ARMOR}
-cm1bekpmk0003knwbdi0gscjk	Ocultista	<p>O Outro Lado é misterioso, perigoso e, de certa forma, cativante. Muitos estudiosos das entidades se perdem em seus reinos obscuros em busca de poder, mas existem aqueles que visam compreender e dominar os mistérios paranormais para usá-los para combater o próprio Outro Lado. Esse tipo de agente não é apenas um conhecedor do oculto, como também possui talento para se conectar com elementos paranormais. </p><p><br></p><p>Ao contrário da crendice popular, ocultistas não são intrinsecamente malignos. Seria como dizer que o cientista que inventou a pólvora é culpado pelo assassino que disparou o revólver. Para a Ordem, o paranormal é uma força que pode ser usada para os mais diversos propósitos, de acordo com a intenção de seu usuário. </p><p><br></p><p>Ocultistas aplicam seu conhecimento acadêmico e suas capacidades de conjuração de rituais em missões para investigar e combater o paranormal em todas as suas formas, principalmente quando munição convencional não é o suficiente para lidar com a tarefa.</p>	2	5	4	12	20	4	5	{SIMPLE}
-\.
 
 
 --
@@ -1026,79 +358,15 @@ COPY public."Equipment" (id, name, num_of_uses, description, weight, category, t
 20	Faca	0	<p>Uma lâmina longa e afiada, como uma navalha, uma faca de churrasco ou uma faca militar (facas de cozinha pequenas causam apenas 1d3 pontos de dano). É uma arma ágil e pode ser arremessada.</p>	1	0	WEAPON	f	{}
 \.
 
+COPY public."CampaignEquipment" (id, campaign_id, equipment_id) FROM stdin;
+cm5hc9w6g00024p9wzf2szlrl	cm5hc4i6z00014p9wyqal4c7k	8
+cm5j13jff000311umdb5zms2f	cm5hc4i6z00014p9wyqal4c7k	18
+\.
+
 
 --
 -- Data for Name: Feat; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-COPY public."Feat" (id, name, description, prerequisites, "characterUpgrades", type, afinity, "afinityUpgrades", element) FROM stdin;
-cm1bfssqn000jknwbawu9pgbz	Ataque Especial	<p>Quando faz um ataque, você pode gastar 2 PE para receber +5 no teste de ataque ou na rolagem de dano. Conforme avança de NEX, você pode gastar +1 PE para receber mais bônus de +5. Você pode aplicar cada bônus de +5 em ataque ou dano. Por exemplo, em NEX 55%, você pode gastar 4 PE para receber +5 no teste de ataque e +10 na rolagem de dano.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bftmrr000kknwbl8q2s9fj	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de combatente e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfv6cs000lknwbgjqn1nhu	Poder de Combatente	<p>Em NEX 15%, você recebe um poder de combatente à sua escolha. Você recebe um novo poder de combatente em NEX 30% e a cada 15% de NEX subsequentes.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfvj04000mknwbs9slbd5b	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfw2ms000oknwb2tkpjazy	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de combatente ou o primeiro poder de uma trilha de combatente que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfx0pa000pknwbzwqgwclv	Eclético	<p>Quando faz um teste de uma perícia, você pode gastar 2 PE para receber os benefícios de ser treinado nesta perícia.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfxgsu000qknwb3jpzo5vq	Perito	<p>Escolha duas perícias nas quais você é treinado (exceto Luta e Pontaria). Quando faz um teste de uma dessas perícias, você pode gastar 2 PE para somar +1d6 no resultado do teste. Conforme avança de NEX, você pode gastar +1 PE para aumentar o dado de bônus. Por exemplo, em NEX 55%, pode gastar 4 PE para receber +1d10 no teste.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfxvxs000rknwbia2ih4x9	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de especialista disponíveis e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida respectivamente em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfyank000sknwbleo6wjpg	Poder de Especialista	<p>Em NEX 15%, você recebe um poder de especialista à sua escolha. Você recebe um novo poder de especialista em NEX 30% e a cada 15% de NEX subsequentes.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfyrr8000tknwbkrmeojn5	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfz1p5000uknwbot9tihzq	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 5 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfz8y0000vknwbpc0dxs1e	Engenhosidade	<p>Em NEX 40%, quando usa sua habilidade Eclético, você pode gastar 2 PE adicionais para receber os benefícios de ser veterano na perícia. Em NEX 75%, pode gastar 4 PE adicionais para receber os benefícios de ser expert na perícia.&nbsp;</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bfzgle000wknwbw1gur7q4	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de especialista ou o primeiro poder de uma trilha de especialista que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg0k4z000xknwbkageq1ce	Escolhido pelo Outro Lado	<p>Você teve uma experiência paranormal e foi marcado pelo Outro Lado, absorvendo o conhecimento e poder necessários para realizar rituais. Você pode lançar rituais de 1º círculo. À medida que aumenta seu NEX, pode lançar rituais de círculos maiores (2º círculo em NEX 25%, 3º círculo em NEX 55% e 4º círculo em NEX 85%). Você começa com três rituais de 1º círculo. Sempre que avança de NEX, aprende um ritual de qualquer círculo que possa lançar. Esses rituais não contam no seu limite de rituais conhecidos.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg0y38000yknwb81tyrw4g	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de ocultista disponíveis e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida respectivamente em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg1a61000zknwbdua7y664	Poder de Ocultista	<p>Em NEX 15%, você recebe um poder de ocultista à sua escolha. Você recebe um novo poder de ocultista em NEX 30% e a cada 15% de NEX subsequentes.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg1iej0010knwbmpve5htk	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg1s5g0011knwbia9jti9h	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 3 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg238j0012knwbc22hj7ko	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de ocultista ou o primeiro poder de uma trilha de ocultista que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm1bg55f10013knwbforr1pde	Técnica Letal	<p>Você recebe um aumento de +2 na margem de ameaça com todos os seus ataques corpo a corpo.</p>	\N	{"{\\"type\\": \\"MARGEM_DE_CRITICO\\", \\"upgradeValue\\": 2}"}	SUBCLASS	\N	\N	REALITY
-cm1bg5u690014knwbv0yo3wbz	Revidar	<p>Sempre que bloquear um ataque, você pode gastar uma reação e 2 PE para fazer um ataque corpo a corpo no inimigo que o atacou.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bg69z80015knwbavyay2zw	Força Opressora	<p>Quando acerta um ataque corpo a corpo, você pode gastar 1 PE para realizar uma manobra derrubar ou empurrar contra o alvo do ataque como ação livre. Se escolher empurrar, recebe um bônus de +5 para cada 10 pontos de dano que causou no alvo. Se escolher derrubar e vencer no teste oposto, você pode gastar 1 PE para fazer um ataque adicional contra o alvo caído.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bg6jw50016knwbpxevoa1k	Potência Máxima	<p>Quando usa seu Ataque Especial com armas corpo a corpo, todos os bônus numéricos são dobrados. Por exemplo, se usar 5 PE para receber +5 no ataque e +15 no dano, você recebe +10 no ataque e +30 no dano.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bg8yip0017knwb9a86ftbs	Ataque Furtivo	<p>Você sabe atingir os pontos vitais de um inimigo distraído. Uma vez por rodada, quando atinge um alvo desprevenido com um ataque corpo a corpo ou em alcance curto, ou um alvo que você esteja flanqueando, você pode gastar 1 PE para causar +1d6 pontos de dano do mesmo tipo da arma. Em NEX 40% o dano adicional aumenta para +2d6, em NEX 65% aumenta para +3d6 e em NEX 99% aumenta para +4d6.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bgad3a0018knwblw7ce5ty	Gatuno	<p>Você recebe +5 em Atletismo e Crime e pode percorrer seu deslocamento normal quando se esconder sem penalidade (veja a perícia Furtividade).</p>	\N	{"{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Crime\\"}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Atletismo\\"}"}	SUBCLASS	\N	\N	REALITY
-cm1bgappw0019knwbkx5f7drn	Assassinar	<p>Você pode gastar uma ação de movimento e 3 PE para analisar um alvo em alcance curto. Até o fim de seu próximo turno, seu primeiro Ataque Furtivo que causar dano a ele tem seus dados de dano extras dessa habilidade dobrados. Além disso, se sofrer dano de seu ataque, o alvo fica inconsciente ou morrendo, à sua escolha (Fortitude DT Agi evita).</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bgb2ow001aknwb944fcpfz	Sombra Fugaz	<p>Quando faz um teste de Furtividade após atacar ou fazer outra ação chamativa, você pode gastar 3 PE para não sofrer a penalidade de –15 no teste.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bgd3la001bknwbdjtvg63u	Ampliar Ritual	<p>Quando lança um ritual, você pode gastar +2 PE para aumentar seu alcance em um passo (de curto para médio, de médio para longo ou de longo para extremo) ou dobrar sua área de efeito.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bgdsfd001cknwbdaol9ytc	Acelerar Ritual	<p>Uma vez por rodada, você pode aumentar o custo de um ritual em 4 PE para conjurá-lo como uma ação livre.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bgemhg001dknwbjoved7i7	Anular Ritual	<p>Quando for alvo de um ritual, você pode gastar uma quantidade de PE igual ao custo pago por esse ritual e fazer um teste oposto de Ocultismo contra o conjurador. Se vencer, você anula o ritual, cancelando todos os seus efeitos.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bgeytz001eknwb5pr0w5bf	Canalizar o Medo	<p>Você aprende o ritual Canalizar o Medo.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm1bghpuz001gknwbrzirzrqa	Ferramentas Favoritas	<p>Um item a sua escolha (exceto armas) conta como uma categoria abaixo (por exemplo, um item de categoria II conta como categoria I para você).</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1bgin13001iknwb02cd504v	Ingrediente Secreto	<p>Em cenas de interlúdio, você pode fazer a ação alimentar-se para cozinhar um prato especial. Você, e todos os membros do grupo que fizeram a ação alimentar-se, recebem o benefício de dois pratos (caso o mesmo benefício seja escolhido duas vezes, seus efeitos se acumulam).</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1bgje25001kknwb410wk3fv	Magnum Opus	<p>Você é famoso por uma de suas obras. Uma vez por missão, pode determinar que um personagem envolvido em uma cena de interação o reconheça. Você recebe +5 em testes de Presença e de perícias baseadas em Presença contra aquele personagem. A critério do mestre, pode receber esses bônus em outras situações nas quais seria reconhecido.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1bgjzt5001mknwbkim3ntpu	Técnica Medicinal	<p>Sempre que cura um personagem, você adiciona seu Intelecto no total de PV curados.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1bgkq35001oknwb6zqls2m3	Saber é Poder	<p>Quando faz um teste usando Intelecto, você pode gastar 2 PE para receber +5 nesse teste.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1bglsmp001qknwb0b47de1w	Vislumbres do Passado	<p>Uma vez por sessão, você pode fazer um teste de Intelecto (DT 10) para reconhecer pessoas ou lugares familiares, que tenha encontrado antes de perder a memória. Se passar, recebe 1d4 PE temporários e, a critério do mestre, uma informação útil.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1bgmjke001sknwbvuxg4nku	110%	<p>Quando faz um teste de perícia usando Força ou Agilidade (exceto Luta e Pontaria) você pode gastar 2 PE para receber +5 nesse teste.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm1cftky30001rtj4n01adomh	Sangue de Ferro	<p>Seu sangue ferve e cria uma camada de proteção em seu corpo, recebe +2 PE por Nex</p>	\N	{"{\\"type\\": \\"VIDA_P_NEX\\", \\"upgradeValue\\": 2}"}	GENERAL	Imunidade a doenças e Fortitude +5	{"{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Fortitude\\"}"}	BLOOD
-cm1hxwcd30002p5u6f99vcy16	Poder de Pesadelos	<p>Descrição Padrão</p>	\N	{}	CUSTOM	\N	{}	REALITY
-cm5hkq8rp00006apb9o0gccm5	A Favorita	<p>Escolha uma arma para ser sua favorita, como katana ou fuzil de assalto. A categoria da arma escolhida é reduzida em I.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkrqj800016apbcwrpgkq3	Técnica Secreta	<p>A categoria da arma favorita passa a ser reduzida em II. Quando faz um ataque com ela, você pode gastar 2 PE para executar um dos efeitos abaixo como parte do ataque. Você pode adicionar mais efeitos gastando +2 PE por efeito adicional. </p><ul><li> Amplo. O ataque pode atingir um alvo adicional em seu alcance e adjacente ao original (use o mesmo teste de ataque para ambos). </li><li> Destruidor. Aumenta o multiplicador de crítico da arma em +1</li></ul>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hksk3w00026apbcmcdl2hw	Técnica Sublime	<p>Você adiciona os seguintes efeitos à lista de sua Técnica Secreta: </p><ul><li>Letal. Aumenta a margem de ameaça em +2. Você pode escolher este efeito duas vezes para aumentar a margem de ameaça em +5. b</li><li>Perfurante. Ignora até 5 pontos de resistência a dano de qualquer tipo do alvo.</li></ul>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkt3el00036apbq4spyc4f	Máquina de Matar	<p>A categoria da arma favorita passa a ser reduzida em III, ela recebe +2 na margem de ameaça e seu dano aumenta em um dado do mesmo tipo.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hktw6k00046apbwr56pqnk	Casca Grossa	<p>Você recebe +1 PV para cada 5% de NEX e, quando faz um bloqueio, soma seu Vigor na resistência a dano recebida.</p>	\N	{"{\\"type\\": \\"VIDA_P_NEX\\", \\"upgradeValue\\": 1}"}	SUBCLASS	\N	\N	REALITY
-cm5hkuox800056apb81oodk9y	Cai Dentro	<p>Sempre que um oponente em alcance curto ataca um de seus aliados, você pode gastar uma reação e 1 PE para fazer com que esse oponente faça um teste de Vontade (DT Vig). Se falhar, o oponente deve atacar você em vez de seu aliado. Este poder só funciona se você puder ser efetivamente atacado e estiver no alcance do ataque (por exemplo, adjacente a um oponente atacando em corpo a corpo ou dentro do alcance de uma arma de ataque à distância). Um oponente que passe no teste de Vontade não pode ser afetado por seu poder Cai Dentro até o final da cena.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkv69m00066apbe3uj442t	Duro de Matar	<p>Ao sofrer dano não paranormal, você pode gastar uma reação e 2 PE para reduzir esse dano à metade. Em NEX 85%, você pode usar esta habilidade para reduzir dano paranormal.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkvjyi00076apb5z6464fk	Inquebrável	<p>Enquanto estiver machucado, você recebe +5 na Defesa e resistência a dano 5. Enquanto estiver morrendo, em vez do normal, você não fica indefeso e ainda pode realizar ações. Você ainda segue as regras de morte normalmente</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkw49100086apb0f6iwu34	Eloquência	<p>Você pode usar uma ação completa e 1 PE por alvo em alcance curto para afetar outros personagens com sua fala. Faça um teste de Diplomacia, Enganação ou Intimidação contra a Vontade dos alvos. Se você vencer, os alvos ficam fascinados enquanto você se concentrar (uma ação padrão por rodada). Um alvo hostil ou que esteja envolvido em combate recebe +5 em seu teste de resistência e tem direito a um novo teste por rodada, sempre que você se concentrar Um personagem que passar no teste fica imune a este efeito por um dia.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkwr0h00096apbjd8jnjn8	Discurso Motivador	<p>Você pode gastar uma ação padrão e 4 PE para inspirar seus aliados com suas palavras. Você e todos os seus aliados em alcance curto ganham +1d20 em testes de perícia até o fim da cena. A partir de NEX 65%, você pode gastar 8 PE para fornecer um bônus total de +2d20.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkx5s9000a6apbasfrrgvh	Eu Conheço um Cara	<p>Uma vez por missão, você pode ativar sua rede de contatos para pedir um favor, como por exemplo trocar todo o equipamento do seu grupo (como se tivesse uma segunda fase de preparação de missão), conseguir um local de descanso ou mesmo ser resgatado de uma cena. O mestre tem a palavra final de quando é possível usar essa habilidade e quais favores podem ser obtidos.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkxkoa000b6apbiqnmubat	Truque de Mestre	<p>Acostumado a uma vida de fingimento e manipulação, você pode gastar 5 PE para simular o efeito de qualquer habilidade que você tenha visto um de seus aliados usar durante a cena. Você ignora os pré-requisitos da habilidade, mas ainda precisa pagar todos os seus custos, incluindo ações, PE e materiais, e ela usa os seus parâmetros de jogo, como se você estivesse usando a habilidade em questão.</p>	\N	{}	SUBCLASS	\N	\N	REALITY
-cm5hkz485000d6apb0fck9bza	Sensitivo	<p>Você consegue sentir as emoções e intenções de outros personagens, como medo, raiva ou malícia, recebendo +5 em testes de Diplomacia, Intimidação e Intuição.</p>	\N	{"{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Diplomacia\\"}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Intimidação\\"}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 5, \\"upgradeTarget\\": \\"Intuição\\"}"}	GENERAL	Quando você faz um teste oposto usando  uma dessas perícias, o oponente sofre –1d20.	{}	KNOWLEDGE
-cm5i9y1dk000111v8vbj4y1wo	Patrulha	<p>Você recebe +2 em Defesa</p>	\N	{"{\\"type\\": \\"DEFESA\\", \\"upgradeValue\\": 2}"}	ORIGIN	\N	\N	REALITY
-cm5i9zds6000311v8f4ybv8q5	Posição de Combate	<p>No primeiro turno de cada cena de ação, você pode gastar 2 PE para receber uma ação de movimento adicional.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm5ia5pp8000511v8w1wdr8db	Vitalidade Reforçada	<p>Você possui uma capacidade superior de suportar ferimentos. Você recebe +1 PV para cada 5% de NEX (ou para cada nível, se estiver usando a regra de nível de experiência) e +2 em Fortitude.</p>	Vigor 2	{"{\\"type\\": \\"VIDA_P_NEX\\", \\"upgradeValue\\": 1}","{\\"type\\": \\"PERICIA\\", \\"upgradeValue\\": 2, \\"upgradeTarget\\": \\"Fortitude\\"}"}	GENERAL	\N	{}	REALITY
-cm5iaejay000611v86sv20smy	Primeira Impressão	<p>Você recebe +2d20 no primeiro teste de Diplomacia, Enganação, Intimidação ou Intuição que fizer em uma cena.</p>	\N	{}	CLASS	\N	\N	REALITY
-cm5ialr96000911v85d170hcm	Escolhido pelo Outro Lado	<p>Você teve uma experiência paranormal e foi marcado pelo Outro Lado, absorvendo o conhecimento e poder necessários para realizar rituais. Você pode lançar rituais de 1º círculo. À medida que aumenta seu NEX, pode lançar rituais de círculos maiores (2º círculo em NEX 25%,&nbsp;3º círculo em NEX 55% e 4º círculo em NEX 85%). Você começa com três rituais de 1º círculo. Sempre que avança de NEX, aprende um ritual de qualquer círculo que possa lançar. Esses rituais não contam no seu limite de rituais conhecidos.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm5iam940000a11v8oh0jmmzm	Habilidade de Trilha	<p>Em NEX 10% você escolhe uma das trilhas de ocultista disponíveis e recebe o primeiro poder da trilha escolhida. Você recebe um novo poder da trilha escolhida respectivamente em NEX 40%, 65% e 99%.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm5iamiri000b11v8z3iidy73	Poder de Ocultista	<p>Em NEX 15%, você recebe um poder de ocultista à sua escolha. Você recebe um novo poder de ocultista em NEX 30% e a cada 15% de NEX subsequentes, conforme indicado na tabela. Veja a lista de poderes a seguir.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm5iamwhp000c11v8wvgxkdrl	Aumento de Atributo	<p>Em NEX 20%, e novamente em NEX 50%, 80% e 95%, aumente um atributo a sua escolha em +1. Você não pode aumentar um atributo além de 5 desta forma.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm5ianb2g000d11v8ogslnpeb	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 3 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
-cm5ianigo000e11v8i3wjxnxe	Versatilidade	<p>Em NEX 50%, escolha entre receber um poder de ocultista ou o primeiro poder de uma trilha de ocultista que não a sua.</p>	\N	\N	CLASS	\N	\N	REALITY
-cm5icnn6v0006xhvh31qjz9rp	O Crime Compensa	<p>No final de uma missão, escolha um item encontrado na missão. Em sua próxima missão, você pode incluir esse item em seu inventário sem que ele conte em seu limite de itens por patente.</p>	\N	{}	ORIGIN	\N	\N	REALITY
-cm5icvvxv0007xhvhv5tdudy3	Golpe Pesado	<p>O dano de suas armas corpo a corpo aumenta em mais um dado do mesmo tipo.</p>	\N	{"{\\"type\\": \\"GLOBAL_MESMO_DADO_DE_DANO_MELEE\\"}"}	CLASS	\N	\N	REALITY
-cm1bfvswi000nknwbpgiv43gf	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 2 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	\N	\N	REALITY
-\.
 
 
 --
@@ -1116,11 +384,11 @@ cm5ia5pp8000411v8j077si0b	cm5ia5pp8000511v8w1wdr8db
 -- Data for Name: Inventory; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Inventory" (character_id, "currentValue", "maxValue", alterations, patent, credit) FROM stdin;
-cm5ilwpxl0009b9sj0y59694c	8	15	{}	OPERATOR	MEDIUM
-cm5iapljv000f11v8nsb6ew4j	8	2	{}	OPERATOR	MEDIUM
-cm5ieylye0009xhvh61qjflda	4	5	{}	OPERATOR	MEDIUM
-cm5jiyyz20001pa9ebsck83xh	2	15	{}	OPERATOR	MEDIUM
+COPY public."Inventory" (character_id, "maxValue", alterations, patent, credit) FROM stdin;
+cm5ilwpxl0009b9sj0y59694c	15	{}	OPERATOR	MEDIUM
+cm5iapljv000f11v8nsb6ew4j	2	{}	OPERATOR	MEDIUM
+cm5ieylye0009xhvh61qjflda	5	{}	OPERATOR	MEDIUM
+cm5jiyyz20001pa9ebsck83xh	15	{}	OPERATOR	MEDIUM
 \.
 
 
@@ -1170,18 +438,6 @@ COPY public."Notes" (id, title, character_id, campaign_id, content) FROM stdin;
 -- Data for Name: Origin; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Origin" (id, name, description, is_custom, feat_id, skills) FROM stdin;
-cm1bghpuz001fknwbcape5u7o	Engenheiro	<p>Enquanto os acadêmicos estão preocupados com teorias, você colocar a mão na massa, seja como engenheiro profissional, seja como inventor de garagem. Provavelmente você criou algum dispositivo paranormal que chamou a atenção da Ordem.</p>	f	cm1bghpuz001gknwbrzirzrqa	{Profissão,Tecnologia}
-cm1bgin13001hknwb1dh5lqnb	Chef	<p>Você é um cozinheiro amador ou profissional. Talvez trabalhasse em um restaurante, talvez simplesmente gostasse de cozinhar para a família e amigos. Como sua comida fez com que você se envolvesse com o paranormal? Ninguém sabe. Mas os outros agentes adoram quando você vai para a missão!</p>	f	cm1bgin13001iknwb02cd504v	{Fortitude,Profissão}
-cm1bgje25001jknwb0be1qzbq	Artista	<p>Você era um ator, músico, escritor, dançarino, influenciador... Seu trabalho pode ter sido inspirado por uma experiência paranormal do passado e o que o público acha que é pura criatividade, a Ordem sabe que tem um lado mais sombrio.</p>	f	cm1bgje25001kknwb410wk3fv	{Artes,Enganação}
-cm1bgjzt5001lknwbydoyib7g	Agente de Saúde	<p>Você era um profissional da saúde como um enfermeiro, farmacêutico, médico, psicólogo ou socorrista, treinado no atendimento e cuidado de pessoas. Você pode ter sido surpreendido por um evento paranormal durante o trabalho ou mesmo cuidado de um agente da Ordem em uma emergência, que ficou surpreso com o quão bem você lidou com a situação.</p>	f	cm1bgjzt5001mknwbkim3ntpu	{Intuição,Medicina}
-cm1bgkq34001nknwbbjyyjucm	Acadêmico	<p>Você era um pesquisador ou professor universitário. De forma proposital ou não, seus estudos tocaram em assuntos misteriosos e chamaram a atenção da Ordo Realitas.</p>	f	cm1bgkq35001oknwb6zqls2m3	{Ciências,Investigação}
-cm1bglsmp001pknwbql2d9fw1	Amnésico	<p>Você perdeu a maior parte da memória. Sabe apenas o próprio nome, ou nem isso. Sua amnésia pode ser resultado de um trauma paranormal ou mesmo de um ritual. Talvez você tenha sido vítima de cultistas? Talvez você tenha sido um cultista? Seja como for, hoje a Ordem é a única família que conhece. Quem sabe, cumprindo missões, você descubra algo sobre seu passado.</p>	f	cm1bglsmp001qknwb0b47de1w	{}
-cm1bgmjke001rknwb56c0wsak	Atleta	<p>Você competia em um esporte individual ou por equipe, como natação ou futebol. Seu alto desempenho pode ser fruto de alguma influência paranormal que nem mesmo você conhecia ou você pode ter se envolvido em algum evento paranormal em uma de suas competições.</p>	f	cm1bgmjke001sknwbvuxg4nku	{Acrobacia,Atletismo}
-cm5i9y1dk000011v8dfwtxcvz	Policial	<p>Você fez parte de uma força de segurança pública, civil ou militar. Em alguma patrulha ou chamado se deparou com um caso paranormal e sobreviveu para contar a história</p>	f	cm5i9y1dk000111v8vbj4y1wo	{Pontaria,Percepção}
-cm5i9zds6000211v8aqqdm484	Mercenário	<p>Você é um soldado de aluguel, que trabalha sozinho ou como parte de alguma organização que vende serviços militares. Escoltas e assassinatos fizeram parte de sua rotina por tempo o suficiente para você se envolver em alguma situação com o paranormal.</p>	f	cm5i9zds6000311v8f4ybv8q5	{Iniciativa,Intimidação}
-cm5icnn6v0005xhvh67p6pkdp	Criminoso	<p><span style="color: rgb(250, 250, 249);">Você vivia uma vida fora da lei, seja como mero batedor de carteiras, seja como membro de uma facção criminosa. Em algum momento, você se envolveu em um assunto da Ordem talvez tenha roubado um item amaldiçoado? A organização, por sua vez, achou melhor recrutar seus talentos do que ter você como um estorvo.</span></p>	f	cm5icnn6v0006xhvh31qjz9rp	{Crime,Furtividade}
-\.
 
 
 --
@@ -1199,19 +455,6 @@ cm5hc4i6z00014p9wyqal4c7k	cm5jis4km0000pa9ew5i0gk3s	2025-01-05 11:20:10.247
 --
 -- Data for Name: Ritual; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-COPY public."Ritual" (id, name, "normalCastDescription", "normalCost", "discentCastDescription", "discentCost", "trueCastDescription", "trueCost", "ritualLevel", "exectutionTime", range, target, duration, element, resistence, is_custom, type) FROM stdin;
-cm1bgryld001uknwbjhewmpq9	Eletrocussão	<p>Você manifesta e dispara uma corrente elétrica contra o alvo, que sofre 3d6 pontos de dano de eletricidade e fica vulnerável por uma rodada. Se passar no teste de resistência, sofre apenas metade do dano e evita a condição. Se usado contra objetos eletrônicos, este ritual causa o dobro de dano e ignora resistência.</p>	1	<p>Muda o alvo para “área: linha de 30m”. Você dispara um poderoso raio que causa 6d6 pontos de dano de Energia em todos os seres e objetos livres na área. Requer 2º círculo.</p>	2	<p>Muda a área para “alvos escolhidos”. Em vez do normal, você dispara vários relâmpagos, um para cada alvo escolhido, causando 8d6 pontos de dano de Energia em cada. Requer 3º círculo.</p>	5	1	Padrão	SHORT	1 ser ou objeto	Instantânea	ENERGY	Fortitude Parcial	f	DAMAGE
-cm1h5en9s000a12te7fbstxb5	Alterar Destino	<p>Você vislumbra seu futuro próximo, analisando milhões de possibilidades e escolhendo a melhor. Você recebe +15 em um teste de resistência ou na Defesa contra um ataque.</p>	9	\N	0	<p>Muda o alcance para “curto” e o alvo para “um aliado à sua escolha”</p>	5	4	Padrão	SELF	Você	Instantanea	ENERGY	Nenhuma	f	EFFECT
-cm1h5mbgq000c12teo5oqs450	Âncora Temporal	<p>Uma aura espiralada surge sobre o alvo. No início de cada turno dele, ele deve fazer um teste de Vontade. Se falhar, não poderá se deslocar naquele turno (ele ainda pode agir, só não pode se deslocar). Se o alvo passar nesse teste dois turnos seguidos o efeito termina.</p>	9	\N	0	<p>Muda o alvo para “seres à sua escolha”. Requer 4º círculo</p>	4	4	Padrão	MEDIUM	Você	Instantanea	DEATH	Nenhuma	f	EFFECT
-cm1h5py6b000f12tevm7nhzsq	Decadência	<p>Espirais de trevas envolvem sua mão e definham o alvo, que sofre 2d8+2 pontos de dano de Morte.</p>	1	<p>muda a resistência para “nenhuma” e o dano para 3d8+3. Como parte da execução do ritual, você transfere as espirais para uma arma e faz um ataque corpo a corpo contra o alvo com esta arma. Se acertar, causa o dano da arma e do ritual, somados.</p>	2	<p>&nbsp;muda o alcance para “pessoal” o alvo para “área: explosão com 6m de raio” e o dano para 8d8+8. As espirais afetam todos os seres na área. Requer 3º círculo.</p>	5	1	Padrão	TOUCH	1 ser	Instantanea	DEATH	Fortitude reduz à metade	f	DAMAGE
-cm5j19qq2000511umm0dq0rl6	Enfeitiçar	<p>Este ritual torna o alvo prestativo (veja a página 45). Ele não fica sob seu controle, mas percebe suas palavras e ações da maneira mais favorável possível. Você recebe um bônus de +10 em testes de Diplomacia com ele. Um alvo hostil ou que esteja envolvido em combate recebe +5 em seu teste de resistência. Se você ou seus aliados tomarem qualquer ação hostil contra o alvo, o efeito é dissipado e o alvo retorna à atitude que tinha antes (ou piorada, de acordo com o mestre).&nbsp;</p>	1	<p>Em vez do normal, você sugere uma ação para o alvo e ele obedece. A sugestão deve ser feita de modo que pareça aceitável, a critério do mestre. Pedir que o alvo atire em seu companheiro, por exemplo, dissipa o efeito. Já sugerir a um guarda que descanse um pouco, de modo que você e seus aliados passem por ele, é aceitável. Quando o alvo executa a ação, o efeito termina. Você pode determinar uma condição específica para a sugestão: por exemplo, que o policial prenda a próxima pessoa de casaco verde que ele encontrar. Requer 2º círculo.</p>	2	<p>Afeta todos os alvos dentro do alcance. Requer 3º círculo.</p>	5	1	Padrão	SHORT	1 pessoa	Cena	KNOWLEDGE	Vontade anula	f	EFFECT
-cm5j1cgnx000611um7acukdm2	Ouvir Sussurros	<p>O ritual conecta você com os sussurros, memórias ecoadas pelo Outro Lado, que você pode consultar para receber conhecimento proibido em relação a uma ação que tomará em breve. Ao usar este ritual, faça uma pergunta sobre um evento que você está prestes a fazer (na mesma cena) que possa ser respondida com “sim” ou “não”. O mestre rola 1d6 em segredo; com um resultado de 2 a 6, o ritual funciona e você recebe sua resposta, que pode ser “sim”, “não” ou “sim e não”. Com um resultado 1, o ritual falha e oferece o resultado “não”. Não há como saber se esse resultado foi dado porque o ritual falhou ou não. Lançar este ritual múltiplas vezes sobre o mesmo assunto gera sempre o primeiro resultado. Por exemplo, você está prestes a entrar em um prédio que pode ser o esconderijo de um cultista. Se você perguntar para os sussurros se o cultista está mesmo nesse local, a resposta pode ser “sim” (ele está no prédio), “não” (ele não está no prédio) ou “sim e não” (ele está no prédio, mas usou um ritual para se esconder seu corpo físico em uma dimensão do Outro Lado...). Isso é útil para saber se você deve (ou não) gastar recursos para um possível combate.</p>	1	<p>Muda a execução para 1 minuto. Em vez do normal, você pode consultar os ecos fazendo uma pergunta sobre um evento que poderá acontecer até um dia no futuro. O mestre rola a chance de falha; com um resultado de 2 a 6, você recebe uma resposta, desde uma simples frase até uma profecia ou enigma. Em geral, este uso oferece pistas, indicando um caminho a tomar para descobrir a resposta que se procura. Numa falha você não recebe resposta alguma. Requer 2º círculo.</p>	2	<p>Muda a execução para 10 minutos e a duração para 5 rodadas. Em vez do normal, você consulta os ecos, podendo fazer uma pergunta por rodada, desde que ela possa ser respondida com “sim”, “não” ou “ninguém sabe”. O mestre rola a chance de falha para cada pergunta. Em caso de falha, a resposta também é “ninguém sabe”. Requer 3º círculo.</p>	5	1	Completa	SELF	Você	Instantânea	KNOWLEDGE	Nenhuma	f	EFFECT
-cm5j1f7u9000711um2j4gis5o	Tecer Ilusões	<p>Este ritual cria uma ilusão visual (uma pessoa, uma parede...) ou sonora (um grito de socorro, um uivo assustador...). O ritual cria apenas imagens ou sons simples, com volume equivalente à voz de uma pessoa para cada cubo de 1,5m no efeito. Não é possível criar cheiros, texturas ou temperaturas, nem sons complexos, como uma música ou diálogo. Seres e objetos atravessam uma ilusão sem sofrer dano, mas o ritual pode, por exemplo, esconder uma armadilha ou emboscada. A ilusão é dissipada se você sair do alcance.</p>	1	<p>Muda o efeito para até 8 cubos de 1,5m e a duração para sustentada. Você pode criar ilusões de imagem e sons combinados, e pode criar sons complexos, odores e sensações térmicas. Também pode criar sensações táteis, como texturas; objetos ainda atravessam a ilusão, mas seres não conseguem atravessá-la sem passar em um teste de Vontade. A cada rodada, você pode usar uma ação livre para mover a imagem ou alterar o som, como aumentar o volume ou fazer com que pareça se afastar ou se aproximar, ainda dentro dos limites do efeito. Você pode, por exemplo, criar a ilusão de um fantasma que anda pela sala, controlando seus movimentos. A ilusão ainda é incapaz de causar ou sofrer dano. Quando você para de sustentar o ritual, a imagem ou som persistem por mais uma rodada antes do ritual se dissipar. Requer 2º círculo.</p>	2	<p>Você cria a ilusão de um perigo mortal. Quando o ritual é conjurado, e no início de cada um de seus turnos, um alvo interagindo com a ilusão deve fazer um teste de Vontade; se falhar, acredita que a ilusão é real e sofre 6d6 pontos de dano de Conhecimento. O alvo racionaliza o efeito sempre que falha no teste (por exemplo, acredita que o mesmo teto pode cair sobre ele várias vezes). Se um alvo passar em dois testes de Vontade seguidos, o efeito é anulado para ele. Requer 3º círculo</p>	5	1	Padrão	MEDIUM	Ilusão que se estende a até 4 cubos de 1,5m	Cena	KNOWLEDGE	Vontade desacredita	f	EFFECT
-cm5j1i8sf000811um31vh5nk2	Terceiro Olho	<p>Seus olhos se enchem de sigilos e você passa a enxergar auras paranormais em alcance longo. Rituais, itens amaldiçoados e criaturas emitem auras. Você sabe o elemento da aura e seu poder aproximado — rituais de 1º círculo e criaturas de VD até 80 emitem uma aura fraca; rituais de 2º e 3º círculos e criaturas de VD entre 81 e 280 emitem uma aura moderada, e rituais de 4º círculo e criaturas de VD 281 ou maior emitem uma aura poderosa. </p><p><br></p><p>Além disso, você pode gastar uma ação de movimento para descobrir se um ser que possa ver em alcance médio tem poderes paranormais ou se é capaz de conjurar rituais e de quais elementos.</p>	1	<p>Muda a duração para 1 dia.&nbsp;</p>	2	<p>Também pode enxergar objetos e seres invisíveis, que aparecem como formas translúcidas.&nbsp;</p>	5	1	Padrão	SELF	Você	Cena	KNOWLEDGE		f	EFFECT
-cm5j1kece000911umr28219vr	Embaralhar	<p>Você cria três cópias ilusórias suas, como hologramas extremamente realistas. As cópias ficam ao seu redor e imitam suas ações, tornando difícil para um inimigo saber quem é o verdadeiro. Você recebe +6 na Defesa. Cada vez que um ataque contra você erra, uma das imagens desaparece e o bônus na Defesa diminui em 2. Um oponente deve ver as cópias para ser confundido. Se você estiver invisível, ou o atacante fechar os olhos, você não recebe o bônus (mas o atacante sofre as penalidades normais por não enxergar).</p>	1	<p>Muda o número de cópias para 5 (e o bônus na Defesa para +10). Requer 2º círculo.</p>	2	<p>Muda o número de cópias para 8 (e o bônus na Defesa para +16). Além do normal, toda vez que uma cópia é destruída, emite um clarão de luz. O ser que destruiu a cópia fica ofuscada por uma rodada. Requer 3º círculo.</p>	5	1	Padrão	SELF	Você	Cena	ENERGY		f	EFFECT
-cm5j1npzn000a11umnpb5p836	Distorcer Aparência	<p>Você modifica sua aparência de modo a parecer outra pessoa. Isso inclui altura, peso, tom de pele, cor de cabelo, timbre de voz, impressão digital, córnea etc. Você recebe +10 em testes de Enganação para 131 disfarce, mas não recebe habilidades da nova forma nem modifica suas demais estatísticas.</p>	1	<p>Muda o alcance para “curto” e o alvo para “1 ser”. Um alvo involuntária pode anular o efeito com um teste de Vontade.</p>	2	<p>Como em Discente, mas muda o alvo para “seres escolhidos”. Requer 3º círculo.</p>	5	1	Padrão	SELF	Você	Cena	BLOOD	Vontade desacredita	f	EFFECT
-\.
 
 
 --
@@ -1259,27 +502,6 @@ Vontade	PRESENCE	<p>Você usa esta perícia para testes de resistência contra e
 \.
 
 
---
--- Data for Name: Subclass; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Subclass" (id, name, description, "classId") FROM stdin;
-cm1bely5b0004knwb1e1zi0hi	Aniquilador	<p>Você é treinado para abater alvos com eficiência e velocidade. Suas armas são suas melhores amigas e você cuida tão bem delas quanto de seus companheiros de equipe. Talvez até melhor.</p>	cm1beidgp0001knwb86n0e6w6
-cm1bem8q00005knwbvx4mshna	Comandante de Campo	<p>Sem um oficial uma batalha não passa de uma briga de bar. Você é treinado para coordenar e auxiliar seus companheiros em combate, tomando decisões 27 rápidas e tirando melhor proveito da situação e do talento de seus aliados.</p>	cm1beidgp0001knwb86n0e6w6
-cm1bemg2h0006knwbsqhi0w4c	Guerreiro	<p>Você treinou sua musculatura e movimentos a ponto de transformar seu corpo em uma verdadeira arma. Com golpes corpo a corpo tão poderosos quanto uma bala, você encara os perigos de frente.</p>	cm1beidgp0001knwb86n0e6w6
-cm1bemopb0007knwbqn26aktv	Operações Especiais	<p>Você é um combatente eficaz. Suas ações são calculadas e otimizadas, sempre antevendo os movimentos inimigos e se posicionando da maneira mais inteligente no campo de batalha.</p>	cm1beidgp0001knwb86n0e6w6
-cm1bemy380008knwbh8ht7a7b	Tropa de Choque	<p>Você é duro na queda. Treinou seu corpo para resistir a traumas físicos, tornando-o praticamente inquebrável, e por isso não teme se colocar entre seus aliados e o perigo.</p>	cm1beidgp0001knwb86n0e6w6
-cm1bena7w0009knwbg2hm9ply	Atirador de Elite	<p>Um tiro, uma morte. Ao contrário dos combatentes, você é perito em neutralizar ameaças de longe, terminando uma briga antes mesmo que ela comece. Você trata sua arma como uma ferramenta de precisão, sendo capaz de executar façanhas incríveis.</p>	cm1bejpao0002knwbwlri6asv
-cm1beng80000aknwb792uz6wm	Infiltrador	<p>Você é um perito em infiltração e sabe neutralizar alvos desprevenidos sem causar alarde. Combinando talento acrobático, destreza manual e conhecimento técnico você é capaz de superar qualquer barreira de defesa, mesmo quando a missão parece impossível</p>	cm1bejpao0002knwbwlri6asv
-cm1bennph000bknwb01zb8bq1	Médico de Campo	<p>Você é treinado em técnicas de primeiros socorros e tratamento de emergência, o que torna você um membro valioso para qualquer grupo de agentes. Ao contrário dos profissionais de saúde convencionais, você está acostumado com o campo de batalha e sabe tomar decisões rápidas no meio do caos</p>	cm1bejpao0002knwbwlri6asv
-cm1benvcd000cknwbwjc693zu	Negociador	<p>Você é um diplomata habilidoso e consegue influenciar outras pessoas, seja por lábia ou intimidação. Sua capacidade de avaliar situações com rapidez e eficiência pode tirar o grupo de apuros que nem a mais poderosa das armas poderia resolver.</p>	cm1bejpao0002knwbwlri6asv
-cm1beo416000dknwbkk2whchu	Técnico	<p>Sua principal habilidade é a manutenção e reparo do valioso equipamento que seu time carrega em missão. Seu conhecimento técnico também permite que improvise ferramentas com o que tiver à disposição e sabote os itens usados por seus inimigos.</p>	cm1bejpao0002knwbwlri6asv
-cm1beodck000eknwbtc0du48u	Conduíte	<p>Você domina os aspectos fundamentais da conjuração de rituais e é capaz de aumentar o alcance e velocidade de suas conjurações. Conforme sua conexão com as entidades paranormais aumenta você se torna capaz de interferir com os rituais de outros ocultistas.</p>	cm1bekpmk0003knwbdi0gscjk
-cm1beokwi000fknwbd903mrl4	Flagelador	<p>Dor é um poderoso catalisador paranormal e você aprendeu a transformá-la em poder para seus rituais. Quando se torna especialmente poderoso, consegue usar a dor e o sofrimento de seus inimigos como instrumento de seus rituais ocultistas.</p>	cm1bekpmk0003knwbdi0gscjk
-cm1beouk0000gknwbc5gi1wo8	Graduado	<p>Você foca seus estudos em se tornar um conjurador versátil e poderoso, conhecendo mais rituais que os outros ocultistas e sendo capaz de torná-los mais difíceis de serem resistidos. Seu objetivo é desvendar e dominar os segredos do Outro Lado, custe o que custar</p>	cm1bekpmk0003knwbdi0gscjk
-cm1bep1tp000hknwb4xjbo5wi	Intuitivo	<p>Assim como combatentes treinam seus corpos para resistir a traumas f ísicos, você preparou sua mente para resistir aos efeitos do Outro Lado. Seu foco e força de vontade fazem com que você expanda os limites de suas capacidades paranormais.</p>	cm1bekpmk0003knwbdi0gscjk
-cm1bep9u1000iknwb53ztxxq4	Lâmina Paranormal	<p>Alguns ocultistas preferem ficar fechados em suas bibliotecas estudando livros e rituais. Outros preferem investigar fenômenos paranormais em sua fonte. Já você, prefere usar o paranormal como uma arma. Você aprendeu e dominou técnicas de luta mesclando suas habilidades de conjuração com suas capacidades de combate.</p>	cm1bekpmk0003knwbdi0gscjk
-\.
 
 
 --
@@ -1318,13 +540,6 @@ cm5hkxkoa000b6apbiqnmubat	cm1benvcd000cknwbwjc693zu	20
 -- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."User" (id, username, password, email, role) FROM stdin;
-cm1bc46xx0000knwbt37wqtvi	quarerma	$2b$10$MqArroBMznobLK3qd9pARO1FlBowQLZHaZCuWaJe/dw15vr3oI.Xa	gabriel.oliveira.quaresma@gmail.com	ADMIN
-cm5bmno2k0000n92qg3024kzq	pukA	$2b$10$wHOyJM0.dQp6Qidv2JlUo.XZm2kGOzA6Eb321EOwdlUqgWMSrD47S	eck.leal.39@gmail.com	USER
-cm5hc0bh900004p9wvlq38ry2	JoeBlossom	$2b$10$fzjGEGDWAOnKpzISnpqFbOYT2q3djWAPN0YfPBMF2PNHBDBbf89bS	snack9827@gmail.com	ADMIN
-cm5ieq8i70008xhvho01d3xkv	Gabili	$2b$10$I6vJs5oEBk8.BbwUOUaqE.zMGbi4eKVbDZhVhFVHLundSg7WMEOtu	g.vanzella1812@gmail.com	USER
-cm5jis4km0000pa9ew5i0gk3s	Danas	$2b$10$sSw5s3z10XE2jkcWRTG1K.5xx6fvF9fgzXa7f2S68NCbyIv0FcE9O	dsouzamiguelfaria@gmail.com	USER
-\.
 
 
 --
@@ -1373,662 +588,4 @@ bdbee976-91a3-4d0d-a900-1aade027b116	4479803cbdd7fa591cb708b8472c1d59ef63fd3e4da
 d3cbc283-0e75-439e-a8e9-296d9fccbbd4	56f76a7147959131d07b6868cb56c91013894725759836407a0dc5ba3a9e6b87	2025-01-13 22:40:36.369242+00	20250113224034_optional_char_campaign_note	\N	\N	2025-01-13 22:40:35.315011+00	1
 \.
 
-
---
--- Name: Equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."Equipment_id_seq"', 20, true);
-
-
---
--- Name: CampaignEquipment CampaignEquipment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignEquipment"
-    ADD CONSTRAINT "CampaignEquipment_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CampaignModifications CampaignModifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignModifications"
-    ADD CONSTRAINT "CampaignModifications_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CampaignOrigin CampaignOrigin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignOrigin"
-    ADD CONSTRAINT "CampaignOrigin_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CampaignRitual CampaignRitual_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignRitual"
-    ADD CONSTRAINT "CampaignRitual_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Campaign Campaign_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Campaign"
-    ADD CONSTRAINT "Campaign_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Character Character_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Class Class_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Class"
-    ADD CONSTRAINT "Class_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Condition Condition_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Condition"
-    ADD CONSTRAINT "Condition_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CursedItem CursedItem_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CursedItem"
-    ADD CONSTRAINT "CursedItem_pkey" PRIMARY KEY ("equipmentId");
-
-
---
--- Name: DamageRitual DamageRitual_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."DamageRitual"
-    ADD CONSTRAINT "DamageRitual_pkey" PRIMARY KEY ("ritualId");
-
-
---
--- Name: Equipment Equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Equipment"
-    ADD CONSTRAINT "Equipment_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Feat Feat_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Feat"
-    ADD CONSTRAINT "Feat_pkey" PRIMARY KEY (id);
-
-
---
--- Name: GeneralFeats GeneralFeats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."GeneralFeats"
-    ADD CONSTRAINT "GeneralFeats_pkey" PRIMARY KEY (id);
-
-
---
--- Name: InventorySlot InventorySlot_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InventorySlot"
-    ADD CONSTRAINT "InventorySlot_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Inventory Inventory_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Inventory"
-    ADD CONSTRAINT "Inventory_pkey" PRIMARY KEY (character_id);
-
-
---
--- Name: Modification Modification_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Modification"
-    ADD CONSTRAINT "Modification_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Notes Notes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Notes"
-    ADD CONSTRAINT "Notes_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Origin Origin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Origin"
-    ADD CONSTRAINT "Origin_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Ritual Ritual_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Ritual"
-    ADD CONSTRAINT "Ritual_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Skill Skill_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Skill"
-    ADD CONSTRAINT "Skill_pkey" PRIMARY KEY (name);
-
-
---
--- Name: Subclass Subclass_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Subclass"
-    ADD CONSTRAINT "Subclass_pkey" PRIMARY KEY (id);
-
-
---
--- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."User"
-    ADD CONSTRAINT "User_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Weapon Weapon_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Weapon"
-    ADD CONSTRAINT "Weapon_pkey" PRIMARY KEY ("equipmentId");
-
-
---
--- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public._prisma_migrations
-    ADD CONSTRAINT _prisma_migrations_pkey PRIMARY KEY (id);
-
-
---
--- Name: CampaignEquipment_campaign_id_equipment_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignEquipment_campaign_id_equipment_id_key" ON public."CampaignEquipment" USING btree (campaign_id, equipment_id);
-
-
---
--- Name: CampaignFeats_featId_campaignId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignFeats_featId_campaignId_key" ON public."CampaignFeats" USING btree ("featId", "campaignId");
-
-
---
--- Name: CampaignModifications_campaign_id_modification_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignModifications_campaign_id_modification_id_key" ON public."CampaignModifications" USING btree (campaign_id, modification_id);
-
-
---
--- Name: CampaignOrigin_campaign_id_origin_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignOrigin_campaign_id_origin_id_key" ON public."CampaignOrigin" USING btree (campaign_id, origin_id);
-
-
---
--- Name: CampaignRitual_campaign_id_ritual_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignRitual_campaign_id_ritual_id_key" ON public."CampaignRitual" USING btree (campaign_id, ritual_id);
-
-
---
--- Name: CharacterCondition_character_id_condition_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CharacterCondition_character_id_condition_id_key" ON public."CharacterCondition" USING btree (character_id, condition_id);
-
-
---
--- Name: CharacterFeat_character_id_feat_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CharacterFeat_character_id_feat_id_key" ON public."CharacterFeat" USING btree (character_id, feat_id);
-
-
---
--- Name: CharacterRitual_character_id_ritual_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CharacterRitual_character_id_ritual_id_key" ON public."CharacterRitual" USING btree (character_id, ritual_id);
-
-
---
--- Name: ClassFeats_featId_classId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "ClassFeats_featId_classId_key" ON public."ClassFeats" USING btree ("featId", "classId");
-
-
---
--- Name: GeneralFeats_featId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "GeneralFeats_featId_key" ON public."GeneralFeats" USING btree ("featId");
-
-
---
--- Name: PlayerOnCampaign_campaign_id_player_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "PlayerOnCampaign_campaign_id_player_id_key" ON public."PlayerOnCampaign" USING btree (campaign_id, player_id);
-
-
---
--- Name: RitualCondition_ritual_id_condition_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "RitualCondition_ritual_id_condition_id_key" ON public."RitualCondition" USING btree (ritual_id, condition_id);
-
-
---
--- Name: SubclassFeats_featId_subclassId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "SubclassFeats_featId_subclassId_key" ON public."SubclassFeats" USING btree ("featId", "subclassId");
-
-
---
--- Name: User_email_idx; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX "User_email_idx" ON public."User" USING btree (email);
-
-
---
--- Name: User_email_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "User_email_key" ON public."User" USING btree (email);
-
-
---
--- Name: User_username_idx; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX "User_username_idx" ON public."User" USING btree (username);
-
-
---
--- Name: User_username_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "User_username_key" ON public."User" USING btree (username);
-
-
---
--- Name: CampaignEquipment CampaignEquipment_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignEquipment"
-    ADD CONSTRAINT "CampaignEquipment_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignEquipment CampaignEquipment_equipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignEquipment"
-    ADD CONSTRAINT "CampaignEquipment_equipment_id_fkey" FOREIGN KEY (equipment_id) REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignFeats CampaignFeats_campaignId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignFeats"
-    ADD CONSTRAINT "CampaignFeats_campaignId_fkey" FOREIGN KEY ("campaignId") REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignFeats CampaignFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignFeats"
-    ADD CONSTRAINT "CampaignFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignModifications CampaignModifications_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignModifications"
-    ADD CONSTRAINT "CampaignModifications_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignModifications CampaignModifications_modification_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignModifications"
-    ADD CONSTRAINT "CampaignModifications_modification_id_fkey" FOREIGN KEY (modification_id) REFERENCES public."Modification"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignOrigin CampaignOrigin_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignOrigin"
-    ADD CONSTRAINT "CampaignOrigin_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignOrigin CampaignOrigin_origin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignOrigin"
-    ADD CONSTRAINT "CampaignOrigin_origin_id_fkey" FOREIGN KEY (origin_id) REFERENCES public."Origin"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignRitual CampaignRitual_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignRitual"
-    ADD CONSTRAINT "CampaignRitual_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignRitual CampaignRitual_ritual_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignRitual"
-    ADD CONSTRAINT "CampaignRitual_ritual_id_fkey" FOREIGN KEY (ritual_id) REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Campaign Campaign_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Campaign"
-    ADD CONSTRAINT "Campaign_owner_id_fkey" FOREIGN KEY (owner_id) REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterCondition CharacterCondition_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterCondition"
-    ADD CONSTRAINT "CharacterCondition_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterCondition CharacterCondition_condition_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterCondition"
-    ADD CONSTRAINT "CharacterCondition_condition_id_fkey" FOREIGN KEY (condition_id) REFERENCES public."Condition"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterFeat CharacterFeat_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterFeat"
-    ADD CONSTRAINT "CharacterFeat_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterFeat CharacterFeat_feat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterFeat"
-    ADD CONSTRAINT "CharacterFeat_feat_id_fkey" FOREIGN KEY (feat_id) REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterRitual CharacterRitual_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterRitual"
-    ADD CONSTRAINT "CharacterRitual_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterRitual CharacterRitual_ritual_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterRitual"
-    ADD CONSTRAINT "CharacterRitual_ritual_id_fkey" FOREIGN KEY (ritual_id) REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_class_id_fkey" FOREIGN KEY (class_id) REFERENCES public."Class"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_origin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_origin_id_fkey" FOREIGN KEY (origin_id) REFERENCES public."Origin"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_owner_id_fkey" FOREIGN KEY (owner_id) REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_subclass_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_subclass_id_fkey" FOREIGN KEY (subclass_id) REFERENCES public."Subclass"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: ClassFeats ClassFeats_classId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."ClassFeats"
-    ADD CONSTRAINT "ClassFeats_classId_fkey" FOREIGN KEY ("classId") REFERENCES public."Class"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: ClassFeats ClassFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."ClassFeats"
-    ADD CONSTRAINT "ClassFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CursedItem CursedItem_equipmentId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CursedItem"
-    ADD CONSTRAINT "CursedItem_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: DamageRitual DamageRitual_ritualId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."DamageRitual"
-    ADD CONSTRAINT "DamageRitual_ritualId_fkey" FOREIGN KEY ("ritualId") REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: GeneralFeats GeneralFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."GeneralFeats"
-    ADD CONSTRAINT "GeneralFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: InventorySlot InventorySlot_equipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InventorySlot"
-    ADD CONSTRAINT "InventorySlot_equipment_id_fkey" FOREIGN KEY (equipment_id) REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: InventorySlot InventorySlot_inventory_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InventorySlot"
-    ADD CONSTRAINT "InventorySlot_inventory_id_fkey" FOREIGN KEY (inventory_id) REFERENCES public."Inventory"(character_id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Inventory Inventory_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Inventory"
-    ADD CONSTRAINT "Inventory_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Notes Notes_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Notes"
-    ADD CONSTRAINT "Notes_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: Notes Notes_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Notes"
-    ADD CONSTRAINT "Notes_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: Origin Origin_feat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Origin"
-    ADD CONSTRAINT "Origin_feat_id_fkey" FOREIGN KEY (feat_id) REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: PlayerOnCampaign PlayerOnCampaign_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."PlayerOnCampaign"
-    ADD CONSTRAINT "PlayerOnCampaign_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: PlayerOnCampaign PlayerOnCampaign_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."PlayerOnCampaign"
-    ADD CONSTRAINT "PlayerOnCampaign_player_id_fkey" FOREIGN KEY (player_id) REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: RitualCondition RitualCondition_condition_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."RitualCondition"
-    ADD CONSTRAINT "RitualCondition_condition_id_fkey" FOREIGN KEY (condition_id) REFERENCES public."Condition"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: RitualCondition RitualCondition_ritual_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."RitualCondition"
-    ADD CONSTRAINT "RitualCondition_ritual_id_fkey" FOREIGN KEY (ritual_id) REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Skill Skill_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Skill"
-    ADD CONSTRAINT "Skill_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: SubclassFeats SubclassFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."SubclassFeats"
-    ADD CONSTRAINT "SubclassFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: SubclassFeats SubclassFeats_subclassId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."SubclassFeats"
-    ADD CONSTRAINT "SubclassFeats_subclassId_fkey" FOREIGN KEY ("subclassId") REFERENCES public."Subclass"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Subclass Subclass_classId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Subclass"
-    ADD CONSTRAINT "Subclass_classId_fkey" FOREIGN KEY ("classId") REFERENCES public."Class"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Weapon Weapon_equipmentId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Weapon"
-    ADD CONSTRAINT "Weapon_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- PostgreSQL database dump complete
---
 

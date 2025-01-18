@@ -77,4 +77,13 @@ export class FeatsController {
       throw new HttpException(`Error retrieving campaign possible feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @Get('character-possible-feats')
+  async getCharacterPossibleFeats(@Query('id') id: string, @Query('level') level: string) {
+    try {
+      return await this.featsService.getCharacterFeats(id, Number(level));
+    } catch (error) {
+      throw new HttpException(`Error retrieving character possible feats: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

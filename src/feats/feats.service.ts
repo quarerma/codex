@@ -238,4 +238,75 @@ export class FeatsService {
       throw new Error('Error getting possible campaign feats');
     }
   }
+
+  async getCharacterFeats(characterId: string, level: number) {
+    try {
+      const feats = await this.dataBaseService.character.findUnique({
+        where: {
+          id: characterId,
+        },
+
+        select: {
+          feats: {
+            select: {
+              feat: true,
+              usingAfinity: true,
+            },
+          },
+          class: {
+            select: {
+              classFeats: {
+                where: {
+                  isStarterFeat: true,
+                },
+                select: {
+                  feat: true,
+                },
+              },
+            },
+          },
+          subclass: {
+            select: {
+              subclassFeats: {
+                where: {
+                  levelRequired: {
+                    lte: level,
+                  },
+                },
+                select: {
+                  feat: true,
+                  levelRequired: true,
+                },
+              },
+            },
+          },
+          origin: {
+            select: {
+              feats: true,
+            },
+          },
+        },
+      });
+
+      // flat map all feats, classfeats, subclassfeats, originfeat, set usingAfinity to false as default
+      // return a object in the format { feat: Feat, usingAfinity: boolean }[]
+
+      const allFeats = [
+        ...feats.feats.map((feat) => ({ feat: feat.feat, usingAfinity: feat.usingAfinity })),
+        ...feats.class.classFeats.map((feat) => ({ feat: feat.feat, usingAfinity: false })),
+        ...feats.subclass.subclassFeats.map((feat) => ({
+          feat: feat.feat,
+          usingAfinity: false,
+          requiredLevel: Math.min(feat.levelRequired * 5, 99), // Multiply level by 5 and cap at 99
+        })),
+        ...(feats.origin.feats
+          ? [{ feat: feats.origin.feats, usingAfinity: false }] // Handle a single feat object
+          : []),
+      ];
+
+      return allFeats;
+    } catch (error) {
+      throw new Error('Error getting character feats');
+    }
+  }
 }
