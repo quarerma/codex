@@ -168,17 +168,15 @@ export class InventoryService {
       });
 
       // On weapon remove -- remove attack
-      if (slot.equipment.type === 'WEAPON') {
+      if (slot.equipment?.type === 'WEAPON') {
         await this.weaponService.removeWeapon(characterId, inventory_slot);
       }
 
-      if (slot.equipment.characterUpgrades.length > 0) {
+      if (slot.equipment?.characterUpgrades.length > 0) {
         for (const upgrade of slot.equipment.characterUpgrades as CharacterUpgrade[]) {
           await this.unUpgradeService.unApplyUpgrades(characterId, upgrade, slot.equipment, 'equipment');
         }
       }
-
-      console.log('slot', slot);
 
       // remove modification alterations
       if (slot.alterations.length > 0) {

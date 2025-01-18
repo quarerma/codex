@@ -1,9 +1,15 @@
-import { Controller, Get, Query, Patch, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Query, Patch, HttpException, HttpStatus, Post, Body } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
+import { CharacterSlotService } from './aux-services/character.slot.service';
+import { EmptySlotDTO } from './dto/empty.slot.dto';
+import { UpdateSlotDTO } from './dto/updata.slot.dto';
 
 @Controller('inventory')
 export class InventoryController {
-  constructor(private readonly inventoryService: InventoryService) {}
+  constructor(
+    private readonly inventoryService: InventoryService,
+    private readonly characterSlotsService: CharacterSlotService,
+  ) {}
 
   @Patch('/add-item')
   async addItemToInventory(@Query('id') id: string, @Query('characterId') characterId: string) {
@@ -29,6 +35,42 @@ export class InventoryController {
       return await this.inventoryService.removeItemFromInventory(characterId, slotId);
     } catch (error) {
       throw new HttpException(`Error removing item from inventory: ${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Patch('/equip-item')
+  async equipItem(@Query('slotId') slotId: string, @Query('characterId') characterId: string) {
+    try {
+      return await this.inventoryService.equipItem(characterId, slotId);
+    } catch (error) {
+      throw new HttpException(`Error equipping item: ${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Patch('/unequip-item')
+  async unequipItem(@Query('slotId') slotId: string, @Query('characterId') characterId: string) {
+    try {
+      return await this.inventoryService.unequipItem(characterId, slotId);
+    } catch (error) {
+      throw new HttpException(`Error unequipping item: ${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('/create-empty-slot')
+  async createEmptySlot(@Body() data: EmptySlotDTO) {
+    try {
+      return await this.characterSlotsService.createInventorySlotNoItem(data);
+    } catch (error) {
+      throw new HttpException(`Error creating empty slot: ${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('/update-slot')
+  async updateSlot(@Body() data: UpdateSlotDTO) {
+    try {
+      return await this.characterSlotsService.updateSlot(data);
+    } catch (error) {
+      throw new HttpException(`Error updating slot: ${error}`, HttpStatus.BAD_REQUEST);
     }
   }
 }
