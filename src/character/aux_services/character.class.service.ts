@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { Character, Class, Subclass } from '@prisma/client';
 import { DataBaseService } from 'src/database/database.service';
 import { CharacterFeatsService } from './character.feats.service';
+import { CharacterUpgradesService } from './character.upgrades.service';
+import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
 
 @Injectable()
 export class CharacterClassService {
   constructor(
     private readonly dataBaseService: DataBaseService,
     private readonly characterFeatsService: CharacterFeatsService,
+    private readonly upgradesService: CharacterUpgradesService,
   ) {}
 
   async assignInitialClassAtributes(character_class: Class, character: Character, num_of_origin_skills: number) {
@@ -21,38 +24,37 @@ export class CharacterClassService {
 
       const classFeats_id = await this.dataBaseService.classFeats.findMany({
         where: {
-          classId: character_class.id,
-          isStarterFeat: true,
+          AND: [{ classId: character_class.id }, { feat: { afinityUpgrades: { isEmpty: false } } }],
         },
         select: {
-          feat: {
-            select: {
-              id: true,
-            },
-          },
+          feat: true,
         },
       });
-      for (const classFeats of classFeats_id.map((classFeat) => classFeat.feat.id)) {
-        await this.characterFeatsService.assignFeat(classFeats, character.id);
+
+      for (const feat of classFeats_id) {
+        for (const upgrade of feat.feat.characterUpgrades) {
+          await this.upgradesService.applyUpgrade(character.id, upgrade as CharacterUpgrade, feat.feat, 'feat');
+        }
       }
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  async assignInitialSubClassFeats(character_subclass: Subclass, character: Character) {
+  async applySubclassFeats(character_subclass: Subclass, character: Character) {
     try {
       const subclassFeats = await this.dataBaseService.subclassFeats.findMany({
-        where: { subclassId: character_subclass.id },
+        where: {
+          AND: [{ subclassId: character_subclass.id }, { feat: { afinityUpgrades: { isEmpty: false } } }, { levelRequired: { lte: character.level } }],
+        },
         select: {
           feat: true,
-          levelRequired: true,
         },
       });
 
-      for (const subclassFeat of subclassFeats) {
-        if (subclassFeat.levelRequired <= character.level) {
-          await this.characterFeatsService.assignFeat(subclassFeat.feat.id, character.id);
+      for (const feat of subclassFeats) {
+        for (const upgrade of feat.feat.characterUpgrades) {
+          await this.upgradesService.applyUpgrade(character.id, upgrade as CharacterUpgrade, feat.feat, 'feat');
         }
       }
     } catch (error) {

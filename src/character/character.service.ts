@@ -7,6 +7,8 @@ import { InventoryService } from 'src/inventory/inventory.service';
 import { CharacterFeatsService } from './aux_services/character.feats.service';
 import { Credit } from '@prisma/client';
 import { CharacterRitualsService } from './aux_services/character.rituals.service';
+import { CharacterUpgradesService } from './aux_services/character.upgrades.service';
+import { CharacterUpgrade } from 'src/types/characterUpgrade-type';
 
 @Injectable()
 export class CharacterService {
@@ -17,6 +19,7 @@ export class CharacterService {
     private readonly inventoryService: InventoryService,
     private readonly characterFeatsService: CharacterFeatsService,
     private readonly characterRitualsService: CharacterRitualsService,
+    private readonly upgradesService: CharacterUpgradesService,
   ) {}
 
   async createCharacter(data: CreateCharacterDTO) {
@@ -105,7 +108,13 @@ export class CharacterService {
         include: {
           class: true,
           subclass: true,
-          origin: true,
+          origin: {
+            select: {
+              feats: true,
+              skills: true,
+              id: true,
+            },
+          },
         },
       });
 
@@ -154,11 +163,16 @@ export class CharacterService {
       for (const skill of createdCharacter.origin.skills) {
         await this.characterSkillsService.editCharacterSkillTraining(createdCharacter.id, skill, 'trained');
       }
-      await this.characterFeatsService.assignFeat(createdCharacter.origin.featId, createdCharacter.id);
 
       // TODO: assign class, subclass and feats on create
       await this.characterClassService.assignInitialClassAtributes(createdCharacter.class, createdCharacter, createdCharacter.origin.skills.length);
-      await this.characterClassService.assignInitialSubClassFeats(createdCharacter.subclass, createdCharacter);
+      await this.characterClassService.applySubclassFeats(createdCharacter.subclass, createdCharacter);
+
+      if (createdCharacter.origin.feats.characterUpgrades) {
+        for (const upgrade of createdCharacter.origin.feats.characterUpgrades) {
+          await this.upgradesService.applyUpgrade(createdCharacter.id, upgrade as CharacterUpgrade, createdCharacter.origin.feats, 'feat');
+        }
+      }
 
       for (const featId of data.featsId) {
         await this.characterFeatsService.assignFeat(featId, createdCharacter.id);
