@@ -7,17 +7,22 @@ import { UpdateSlotDTO } from '../dto/updata.slot.dto';
 export class CharacterSlotService {
   constructor(private readonly dataBaseService: DataBaseService) {}
 
-  async createInventorySlotNoItem(data: EmptySlotDTO) {
+  async createInventorySlotNoItem(characterId: string) {
+    const data: EmptySlotDTO = {
+      category: 0,
+      characterId: characterId,
+      local_name: '0. Novo Item',
+      uses: 0,
+      weight: 0,
+    };
     return await this.dataBaseService.inventory.update({
       where: { characterId: data.characterId },
       data: {
         slots: {
           create: {
             category: data.category,
-            local_description: data.local_description,
             local_name: data.local_name,
             uses: data.uses,
-            is_equipped: true,
             weight: data.weight,
           },
         },
@@ -33,6 +38,7 @@ export class CharacterSlotService {
         local_name: data.new_local_name,
         uses: data.new_uses,
         weight: data.weight,
+        category: data.new_category,
       },
     });
   }

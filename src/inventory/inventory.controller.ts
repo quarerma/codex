@@ -1,7 +1,6 @@
 import { Controller, Get, Query, Patch, HttpException, HttpStatus, Post, Body } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { CharacterSlotService } from './aux-services/character.slot.service';
-import { EmptySlotDTO } from './dto/empty.slot.dto';
 import { UpdateSlotDTO } from './dto/updata.slot.dto';
 
 @Controller('inventory')
@@ -57,9 +56,9 @@ export class InventoryController {
   }
 
   @Post('/create-empty-slot')
-  async createEmptySlot(@Body() data: EmptySlotDTO) {
+  async createEmptySlot(@Query('characterId') characterId: string) {
     try {
-      return await this.characterSlotsService.createInventorySlotNoItem(data);
+      return await this.characterSlotsService.createInventorySlotNoItem(characterId);
     } catch (error) {
       throw new HttpException(`Error creating empty slot: ${error}`, HttpStatus.BAD_REQUEST);
     }

@@ -4,4 +4,5 @@ export class UpdateSlotDTO {
   new_local_description: string;
   new_uses: number;
   weight: number;
+  new_category: number;
 }

@@ -1,978 +1,11 @@
---
--- PostgreSQL database dump
---
 
--- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
--- Dumped by pg_dump version 16.6 (Ubuntu 16.6-0ubuntu0.24.04.1)
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
---
-
--- *not* creating schema, since initdb creates it
-
-
-ALTER SCHEMA public OWNER TO postgres;
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON SCHEMA public IS '';
-
-
---
--- Name: Atribute; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Atribute" AS ENUM (
-    'STRENGTH',
-    'DEXTERITY',
-    'VITALITY',
-    'INTELLIGENCE',
-    'PRESENCE'
-);
-
-
-ALTER TYPE public."Atribute" OWNER TO postgres;
-
---
--- Name: Credit; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Credit" AS ENUM (
-    'LOW',
-    'MEDIUM',
-    'HIGH',
-    'UNLIMITED'
-);
-
-
-ALTER TYPE public."Credit" OWNER TO postgres;
-
---
--- Name: DamageType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."DamageType" AS ENUM (
-    'PIERCING',
-    'BALISTIC',
-    'IMPACT',
-    'SLASHING',
-    'FIRE',
-    'CHEMICAL',
-    'POISON',
-    'BLOOD',
-    'FEAR',
-    'KNOWLEDGE',
-    'DEATH',
-    'ENERGY',
-    'ELETRIC'
-);
-
-
-ALTER TYPE public."DamageType" OWNER TO postgres;
-
---
--- Name: Element; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Element" AS ENUM (
-    'REALITY',
-    'FEAR',
-    'BLOOD',
-    'DEATH',
-    'ENERGY',
-    'KNOWLEDGE'
-);
-
-
-ALTER TYPE public."Element" OWNER TO postgres;
-
---
--- Name: FeatType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."FeatType" AS ENUM (
-    'CLASS',
-    'SUBCLASS',
-    'GENERAL',
-    'CUSTOM',
-    'ORIGIN'
-);
-
-
-ALTER TYPE public."FeatType" OWNER TO postgres;
-
---
--- Name: HandType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."HandType" AS ENUM (
-    'LIGHT',
-    'ONE_HANDED',
-    'TWO_HANDED'
-);
-
-
-ALTER TYPE public."HandType" OWNER TO postgres;
-
---
--- Name: ItemType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."ItemType" AS ENUM (
-    'WEAPON',
-    'ARMOR',
-    'AMMO',
-    'ACESSORY',
-    'EXPLOSIVE',
-    'OPERATIONAL_EQUIPMENT',
-    'PARANORMAL_EQUIPMENT',
-    'CURSED_ITEM',
-    'DEFAULT'
-);
-
-
-ALTER TYPE public."ItemType" OWNER TO postgres;
-
---
--- Name: ModificationType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."ModificationType" AS ENUM (
-    'MELEE_WEAPON',
-    'BULLET_WEAPON',
-    'BOLT_WEAPON',
-    'ARMOR',
-    'AMMO',
-    'ACESSORY'
-);
-
-
-ALTER TYPE public."ModificationType" OWNER TO postgres;
-
---
--- Name: Patent; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Patent" AS ENUM (
-    'ROOKIE',
-    'OPERATOR',
-    'SPECIAL_AGENT',
-    'OPERATION_OFFICER',
-    'ELITE_AGENT'
-);
-
-
-ALTER TYPE public."Patent" OWNER TO postgres;
-
---
--- Name: Proficiency; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Proficiency" AS ENUM (
-    'SIMPLE',
-    'TATICAL',
-    'HEAVY',
-    'LIGHT_ARMOR',
-    'HEAVY_ARMOR'
-);
-
-
-ALTER TYPE public."Proficiency" OWNER TO postgres;
-
---
--- Name: Range; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Range" AS ENUM (
-    'MELEE',
-    'SHORT',
-    'MEDIUM',
-    'LONG',
-    'SELF',
-    'TOUCH',
-    'EXTREME',
-    'UNLIMITED'
-);
-
-
-ALTER TYPE public."Range" OWNER TO postgres;
-
---
--- Name: RitualType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."RitualType" AS ENUM (
-    'EFFECT',
-    'DAMAGE'
-);
-
-
-ALTER TYPE public."RitualType" OWNER TO postgres;
-
---
--- Name: Role; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."Role" AS ENUM (
-    'USER',
-    'ADMIN'
-);
-
-
-ALTER TYPE public."Role" OWNER TO postgres;
-
---
--- Name: WeaponCategory; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."WeaponCategory" AS ENUM (
-    'SIMPLE',
-    'TATICAL',
-    'HEAVY'
-);
-
-
-ALTER TYPE public."WeaponCategory" OWNER TO postgres;
-
---
--- Name: WeaponType; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."WeaponType" AS ENUM (
-    'MELEE',
-    'BOLT',
-    'BULLET'
-);
-
-
-ALTER TYPE public."WeaponType" OWNER TO postgres;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- Name: Campaign; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Campaign" (
-    id text NOT NULL,
-    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    name character varying(50) NOT NULL,
-    description character varying(255) NOT NULL,
-    password text NOT NULL,
-    owner_id text NOT NULL
-);
-
-
-ALTER TABLE public."Campaign" OWNER TO postgres;
-
---
--- Name: CampaignEquipment; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignEquipment" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    equipment_id integer NOT NULL
-);
-
-
-ALTER TABLE public."CampaignEquipment" OWNER TO postgres;
-
---
--- Name: CampaignFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignFeats" (
-    "featId" text NOT NULL,
-    "campaignId" text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignFeats" OWNER TO postgres;
-
---
--- Name: CampaignModifications; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignModifications" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    modification_id text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignModifications" OWNER TO postgres;
-
---
--- Name: CampaignOrigin; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignOrigin" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    origin_id text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignOrigin" OWNER TO postgres;
-
---
--- Name: CampaignRitual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CampaignRitual" (
-    id text NOT NULL,
-    campaign_id text NOT NULL,
-    ritual_id text NOT NULL
-);
-
-
-ALTER TABLE public."CampaignRitual" OWNER TO postgres;
-
---
--- Name: Character; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Character" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    level integer NOT NULL,
-    owner_id text NOT NULL,
-    campaign_id text NOT NULL,
-    class_id text NOT NULL,
-    subclass_id text NOT NULL,
-    health_info jsonb NOT NULL,
-    effort_info jsonb NOT NULL,
-    sanity_info jsonb NOT NULL,
-    atributes jsonb NOT NULL,
-    skills jsonb[],
-    attacks jsonb[],
-    origin_id text NOT NULL,
-    proficiencies public."Proficiency"[],
-    current_effort integer NOT NULL,
-    current_health integer NOT NULL,
-    current_sanity integer NOT NULL,
-    max_effort integer NOT NULL,
-    max_health integer NOT NULL,
-    max_sanity integer NOT NULL,
-    defense integer NOT NULL,
-    speed integer NOT NULL,
-    num_of_skills integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public."Character" OWNER TO postgres;
-
---
--- Name: CharacterCondition; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CharacterCondition" (
-    character_id text NOT NULL,
-    condition_id text NOT NULL
-);
-
-
-ALTER TABLE public."CharacterCondition" OWNER TO postgres;
-
---
--- Name: CharacterFeat; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CharacterFeat" (
-    character_id text NOT NULL,
-    feat_id text NOT NULL,
-    "usingAfinity" boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE public."CharacterFeat" OWNER TO postgres;
-
---
--- Name: CharacterRitual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CharacterRitual" (
-    character_id text NOT NULL,
-    ritual_id text NOT NULL,
-    alterations jsonb[],
-    ritual_cost integer NOT NULL
-);
-
-
-ALTER TABLE public."CharacterRitual" OWNER TO postgres;
-
---
--- Name: Class; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Class" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    "SanityPointsPerLevel" integer NOT NULL,
-    "effortPointsPerLevel" integer NOT NULL,
-    "hitPointsPerLevel" integer NOT NULL,
-    "initialEffort" integer NOT NULL,
-    "initialHealth" integer NOT NULL,
-    "initialSanity" integer NOT NULL,
-    proficiencies public."Proficiency"[],
-    description text NOT NULL,
-    number_of_skills integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public."Class" OWNER TO postgres;
-
---
--- Name: ClassFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."ClassFeats" (
-    "featId" text NOT NULL,
-    "classId" text NOT NULL,
-    "isStarterFeat" boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE public."ClassFeats" OWNER TO postgres;
-
---
--- Name: Condition; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Condition" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    description text NOT NULL,
-    is_custom boolean NOT NULL
-);
-
-
-ALTER TABLE public."Condition" OWNER TO postgres;
-
---
--- Name: CursedItem; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."CursedItem" (
-    "equipmentId" integer NOT NULL,
-    element public."Element" NOT NULL
-);
-
-
-ALTER TABLE public."CursedItem" OWNER TO postgres;
-
---
--- Name: DamageRitual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."DamageRitual" (
-    "ritualId" text NOT NULL,
-    "normalCastDamageType" public."DamageType",
-    "discentCastDamageType" public."DamageType",
-    "trueCastDamageType" public."DamageType",
-    "normalCastDamage" text,
-    "discentCastDamage" text,
-    "trueCastDamage" text
-);
-
-
-ALTER TABLE public."DamageRitual" OWNER TO postgres;
-
---
--- Name: Equipment; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Equipment" (
-    id integer NOT NULL,
-    name text NOT NULL,
-    description text NOT NULL,
-    weight integer NOT NULL,
-    category integer NOT NULL,
-    type public."ItemType" NOT NULL,
-    is_custom boolean NOT NULL,
-    num_of_uses integer NOT NULL,
-    "characterUpgrades" jsonb[]
-);
-
-
-ALTER TABLE public."Equipment" OWNER TO postgres;
-
---
--- Name: Equipment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public."Equipment_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."Equipment_id_seq" OWNER TO postgres;
-
---
--- Name: Equipment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public."Equipment_id_seq" OWNED BY public."Equipment".id;
-
-
---
--- Name: Feat; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Feat" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    description text NOT NULL,
-    prerequisites text,
-    "characterUpgrades" jsonb[],
-    type public."FeatType" NOT NULL,
-    element public."Element" NOT NULL,
-    afinity text,
-    "afinityUpgrades" jsonb[]
-);
-
-
-ALTER TABLE public."Feat" OWNER TO postgres;
-
---
--- Name: GeneralFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."GeneralFeats" (
-    id text NOT NULL,
-    "featId" text NOT NULL
-);
-
-
-ALTER TABLE public."GeneralFeats" OWNER TO postgres;
-
---
--- Name: Inventory; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Inventory" (
-    character_id text NOT NULL,
-    credit public."Credit" DEFAULT 'LOW'::public."Credit" NOT NULL,
-    alterations jsonb[],
-    "maxValue" integer NOT NULL,
-    patent public."Patent" NOT NULL
-);
-
-
-ALTER TABLE public."Inventory" OWNER TO postgres;
-
---
--- Name: InventorySlot; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."InventorySlot" (
-    id text NOT NULL,
-    inventory_id text NOT NULL,
-    equipment_id integer,
-    uses integer DEFAULT 0 NOT NULL,
-    category integer NOT NULL,
-    local_name text NOT NULL,
-    alterations jsonb[],
-    is_equipped boolean DEFAULT false NOT NULL,
-    local_description text NOT NULL,
-    weight integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public."InventorySlot" OWNER TO postgres;
-
---
--- Name: Modification; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Modification" (
-    id text NOT NULL,
-    name text NOT NULL,
-    type public."ModificationType"[],
-    element public."Element" NOT NULL,
-    "characterUpgrades" jsonb[],
-    description text NOT NULL,
-    is_custom boolean NOT NULL
-);
-
-
-ALTER TABLE public."Modification" OWNER TO postgres;
-
---
--- Name: Notes; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Notes" (
-    id text NOT NULL,
-    title character varying(50) NOT NULL,
-    character_id text,
-    campaign_id text,
-    content text
-);
-
-
-ALTER TABLE public."Notes" OWNER TO postgres;
-
---
--- Name: Origin; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Origin" (
-    id text NOT NULL,
-    name text NOT NULL,
-    description text NOT NULL,
-    is_custom boolean NOT NULL,
-    feat_id text NOT NULL,
-    skills text[]
-);
-
-
-ALTER TABLE public."Origin" OWNER TO postgres;
-
---
--- Name: PlayerOnCampaign; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."PlayerOnCampaign" (
-    campaign_id text NOT NULL,
-    player_id text NOT NULL,
-    joined_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
-ALTER TABLE public."PlayerOnCampaign" OWNER TO postgres;
-
---
--- Name: Ritual; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Ritual" (
-    id text NOT NULL,
-    name text NOT NULL,
-    element public."Element" NOT NULL,
-    is_custom boolean NOT NULL,
-    "discentCastDescription" text,
-    duration text NOT NULL,
-    "exectutionTime" text NOT NULL,
-    "normalCastDescription" text NOT NULL,
-    range public."Range" NOT NULL,
-    target text NOT NULL,
-    "trueCastDescription" text,
-    type public."RitualType" NOT NULL,
-    "discentCost" integer,
-    "ritualLevel" integer NOT NULL,
-    "trueCost" integer,
-    "normalCost" integer NOT NULL,
-    resistence text NOT NULL
-);
-
-
-ALTER TABLE public."Ritual" OWNER TO postgres;
-
---
--- Name: RitualCondition; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."RitualCondition" (
-    ritual_id text NOT NULL,
-    condition_id text NOT NULL
-);
-
-
-ALTER TABLE public."RitualCondition" OWNER TO postgres;
-
---
--- Name: Skill; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Skill" (
-    name text NOT NULL,
-    atribute public."Atribute" NOT NULL,
-    description text NOT NULL,
-    only_trained boolean NOT NULL,
-    carry_peanalty boolean NOT NULL,
-    needs_kit boolean NOT NULL,
-    is_custom boolean NOT NULL,
-    campaign_id text
-);
-
-
-ALTER TABLE public."Skill" OWNER TO postgres;
-
---
--- Name: Subclass; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Subclass" (
-    id text NOT NULL,
-    name character varying(50) NOT NULL,
-    "classId" text NOT NULL,
-    description text NOT NULL
-);
-
-
-ALTER TABLE public."Subclass" OWNER TO postgres;
-
---
--- Name: SubclassFeats; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."SubclassFeats" (
-    "featId" text NOT NULL,
-    "subclassId" text NOT NULL,
-    "levelRequired" integer NOT NULL
-);
-
-
-ALTER TABLE public."SubclassFeats" OWNER TO postgres;
-
---
--- Name: User; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."User" (
-    id text NOT NULL,
-    username character varying(50) NOT NULL,
-    password text NOT NULL,
-    email text NOT NULL,
-    role public."Role" DEFAULT 'USER'::public."Role" NOT NULL
-);
-
-
-ALTER TABLE public."User" OWNER TO postgres;
-
---
--- Name: Weapon; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."Weapon" (
-    "equipmentId" integer NOT NULL,
-    damage text NOT NULL,
-    critical_multiplier integer NOT NULL,
-    critical_range integer NOT NULL,
-    range public."Range" NOT NULL,
-    damage_type public."DamageType" NOT NULL,
-    weapon_category public."WeaponCategory" NOT NULL,
-    weapon_type public."WeaponType" NOT NULL,
-    hand_type public."HandType" NOT NULL
-);
-
-
-ALTER TABLE public."Weapon" OWNER TO postgres;
-
---
--- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public._prisma_migrations (
-    id character varying(36) NOT NULL,
-    checksum character varying(64) NOT NULL,
-    finished_at timestamp with time zone,
-    migration_name character varying(255) NOT NULL,
-    logs text,
-    rolled_back_at timestamp with time zone,
-    started_at timestamp with time zone DEFAULT now() NOT NULL,
-    applied_steps_count integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public._prisma_migrations OWNER TO postgres;
-
---
--- Name: Equipment id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Equipment" ALTER COLUMN id SET DEFAULT nextval('public."Equipment_id_seq"'::regclass);
-
-
---
--- Data for Name: Campaign; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Campaign" (id, "createdAt", name, description, password, owner_id) FROM stdin;
-cm5hc4i6z00014p9wyqal4c7k	2025-01-03 22:36:52.311	Olhos do Passado	Lugar onde todos te observam	$2b$10$3mIZN.0qJDRgQnLm.hHNNu66PX4wjNnMhVzM95bS/jLyrR3N5fPMK	cm5hc0bh900004p9wvlq38ry2
-cm5hjm9hj0000147bc51q2l0p	2025-01-04 02:06:38.142	Pesadelos	História de uma mulher que adorava brincar com pedrinhas na praia... e pessoas.	$2b$10$yIbjk.jpkeCzrPmwA9JeQuWw23WO8hsE8icwRuQbk3sP2bm5K/i/i	cm1bc46xx0000knwbt37wqtvi
+COPY public."User" (id, username, password, email, role) FROM stdin;
+cm1bc46xx0000knwbt37wqtvi	quarerma	$2b$10$MqArroBMznobLK3qd9pARO1FlBowQLZHaZCuWaJe/dw15vr3oI.Xa	gabriel.oliveira.quaresma@gmail.com	ADMIN
+cm5bmno2k0000n92qg3024kzq	pukA	$2b$10$wHOyJM0.dQp6Qidv2JlUo.XZm2kGOzA6Eb321EOwdlUqgWMSrD47S	eck.leal.39@gmail.com	USER
+cm5hc0bh900004p9wvlq38ry2	JoeBlossom	$2b$10$fzjGEGDWAOnKpzISnpqFbOYT2q3djWAPN0YfPBMF2PNHBDBbf89bS	snack9827@gmail.com	ADMIN
+cm5ieq8i70008xhvho01d3xkv	Gabili	$2b$10$I6vJs5oEBk8.BbwUOUaqE.zMGbi4eKVbDZhVhFVHLundSg7WMEOtu	g.vanzella1812@gmail.com	USER
+cm5jis4km0000pa9ew5i0gk3s	Danas	$2b$10$sSw5s3z10XE2jkcWRTG1K.5xx6fvF9fgzXa7f2S68NCbyIv0FcE9O	dsouzamiguelfaria@gmail.com	USER
 \.
-
-
---
--- Data for Name: CampaignEquipment; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CampaignEquipment" (id, campaign_id, equipment_id) FROM stdin;
-cm5hc9w6g00024p9wzf2szlrl	cm5hc4i6z00014p9wyqal4c7k	8
-cm5j13jff000311umdb5zms2f	cm5hc4i6z00014p9wyqal4c7k	18
-\.
-
-
---
--- Data for Name: CampaignFeats; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CampaignFeats" ("featId", "campaignId") FROM stdin;
-\.
-
-
---
--- Data for Name: CampaignModifications; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CampaignModifications" (id, campaign_id, modification_id) FROM stdin;
-\.
-
-
---
--- Data for Name: CampaignOrigin; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CampaignOrigin" (id, campaign_id, origin_id) FROM stdin;
-\.
-
-
---
--- Data for Name: CampaignRitual; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CampaignRitual" (id, campaign_id, ritual_id) FROM stdin;
-\.
-
-
---
--- Data for Name: Character; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Character" (id, name, level, owner_id, campaign_id, class_id, subclass_id, health_info, effort_info, sanity_info, atributes, skills, attacks, origin_id, proficiencies, current_effort, current_health, current_sanity, max_effort, max_health, max_sanity, defense, speed, num_of_skills) FROM stdin;
-cm5ilwpxl0009b9sj0y59694c	Kleber Martins	4	cm5bmno2k0000n92qg3024kzq	cm5hc4i6z00014p9wyqal4c7k	cm1beidgp0001knwb86n0e6w6	cm1bemy380008knwbh8ht7a7b	{"alterations": [{"feat": "cm5ia5pp8000511v8w1wdr8db", "featName": "Vitalidade Reforçada"}], "valuePerLevel": 10}	{"alterations": [], "valuePerLevel": 3}	{"maxValue": 21, "alterations": [], "currentValue": 21, "valuePerLevel": 3}	{"presence": 1, "strength": 3, "vitality": 4, "dexterity": 0, "alterations": [], "intelligence": 2}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 7, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [{\\"feat\\": \\"cm5ia5pp8000511v8w1wdr8db\\", \\"value\\": 2, \\"featName\\": \\"Vitalidade Reforçada\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Machado\\", \\"skill\\": \\"Luta\\", \\"local_id\\": \\"cm5ilzhd3000ab9sjwg9g6n4l\\", \\"alterations\\": [], \\"damage_dies\\": [\\"1d8\\"], \\"extra_damage\\": [], \\"critical_margin\\": 20, \\"critical_multiplier\\": 3}"}	cm5i9y1dk000011v8dfwtxcvz	{SIMPLE,TATICAL,LIGHT_ARMOR}	12	56	21	12	56	21	19	9	5
-cm5jiyyz20001pa9ebsck83xh	Giovanni Constanzo	4	cm5jis4km0000pa9ew5i0gk3s	cm5hc4i6z00014p9wyqal4c7k	cm1beidgp0001knwb86n0e6w6	cm1bely5b0004knwb1e1zi0hi	{"alterations": [], "valuePerLevel": 6}	{"alterations": [], "valuePerLevel": 3}	{"maxValue": 21, "alterations": [], "currentValue": 21, "valuePerLevel": 3}	{"presence": 1, "strength": 3, "vitality": 2, "dexterity": 2, "alterations": [], "intelligence": 1}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 5, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}"}	\N	cm5icnn6v0005xhvh67p6pkdp	{SIMPLE,TATICAL,LIGHT_ARMOR}	10	37	19	12	40	21	17	9	5
-cm5ieylye0009xhvh61qjflda	Kate Carter	4	cm5ieq8i70008xhvho01d3xkv	cm5hc4i6z00014p9wyqal4c7k	cm1bejpao0002knwbwlri6asv	cm1benvcd000cknwbwjc693zu	{"alterations": [], "valuePerLevel": 4}	{"alterations": [], "valuePerLevel": 6}	{"maxValue": 28, "alterations": [], "currentValue": 28, "valuePerLevel": 4}	{"presence": 3, "strength": 1, "vitality": 1, "dexterity": 2, "alterations": [], "intelligence": 3}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 0, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Fuzil de caça\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5j3ralf00005p0p2d69jw7h\\", \\"alterations\\": [], \\"damage_dies\\": [\\"2d8\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 3}"}	cm1bgje25001jknwb0be1qzbq	{SIMPLE,LIGHT_ARMOR}	22	22	21	24	29	28	12	9	9
-cm5iapljv000f11v8nsb6ew4j	Tobias Porto	4	cm1bc46xx0000knwbt37wqtvi	cm5hc4i6z00014p9wyqal4c7k	cm1bekpmk0003knwbdi0gscjk	cm1beodck000eknwbtc0du48u	{"alterations": [], "valuePerLevel": 4}	{"alterations": [], "valuePerLevel": 8}	{"maxValue": 35, "alterations": [], "currentValue": 35, "valuePerLevel": 5}	{"presence": 4, "strength": 0, "vitality": 1, "dexterity": 2, "alterations": [], "intelligence": 3}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 4, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 10, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [{\\"item\\": 8, \\"value\\": 5, \\"itemName\\": \\"Crucifixo Invertido\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Revólver\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5ilsiie0007b9sjpun1t6r1\\", \\"alterations\\": [], \\"damage_dies\\": [\\"2d6\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 3}","{\\"name\\": \\"Faca\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5j26eks000b11umy5lx534y\\", \\"alterations\\": [], \\"damage_dies\\": [\\"1d4\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 2}"}	cm1bgje25001jknwb0be1qzbq	{SIMPLE}	27	22	22	32	22	30	12	9	7
-\.
-
-
---
--- Data for Name: CharacterCondition; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CharacterCondition" (character_id, condition_id) FROM stdin;
-\.
-
-
---
--- Data for Name: CharacterFeat; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CharacterFeat" (character_id, feat_id, "usingAfinity") FROM stdin;
-cm5iapljv000f11v8nsb6ew4j	cm5hkz485000d6apb0fck9bza	f
-cm5ilwpxl0009b9sj0y59694c	cm5ia5pp8000511v8w1wdr8db	f
-\.
-
-
---
--- Data for Name: CharacterRitual; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CharacterRitual" (character_id, ritual_id, alterations, ritual_cost) FROM stdin;
-cm5iapljv000f11v8nsb6ew4j	cm5j19qq2000511umm0dq0rl6	\N	1
-cm5iapljv000f11v8nsb6ew4j	cm5j1cgnx000611um7acukdm2	\N	1
-cm5iapljv000f11v8nsb6ew4j	cm5j1f7u9000711um2j4gis5o	\N	1
-cm5iapljv000f11v8nsb6ew4j	cm5j1i8sf000811um31vh5nk2	\N	1
-cm5iapljv000f11v8nsb6ew4j	cm5j1npzn000a11umnpb5p836	\N	1
-cm5iapljv000f11v8nsb6ew4j	cm1bgryld001uknwbjhewmpq9	\N	1
-cm5iapljv000f11v8nsb6ew4j	cm5j1kece000911umr28219vr	\N	1
-\.
-
-
---
--- Data for Name: Class; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Class" (id, name, "SanityPointsPerLevel", "effortPointsPerLevel", "hitPointsPerLevel", "initialEffort", "initialHealth", "initialSanity", proficiencies, description, number_of_skills) FROM stdin;
-cm1beidgp0001knwb86n0e6w6	Combatente	3	2	4	2	20	12	{SIMPLE,TATICAL,LIGHT_ARMOR}	<p>Treinado para lutar com todo tipo de armas, e com a força e a coragem para encarar os perigos de frente, É o tipo de agente que prefere abordagens mais diretas e costuma atirar primeiro e perguntar depois. </p><p><br></p><p>Do mercenário especialista em armas de fogo até o perito em espadas, combatentes apresentam uma gama enorme de habilidades e técnicas especiais que aprimoram sua eficiência no campo de batalha, tornando-os membros essenciais em qualquer missão de extermínio. </p><p><br></p><p>Além de treinar seu corpo, o combatente também é perito em liderar seus aliados em batalha e cuidar de seu equipamento de combate, sempre preparado para assumir a linha de frente quando a coisa fica feia</p>	3
-cm1bejpao0002knwbwlri6asv	Especialista	4	3	3	3	16	16	{SIMPLE,LIGHT_ARMOR}	<p>Um agente que confia mais em esperteza do que em força bruta. Um especialista se vale de conhecimento técnico, raciocínio rápido ou mesmo lábia para resolver mistérios e enfrentar o paranormal. </p><p><br></p><p>Cientistas, inventores, pesquisadores e técnicos de vários tipos são exemplos de especialistas, que são tão variados quanto as áreas do conhecimento e da tecnologia. Alguns ainda preferem estudar engenharia social e se tornam excelentes espiões infiltrados, ou mesmo estudam técnicas especiais de combate como artes marciais e tiro a distância, aliando conhecimento técnico e habilidade. </p><p><br></p><p>O que une todos os especialistas é sua incrível capacidade de aprender e improvisar usando seu intelecto e conhecimento avançado, que pode tirar o grupo todo dos mais diversos tipos de enrascadas.</p>	7
-cm1bekpmk0003knwbdi0gscjk	Ocultista	5	4	2	4	12	20	{SIMPLE}	<p>O Outro Lado é misterioso, perigoso e, de certa forma, cativante. Muitos estudiosos das entidades se perdem em seus reinos obscuros em busca de poder, mas existem aqueles que visam compreender e dominar os mistérios paranormais para usá-los para combater o próprio Outro Lado. Esse tipo de agente não é apenas um conhecedor do oculto, como também possui talento para se conectar com elementos paranormais. </p><p><br></p><p>Ao contrário da crendice popular, ocultistas não são intrinsecamente malignos. Seria como dizer que o cientista que inventou a pólvora é culpado pelo assassino que disparou o revólver. Para a Ordem, o paranormal é uma força que pode ser usada para os mais diversos propósitos, de acordo com a intenção de seu usuário. </p><p><br></p><p>Ocultistas aplicam seu conhecimento acadêmico e suas capacidades de conjuração de rituais em missões para investigar e combater o paranormal em todas as suas formas, principalmente quando munição convencional não é o suficiente para lidar com a tarefa.</p>	5
-\.
-
-
---
--- Data for Name: ClassFeats; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."ClassFeats" ("featId", "classId", "isStarterFeat") FROM stdin;
-cm1bfssqn000jknwbawu9pgbz	cm1beidgp0001knwb86n0e6w6	t
-cm1bftmrr000kknwbl8q2s9fj	cm1beidgp0001knwb86n0e6w6	t
-cm1bfv6cs000lknwbgjqn1nhu	cm1beidgp0001knwb86n0e6w6	t
-cm1bfvj04000mknwbs9slbd5b	cm1beidgp0001knwb86n0e6w6	t
-cm1bfvswi000nknwbpgiv43gf	cm1beidgp0001knwb86n0e6w6	t
-cm1bfw2ms000oknwb2tkpjazy	cm1beidgp0001knwb86n0e6w6	t
-cm1bfx0pa000pknwbzwqgwclv	cm1bejpao0002knwbwlri6asv	t
-cm1bfxgsu000qknwb3jpzo5vq	cm1bejpao0002knwbwlri6asv	t
-cm1bfxvxs000rknwbia2ih4x9	cm1bejpao0002knwbwlri6asv	t
-cm1bfyank000sknwbleo6wjpg	cm1bejpao0002knwbwlri6asv	t
-cm1bfyrr8000tknwbkrmeojn5	cm1bejpao0002knwbwlri6asv	t
-cm1bfz1p5000uknwbot9tihzq	cm1bejpao0002knwbwlri6asv	t
-cm1bfz8y0000vknwbpc0dxs1e	cm1bejpao0002knwbwlri6asv	t
-cm1bfzgle000wknwbw1gur7q4	cm1bejpao0002knwbwlri6asv	t
-cm5iaejay000611v86sv20smy	cm1bejpao0002knwbwlri6asv	f
-cm5ialr96000911v85d170hcm	cm1bekpmk0003knwbdi0gscjk	t
-cm5iam940000a11v8oh0jmmzm	cm1bekpmk0003knwbdi0gscjk	t
-cm5iamiri000b11v8z3iidy73	cm1bekpmk0003knwbdi0gscjk	t
-cm5iamwhp000c11v8wvgxkdrl	cm1bekpmk0003knwbdi0gscjk	t
-cm5ianb2g000d11v8ogslnpeb	cm1bekpmk0003knwbdi0gscjk	t
-cm5ianigo000e11v8i3wjxnxe	cm1bekpmk0003knwbdi0gscjk	t
-cm5icvvxv0007xhvhv5tdudy3	cm1beidgp0001knwb86n0e6w6	f
-\.
-
-
---
--- Data for Name: Condition; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Condition" (id, name, description, is_custom) FROM stdin;
-cm1bgrn7x001tknwbxj0bvf3m	Vulnerável	<p>O personagem sofre –5 na Defesa.</p>	f
-cm1h5ctzq000712tey5r657jh	Debilitado	<p>O personagem sofre –2d20 em testes de Agilidade, Força e Vigor. Se o personagem ficar debilitado novamente, em vez disso fica inconsciente.</p>	f
-cm1h5d1i8000812teko5plk00	Asfixiado	<p>O personagem não pode respirar. Um personagem asfixiado pode prender seu fôlego por um total de rodadas igual ao seu Vigor e, a cada vez que sofre dano enquanto está nesta condição, reduz este valor em 1. Ao final de seu turno na última dessas rodadas, o personagem fica morrendo.</p>	f
-cm1h5d8ie000912te8mnlbi44	Atordoado	<p>O personagem fica desprevenido e não pode fazer ações. Condição mental.</p>	f
-\.
-
-
---
--- Data for Name: CursedItem; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."CursedItem" ("equipmentId", element) FROM stdin;
-\.
-
-
---
--- Data for Name: DamageRitual; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."DamageRitual" ("ritualId", "normalCastDamageType", "discentCastDamageType", "trueCastDamageType", "normalCastDamage", "discentCastDamage", "trueCastDamage") FROM stdin;
-cm1bgryld001uknwbjhewmpq9	ELETRIC	ENERGY	ENERGY	3d6	6d6	8d6
-cm1h5py6b000f12tevm7nhzsq	DEATH	DEATH	DEATH	2d8+2	3d8+3	8d8+8
-\.
-
 
 --
 -- Data for Name: Equipment; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -1062,17 +95,122 @@ cm5icvvxv0007xhvhv5tdudy3	Golpe Pesado	<p>O dano de suas armas corpo a corpo aum
 cm1bfvswi000nknwbpgiv43gf	Grau de Treinamento	<p>Em NEX 35%, e novamente em NEX 70%, escolha um número de perícias treinadas igual a 2 + Int. Seu grau de treinamento nessas perícias aumenta em um (de treinado para veterano ou de veterano para expert).</p>	\N	\N	CLASS	REALITY	\N	\N
 \.
 
-
 --
--- Data for Name: GeneralFeats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+-- Data for Name: Origin; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."GeneralFeats" (id, "featId") FROM stdin;
-cm1cftkxz0000rtj4ii78jsv8	cm1cftky30001rtj4n01adomh
-cm5hkz485000c6apb2meaj95o	cm5hkz485000d6apb0fck9bza
-cm5ia5pp8000411v8j077si0b	cm5ia5pp8000511v8w1wdr8db
+COPY public."Origin" (id, name, description, is_custom, feat_id, skills) FROM stdin;
+cm1bghpuz001fknwbcape5u7o	Engenheiro	<p>Enquanto os acadêmicos estão preocupados com teorias, você colocar a mão na massa, seja como engenheiro profissional, seja como inventor de garagem. Provavelmente você criou algum dispositivo paranormal que chamou a atenção da Ordem.</p>	f	cm1bghpuz001gknwbrzirzrqa	{Profissão,Tecnologia}
+cm1bgin13001hknwb1dh5lqnb	Chef	<p>Você é um cozinheiro amador ou profissional. Talvez trabalhasse em um restaurante, talvez simplesmente gostasse de cozinhar para a família e amigos. Como sua comida fez com que você se envolvesse com o paranormal? Ninguém sabe. Mas os outros agentes adoram quando você vai para a missão!</p>	f	cm1bgin13001iknwb02cd504v	{Fortitude,Profissão}
+cm1bgje25001jknwb0be1qzbq	Artista	<p>Você era um ator, músico, escritor, dançarino, influenciador... Seu trabalho pode ter sido inspirado por uma experiência paranormal do passado e o que o público acha que é pura criatividade, a Ordem sabe que tem um lado mais sombrio.</p>	f	cm1bgje25001kknwb410wk3fv	{Artes,Enganação}
+cm1bgjzt5001lknwbydoyib7g	Agente de Saúde	<p>Você era um profissional da saúde como um enfermeiro, farmacêutico, médico, psicólogo ou socorrista, treinado no atendimento e cuidado de pessoas. Você pode ter sido surpreendido por um evento paranormal durante o trabalho ou mesmo cuidado de um agente da Ordem em uma emergência, que ficou surpreso com o quão bem você lidou com a situação.</p>	f	cm1bgjzt5001mknwbkim3ntpu	{Intuição,Medicina}
+cm1bgkq34001nknwbbjyyjucm	Acadêmico	<p>Você era um pesquisador ou professor universitário. De forma proposital ou não, seus estudos tocaram em assuntos misteriosos e chamaram a atenção da Ordo Realitas.</p>	f	cm1bgkq35001oknwb6zqls2m3	{Ciências,Investigação}
+cm1bglsmp001pknwbql2d9fw1	Amnésico	<p>Você perdeu a maior parte da memória. Sabe apenas o próprio nome, ou nem isso. Sua amnésia pode ser resultado de um trauma paranormal ou mesmo de um ritual. Talvez você tenha sido vítima de cultistas? Talvez você tenha sido um cultista? Seja como for, hoje a Ordem é a única família que conhece. Quem sabe, cumprindo missões, você descubra algo sobre seu passado.</p>	f	cm1bglsmp001qknwb0b47de1w	{}
+cm1bgmjke001rknwb56c0wsak	Atleta	<p>Você competia em um esporte individual ou por equipe, como natação ou futebol. Seu alto desempenho pode ser fruto de alguma influência paranormal que nem mesmo você conhecia ou você pode ter se envolvido em algum evento paranormal em uma de suas competições.</p>	f	cm1bgmjke001sknwbvuxg4nku	{Acrobacia,Atletismo}
+cm5i9y1dk000011v8dfwtxcvz	Policial	<p>Você fez parte de uma força de segurança pública, civil ou militar. Em alguma patrulha ou chamado se deparou com um caso paranormal e sobreviveu para contar a história</p>	f	cm5i9y1dk000111v8vbj4y1wo	{Pontaria,Percepção}
+cm5i9zds6000211v8aqqdm484	Mercenário	<p>Você é um soldado de aluguel, que trabalha sozinho ou como parte de alguma organização que vende serviços militares. Escoltas e assassinatos fizeram parte de sua rotina por tempo o suficiente para você se envolver em alguma situação com o paranormal.</p>	f	cm5i9zds6000311v8f4ybv8q5	{Iniciativa,Intimidação}
+cm5icnn6v0005xhvh67p6pkdp	Criminoso	<p><span style="color: rgb(250, 250, 249);">Você vivia uma vida fora da lei, seja como mero batedor de carteiras, seja como membro de uma facção criminosa. Em algum momento, você se envolveu em um assunto da Ordem talvez tenha roubado um item amaldiçoado? A organização, por sua vez, achou melhor recrutar seus talentos do que ter você como um estorvo.</span></p>	f	cm5icnn6v0006xhvh31qjz9rp	{Crime,Furtividade}
 \.
 
+
+COPY public."Campaign" (id, "createdAt", name, description, password, owner_id) FROM stdin;
+cm5hc4i6z00014p9wyqal4c7k	2025-01-03 22:36:52.311	Olhos do Passado	Lugar onde todos te observam	$2b$10$3mIZN.0qJDRgQnLm.hHNNu66PX4wjNnMhVzM95bS/jLyrR3N5fPMK	cm5hc0bh900004p9wvlq38ry2
+cm5hjm9hj0000147bc51q2l0p	2025-01-04 02:06:38.142	Pesadelos	História de uma mulher que adorava brincar com pedrinhas na praia... e pessoas.	$2b$10$yIbjk.jpkeCzrPmwA9JeQuWw23WO8hsE8icwRuQbk3sP2bm5K/i/i	cm1bc46xx0000knwbt37wqtvi
+\.
+
+COPY public."Condition" (id, name, description, is_custom) FROM stdin;
+cm1bgrn7x001tknwbxj0bvf3m	Vulnerável	<p>O personagem sofre –5 na Defesa.</p>	f
+cm1h5ctzq000712tey5r657jh	Debilitado	<p>O personagem sofre –2d20 em testes de Agilidade, Força e Vigor. Se o personagem ficar debilitado novamente, em vez disso fica inconsciente.</p>	f
+cm1h5d1i8000812teko5plk00	Asfixiado	<p>O personagem não pode respirar. Um personagem asfixiado pode prender seu fôlego por um total de rodadas igual ao seu Vigor e, a cada vez que sofre dano enquanto está nesta condição, reduz este valor em 1. Ao final de seu turno na última dessas rodadas, o personagem fica morrendo.</p>	f
+cm1h5d8ie000912te8mnlbi44	Atordoado	<p>O personagem fica desprevenido e não pode fazer ações. Condição mental.</p>	f
+\.
+
+
+--
+-- Data for Name: Class; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Class" (id, name, "SanityPointsPerLevel", "effortPointsPerLevel", "hitPointsPerLevel", "initialEffort", "initialHealth", "initialSanity", proficiencies, description, number_of_skills) FROM stdin;
+cm1beidgp0001knwb86n0e6w6	Combatente	3	2	4	2	20	12	{SIMPLE,TATICAL,LIGHT_ARMOR}	<p>Treinado para lutar com todo tipo de armas, e com a força e a coragem para encarar os perigos de frente, É o tipo de agente que prefere abordagens mais diretas e costuma atirar primeiro e perguntar depois. </p><p><br></p><p>Do mercenário especialista em armas de fogo até o perito em espadas, combatentes apresentam uma gama enorme de habilidades e técnicas especiais que aprimoram sua eficiência no campo de batalha, tornando-os membros essenciais em qualquer missão de extermínio. </p><p><br></p><p>Além de treinar seu corpo, o combatente também é perito em liderar seus aliados em batalha e cuidar de seu equipamento de combate, sempre preparado para assumir a linha de frente quando a coisa fica feia</p>	3
+cm1bejpao0002knwbwlri6asv	Especialista	4	3	3	3	16	16	{SIMPLE,LIGHT_ARMOR}	<p>Um agente que confia mais em esperteza do que em força bruta. Um especialista se vale de conhecimento técnico, raciocínio rápido ou mesmo lábia para resolver mistérios e enfrentar o paranormal. </p><p><br></p><p>Cientistas, inventores, pesquisadores e técnicos de vários tipos são exemplos de especialistas, que são tão variados quanto as áreas do conhecimento e da tecnologia. Alguns ainda preferem estudar engenharia social e se tornam excelentes espiões infiltrados, ou mesmo estudam técnicas especiais de combate como artes marciais e tiro a distância, aliando conhecimento técnico e habilidade. </p><p><br></p><p>O que une todos os especialistas é sua incrível capacidade de aprender e improvisar usando seu intelecto e conhecimento avançado, que pode tirar o grupo todo dos mais diversos tipos de enrascadas.</p>	7
+cm1bekpmk0003knwbdi0gscjk	Ocultista	5	4	2	4	12	20	{SIMPLE}	<p>O Outro Lado é misterioso, perigoso e, de certa forma, cativante. Muitos estudiosos das entidades se perdem em seus reinos obscuros em busca de poder, mas existem aqueles que visam compreender e dominar os mistérios paranormais para usá-los para combater o próprio Outro Lado. Esse tipo de agente não é apenas um conhecedor do oculto, como também possui talento para se conectar com elementos paranormais. </p><p><br></p><p>Ao contrário da crendice popular, ocultistas não são intrinsecamente malignos. Seria como dizer que o cientista que inventou a pólvora é culpado pelo assassino que disparou o revólver. Para a Ordem, o paranormal é uma força que pode ser usada para os mais diversos propósitos, de acordo com a intenção de seu usuário. </p><p><br></p><p>Ocultistas aplicam seu conhecimento acadêmico e suas capacidades de conjuração de rituais em missões para investigar e combater o paranormal em todas as suas formas, principalmente quando munição convencional não é o suficiente para lidar com a tarefa.</p>	5
+\.
+--
+-- Data for Name: Subclass; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Subclass" (id, name, "classId", description) FROM stdin;
+cm1bely5b0004knwb1e1zi0hi	Aniquilador	cm1beidgp0001knwb86n0e6w6	<p>Você é treinado para abater alvos com eficiência e velocidade. Suas armas são suas melhores amigas e você cuida tão bem delas quanto de seus companheiros de equipe. Talvez até melhor.</p>
+cm1bem8q00005knwbvx4mshna	Comandante de Campo	cm1beidgp0001knwb86n0e6w6	<p>Sem um oficial uma batalha não passa de uma briga de bar. Você é treinado para coordenar e auxiliar seus companheiros em combate, tomando decisões 27 rápidas e tirando melhor proveito da situação e do talento de seus aliados.</p>
+cm1bemg2h0006knwbsqhi0w4c	Guerreiro	cm1beidgp0001knwb86n0e6w6	<p>Você treinou sua musculatura e movimentos a ponto de transformar seu corpo em uma verdadeira arma. Com golpes corpo a corpo tão poderosos quanto uma bala, você encara os perigos de frente.</p>
+cm1bemopb0007knwbqn26aktv	Operações Especiais	cm1beidgp0001knwb86n0e6w6	<p>Você é um combatente eficaz. Suas ações são calculadas e otimizadas, sempre antevendo os movimentos inimigos e se posicionando da maneira mais inteligente no campo de batalha.</p>
+cm1bemy380008knwbh8ht7a7b	Tropa de Choque	cm1beidgp0001knwb86n0e6w6	<p>Você é duro na queda. Treinou seu corpo para resistir a traumas físicos, tornando-o praticamente inquebrável, e por isso não teme se colocar entre seus aliados e o perigo.</p>
+cm1bena7w0009knwbg2hm9ply	Atirador de Elite	cm1bejpao0002knwbwlri6asv	<p>Um tiro, uma morte. Ao contrário dos combatentes, você é perito em neutralizar ameaças de longe, terminando uma briga antes mesmo que ela comece. Você trata sua arma como uma ferramenta de precisão, sendo capaz de executar façanhas incríveis.</p>
+cm1beng80000aknwb792uz6wm	Infiltrador	cm1bejpao0002knwbwlri6asv	<p>Você é um perito em infiltração e sabe neutralizar alvos desprevenidos sem causar alarde. Combinando talento acrobático, destreza manual e conhecimento técnico você é capaz de superar qualquer barreira de defesa, mesmo quando a missão parece impossível</p>
+cm1bennph000bknwb01zb8bq1	Médico de Campo	cm1bejpao0002knwbwlri6asv	<p>Você é treinado em técnicas de primeiros socorros e tratamento de emergência, o que torna você um membro valioso para qualquer grupo de agentes. Ao contrário dos profissionais de saúde convencionais, você está acostumado com o campo de batalha e sabe tomar decisões rápidas no meio do caos</p>
+cm1benvcd000cknwbwjc693zu	Negociador	cm1bejpao0002knwbwlri6asv	<p>Você é um diplomata habilidoso e consegue influenciar outras pessoas, seja por lábia ou intimidação. Sua capacidade de avaliar situações com rapidez e eficiência pode tirar o grupo de apuros que nem a mais poderosa das armas poderia resolver.</p>
+cm1beo416000dknwbkk2whchu	Técnico	cm1bejpao0002knwbwlri6asv	<p>Sua principal habilidade é a manutenção e reparo do valioso equipamento que seu time carrega em missão. Seu conhecimento técnico também permite que improvise ferramentas com o que tiver à disposição e sabote os itens usados por seus inimigos.</p>
+cm1beodck000eknwbtc0du48u	Conduíte	cm1bekpmk0003knwbdi0gscjk	<p>Você domina os aspectos fundamentais da conjuração de rituais e é capaz de aumentar o alcance e velocidade de suas conjurações. Conforme sua conexão com as entidades paranormais aumenta você se torna capaz de interferir com os rituais de outros ocultistas.</p>
+cm1beokwi000fknwbd903mrl4	Flagelador	cm1bekpmk0003knwbdi0gscjk	<p>Dor é um poderoso catalisador paranormal e você aprendeu a transformá-la em poder para seus rituais. Quando se torna especialmente poderoso, consegue usar a dor e o sofrimento de seus inimigos como instrumento de seus rituais ocultistas.</p>
+cm1beouk0000gknwbc5gi1wo8	Graduado	cm1bekpmk0003knwbdi0gscjk	<p>Você foca seus estudos em se tornar um conjurador versátil e poderoso, conhecendo mais rituais que os outros ocultistas e sendo capaz de torná-los mais difíceis de serem resistidos. Seu objetivo é desvendar e dominar os segredos do Outro Lado, custe o que custar</p>
+cm1bep1tp000hknwb4xjbo5wi	Intuitivo	cm1bekpmk0003knwbdi0gscjk	<p>Assim como combatentes treinam seus corpos para resistir a traumas f ísicos, você preparou sua mente para resistir aos efeitos do Outro Lado. Seu foco e força de vontade fazem com que você expanda os limites de suas capacidades paranormais.</p>
+cm1bep9u1000iknwb53ztxxq4	Lâmina Paranormal	cm1bekpmk0003knwbdi0gscjk	<p>Alguns ocultistas preferem ficar fechados em suas bibliotecas estudando livros e rituais. Outros preferem investigar fenômenos paranormais em sua fonte. Já você, prefere usar o paranormal como uma arma. Você aprendeu e dominou técnicas de luta mesclando suas habilidades de conjuração com suas capacidades de combate.</p>
+\.
+
+
+--
+-- Data for Name: CampaignEquipment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CampaignEquipment" (id, campaign_id, equipment_id) FROM stdin;
+cm5hc9w6g00024p9wzf2szlrl	cm5hc4i6z00014p9wyqal4c7k	8
+cm5j13jff000311umdb5zms2f	cm5hc4i6z00014p9wyqal4c7k	18
+\.
+
+
+--
+-- Data for Name: CampaignFeats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CampaignFeats" ("featId", "campaignId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: CampaignModifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CampaignModifications" (id, campaign_id, modification_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: CampaignOrigin; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CampaignOrigin" (id, campaign_id, origin_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: CampaignRitual; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CampaignRitual" (id, campaign_id, ritual_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: Character; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Character" (id, name, level, owner_id, campaign_id, class_id, subclass_id, health_info, effort_info, sanity_info, atributes, skills, attacks, origin_id, proficiencies, current_effort, current_health, current_sanity, max_effort, max_health, max_sanity, defense, speed, num_of_skills) FROM stdin;
+cm5ilwpxl0009b9sj0y59694c	Kleber Martins	4	cm5bmno2k0000n92qg3024kzq	cm5hc4i6z00014p9wyqal4c7k	cm1beidgp0001knwb86n0e6w6	cm1bemy380008knwbh8ht7a7b	{"alterations": [{"feat": "cm5ia5pp8000511v8w1wdr8db", "featName": "Vitalidade Reforçada"}], "valuePerLevel": 10}	{"alterations": [], "valuePerLevel": 3}	{"maxValue": 21, "alterations": [], "currentValue": 21, "valuePerLevel": 3}	{"presence": 1, "strength": 3, "vitality": 4, "dexterity": 0, "alterations": [], "intelligence": 2}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 7, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [{\\"feat\\": \\"cm5ia5pp8000511v8w1wdr8db\\", \\"value\\": 2, \\"featName\\": \\"Vitalidade Reforçada\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Machado\\", \\"skill\\": \\"Luta\\", \\"local_id\\": \\"cm5ilzhd3000ab9sjwg9g6n4l\\", \\"alterations\\": [], \\"damage_dies\\": [\\"1d8\\"], \\"extra_damage\\": [], \\"critical_margin\\": 20, \\"critical_multiplier\\": 3}"}	cm5i9y1dk000011v8dfwtxcvz	{SIMPLE,TATICAL,LIGHT_ARMOR}	12	56	21	12	56	21	19	9	5
+cm5jiyyz20001pa9ebsck83xh	Giovanni Constanzo	4	cm5jis4km0000pa9ew5i0gk3s	cm5hc4i6z00014p9wyqal4c7k	cm1beidgp0001knwb86n0e6w6	cm1bely5b0004knwb1e1zi0hi	{"alterations": [], "valuePerLevel": 6}	{"alterations": [], "valuePerLevel": 3}	{"maxValue": 21, "alterations": [], "currentValue": 21, "valuePerLevel": 3}	{"presence": 1, "strength": 3, "vitality": 2, "dexterity": 2, "alterations": [], "intelligence": 1}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 5, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 5, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}"}	\N	cm5icnn6v0005xhvh67p6pkdp	{SIMPLE,TATICAL,LIGHT_ARMOR}	10	37	19	12	40	21	17	9	5
+cm5ieylye0009xhvh61qjflda	Kate Carter	4	cm5ieq8i70008xhvho01d3xkv	cm5hc4i6z00014p9wyqal4c7k	cm1bejpao0002knwbwlri6asv	cm1benvcd000cknwbwjc693zu	{"alterations": [], "valuePerLevel": 4}	{"alterations": [], "valuePerLevel": 6}	{"maxValue": 28, "alterations": [], "currentValue": 28, "valuePerLevel": 4}	{"presence": 3, "strength": 1, "vitality": 1, "dexterity": 2, "alterations": [], "intelligence": 3}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 0, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 5, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Fuzil de caça\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5j3ralf00005p0p2d69jw7h\\", \\"alterations\\": [], \\"damage_dies\\": [\\"2d8\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 3}"}	cm1bgje25001jknwb0be1qzbq	{SIMPLE,LIGHT_ARMOR}	22	22	21	24	29	28	12	9	9
+cm5iapljv000f11v8nsb6ew4j	Tobias Porto	4	cm1bc46xx0000knwbt37wqtvi	cm5hc4i6z00014p9wyqal4c7k	cm1bekpmk0003knwbdi0gscjk	cm1beodck000eknwbtc0du48u	{"alterations": [], "valuePerLevel": 4}	{"alterations": [], "valuePerLevel": 8}	{"maxValue": 35, "alterations": [], "currentValue": 35, "valuePerLevel": 5}	{"presence": 4, "strength": 0, "vitality": 1, "dexterity": 2, "alterations": [], "intelligence": 3}	{"{\\"name\\": \\"Acrobacia\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Adestramento\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Artes\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Atletismo\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Atualidades\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ciências\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Crime\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Diplomacia\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Enganação\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Fortitude\\", \\"value\\": 4, \\"atribute\\": \\"VITALITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Furtividade\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Iniciativa\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Intimidação\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Intuição\\", \\"value\\": 10, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [{\\"feat\\": \\"cm5hkz485000d6apb0fck9bza\\", \\"value\\": 5, \\"featName\\": \\"Sensitivo\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Investigação\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Luta\\", \\"value\\": 0, \\"atribute\\": \\"STRENGTH\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Medicina\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Ocultismo\\", \\"value\\": 10, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [{\\"item\\": 8, \\"value\\": 5, \\"itemName\\": \\"Crucifixo Invertido\\"}], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Percepção\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Pilotagem\\", \\"value\\": 0, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Pontaria\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Profissão\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Reflexos\\", \\"value\\": 5, \\"atribute\\": \\"DEXTERITY\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}","{\\"name\\": \\"Religião\\", \\"value\\": 0, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Sobrevivência\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tática\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Tecnologia\\", \\"value\\": 0, \\"atribute\\": \\"INTELLIGENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"none\\"}","{\\"name\\": \\"Vontade\\", \\"value\\": 5, \\"atribute\\": \\"PRESENCE\\", \\"alterations\\": [], \\"trainingLevel\\": \\"trained\\"}"}	{"{\\"name\\": \\"Revólver\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5ilsiie0007b9sjpun1t6r1\\", \\"alterations\\": [], \\"damage_dies\\": [\\"2d6\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 3}","{\\"name\\": \\"Faca\\", \\"skill\\": \\"Pontaria\\", \\"local_id\\": \\"cm5j26eks000b11umy5lx534y\\", \\"alterations\\": [], \\"damage_dies\\": [\\"1d4\\"], \\"extra_damage\\": [], \\"critical_margin\\": 19, \\"critical_multiplier\\": 2}"}	cm1bgje25001jknwb0be1qzbq	{SIMPLE}	27	22	22	32	22	30	12	9	7
+\.
 
 --
 -- Data for Name: Inventory; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -1113,6 +251,86 @@ cm5jj3l1m0002pa9ewdphec9h	cm5jiyyz20001pa9ebsck83xh	15	0	1	Proteção Leve	{}	t	
 
 
 --
+-- Data for Name: CharacterCondition; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CharacterCondition" (character_id, condition_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: CharacterFeat; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CharacterFeat" (character_id, feat_id, "usingAfinity") FROM stdin;
+cm5iapljv000f11v8nsb6ew4j	cm5hkz485000d6apb0fck9bza	f
+cm5ilwpxl0009b9sj0y59694c	cm5ia5pp8000511v8w1wdr8db	f
+\.
+
+
+
+-- Data for Name: ClassFeats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."ClassFeats" ("featId", "classId", "isStarterFeat") FROM stdin;
+cm1bfssqn000jknwbawu9pgbz	cm1beidgp0001knwb86n0e6w6	t
+cm1bftmrr000kknwbl8q2s9fj	cm1beidgp0001knwb86n0e6w6	t
+cm1bfv6cs000lknwbgjqn1nhu	cm1beidgp0001knwb86n0e6w6	t
+cm1bfvj04000mknwbs9slbd5b	cm1beidgp0001knwb86n0e6w6	t
+cm1bfvswi000nknwbpgiv43gf	cm1beidgp0001knwb86n0e6w6	t
+cm1bfw2ms000oknwb2tkpjazy	cm1beidgp0001knwb86n0e6w6	t
+cm1bfx0pa000pknwbzwqgwclv	cm1bejpao0002knwbwlri6asv	t
+cm1bfxgsu000qknwb3jpzo5vq	cm1bejpao0002knwbwlri6asv	t
+cm1bfxvxs000rknwbia2ih4x9	cm1bejpao0002knwbwlri6asv	t
+cm1bfyank000sknwbleo6wjpg	cm1bejpao0002knwbwlri6asv	t
+cm1bfyrr8000tknwbkrmeojn5	cm1bejpao0002knwbwlri6asv	t
+cm1bfz1p5000uknwbot9tihzq	cm1bejpao0002knwbwlri6asv	t
+cm1bfz8y0000vknwbpc0dxs1e	cm1bejpao0002knwbwlri6asv	t
+cm1bfzgle000wknwbw1gur7q4	cm1bejpao0002knwbwlri6asv	t
+cm5iaejay000611v86sv20smy	cm1bejpao0002knwbwlri6asv	f
+cm5ialr96000911v85d170hcm	cm1bekpmk0003knwbdi0gscjk	t
+cm5iam940000a11v8oh0jmmzm	cm1bekpmk0003knwbdi0gscjk	t
+cm5iamiri000b11v8z3iidy73	cm1bekpmk0003knwbdi0gscjk	t
+cm5iamwhp000c11v8wvgxkdrl	cm1bekpmk0003knwbdi0gscjk	t
+cm5ianb2g000d11v8ogslnpeb	cm1bekpmk0003knwbdi0gscjk	t
+cm5ianigo000e11v8i3wjxnxe	cm1bekpmk0003knwbdi0gscjk	t
+cm5icvvxv0007xhvhv5tdudy3	cm1beidgp0001knwb86n0e6w6	f
+\.
+
+
+--
+-- Data for Name: Condition; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+--
+-- Data for Name: CursedItem; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."CursedItem" ("equipmentId", element) FROM stdin;
+\.
+
+
+--
+-- Data for Name: DamageRitual; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: GeneralFeats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."GeneralFeats" (id, "featId") FROM stdin;
+cm1cftkxz0000rtj4ii78jsv8	cm1cftky30001rtj4n01adomh
+cm5hkz485000c6apb2meaj95o	cm5hkz485000d6apb0fck9bza
+cm5ia5pp8000411v8j077si0b	cm5ia5pp8000511v8w1wdr8db
+\.
+
+
+
+
+--
 -- Data for Name: Modification; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -1128,22 +346,6 @@ COPY public."Notes" (id, title, character_id, campaign_id, content) FROM stdin;
 \.
 
 
---
--- Data for Name: Origin; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Origin" (id, name, description, is_custom, feat_id, skills) FROM stdin;
-cm1bghpuz001fknwbcape5u7o	Engenheiro	<p>Enquanto os acadêmicos estão preocupados com teorias, você colocar a mão na massa, seja como engenheiro profissional, seja como inventor de garagem. Provavelmente você criou algum dispositivo paranormal que chamou a atenção da Ordem.</p>	f	cm1bghpuz001gknwbrzirzrqa	{Profissão,Tecnologia}
-cm1bgin13001hknwb1dh5lqnb	Chef	<p>Você é um cozinheiro amador ou profissional. Talvez trabalhasse em um restaurante, talvez simplesmente gostasse de cozinhar para a família e amigos. Como sua comida fez com que você se envolvesse com o paranormal? Ninguém sabe. Mas os outros agentes adoram quando você vai para a missão!</p>	f	cm1bgin13001iknwb02cd504v	{Fortitude,Profissão}
-cm1bgje25001jknwb0be1qzbq	Artista	<p>Você era um ator, músico, escritor, dançarino, influenciador... Seu trabalho pode ter sido inspirado por uma experiência paranormal do passado e o que o público acha que é pura criatividade, a Ordem sabe que tem um lado mais sombrio.</p>	f	cm1bgje25001kknwb410wk3fv	{Artes,Enganação}
-cm1bgjzt5001lknwbydoyib7g	Agente de Saúde	<p>Você era um profissional da saúde como um enfermeiro, farmacêutico, médico, psicólogo ou socorrista, treinado no atendimento e cuidado de pessoas. Você pode ter sido surpreendido por um evento paranormal durante o trabalho ou mesmo cuidado de um agente da Ordem em uma emergência, que ficou surpreso com o quão bem você lidou com a situação.</p>	f	cm1bgjzt5001mknwbkim3ntpu	{Intuição,Medicina}
-cm1bgkq34001nknwbbjyyjucm	Acadêmico	<p>Você era um pesquisador ou professor universitário. De forma proposital ou não, seus estudos tocaram em assuntos misteriosos e chamaram a atenção da Ordo Realitas.</p>	f	cm1bgkq35001oknwb6zqls2m3	{Ciências,Investigação}
-cm1bglsmp001pknwbql2d9fw1	Amnésico	<p>Você perdeu a maior parte da memória. Sabe apenas o próprio nome, ou nem isso. Sua amnésia pode ser resultado de um trauma paranormal ou mesmo de um ritual. Talvez você tenha sido vítima de cultistas? Talvez você tenha sido um cultista? Seja como for, hoje a Ordem é a única família que conhece. Quem sabe, cumprindo missões, você descubra algo sobre seu passado.</p>	f	cm1bglsmp001qknwb0b47de1w	{}
-cm1bgmjke001rknwb56c0wsak	Atleta	<p>Você competia em um esporte individual ou por equipe, como natação ou futebol. Seu alto desempenho pode ser fruto de alguma influência paranormal que nem mesmo você conhecia ou você pode ter se envolvido em algum evento paranormal em uma de suas competições.</p>	f	cm1bgmjke001sknwbvuxg4nku	{Acrobacia,Atletismo}
-cm5i9y1dk000011v8dfwtxcvz	Policial	<p>Você fez parte de uma força de segurança pública, civil ou militar. Em alguma patrulha ou chamado se deparou com um caso paranormal e sobreviveu para contar a história</p>	f	cm5i9y1dk000111v8vbj4y1wo	{Pontaria,Percepção}
-cm5i9zds6000211v8aqqdm484	Mercenário	<p>Você é um soldado de aluguel, que trabalha sozinho ou como parte de alguma organização que vende serviços militares. Escoltas e assassinatos fizeram parte de sua rotina por tempo o suficiente para você se envolver em alguma situação com o paranormal.</p>	f	cm5i9zds6000311v8f4ybv8q5	{Iniciativa,Intimidação}
-cm5icnn6v0005xhvh67p6pkdp	Criminoso	<p><span style="color: rgb(250, 250, 249);">Você vivia uma vida fora da lei, seja como mero batedor de carteiras, seja como membro de uma facção criminosa. Em algum momento, você se envolveu em um assunto da Ordem talvez tenha roubado um item amaldiçoado? A organização, por sua vez, achou melhor recrutar seus talentos do que ter você como um estorvo.</span></p>	f	cm5icnn6v0006xhvh31qjz9rp	{Crime,Furtividade}
-\.
 
 
 --
@@ -1175,7 +377,29 @@ cm5j1kece000911umr28219vr	Embaralhar	ENERGY	f	<p>Muda o número de cópias para 
 cm5j1npzn000a11umnpb5p836	Distorcer Aparência	BLOOD	f	<p>Muda o alcance para “curto” e o alvo para “1 ser”. Um alvo involuntária pode anular o efeito com um teste de Vontade.</p>	Cena	Padrão	<p>Você modifica sua aparência de modo a parecer outra pessoa. Isso inclui altura, peso, tom de pele, cor de cabelo, timbre de voz, impressão digital, córnea etc. Você recebe +10 em testes de Enganação para 131 disfarce, mas não recebe habilidades da nova forma nem modifica suas demais estatísticas.</p>	SELF	Você	<p>Como em Discente, mas muda o alvo para “seres escolhidos”. Requer 3º círculo.</p>	EFFECT	2	1	5	1	Vontade desacredita
 \.
 
+--
+-- Data for Name: CharacterRitual; Type: TABLE DATA; Schema: public; Owner: postgres
+--
 
+COPY public."CharacterRitual" (character_id, ritual_id, alterations, ritual_cost) FROM stdin;
+cm5iapljv000f11v8nsb6ew4j	cm5j19qq2000511umm0dq0rl6	\N	1
+cm5iapljv000f11v8nsb6ew4j	cm5j1cgnx000611um7acukdm2	\N	1
+cm5iapljv000f11v8nsb6ew4j	cm5j1f7u9000711um2j4gis5o	\N	1
+cm5iapljv000f11v8nsb6ew4j	cm5j1i8sf000811um31vh5nk2	\N	1
+cm5iapljv000f11v8nsb6ew4j	cm5j1npzn000a11umnpb5p836	\N	1
+cm5iapljv000f11v8nsb6ew4j	cm1bgryld001uknwbjhewmpq9	\N	1
+cm5iapljv000f11v8nsb6ew4j	cm5j1kece000911umr28219vr	\N	1
+\.
+
+
+COPY public."DamageRitual" ("ritualId", "normalCastDamageType", "discentCastDamageType", "trueCastDamageType", "normalCastDamage", "discentCastDamage", "trueCastDamage") FROM stdin;
+cm1bgryld001uknwbjhewmpq9	ELETRIC	ENERGY	ENERGY	3d6	6d6	8d6
+cm1h5py6b000f12tevm7nhzsq	DEATH	DEATH	DEATH	2d8+2	3d8+3	8d8+8
+\.
+
+
+
+--
 --
 -- Data for Name: RitualCondition; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1221,27 +445,6 @@ Vontade	PRESENCE	<p>Você usa esta perícia para testes de resistência contra e
 \.
 
 
---
--- Data for Name: Subclass; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Subclass" (id, name, "classId", description) FROM stdin;
-cm1bely5b0004knwb1e1zi0hi	Aniquilador	cm1beidgp0001knwb86n0e6w6	<p>Você é treinado para abater alvos com eficiência e velocidade. Suas armas são suas melhores amigas e você cuida tão bem delas quanto de seus companheiros de equipe. Talvez até melhor.</p>
-cm1bem8q00005knwbvx4mshna	Comandante de Campo	cm1beidgp0001knwb86n0e6w6	<p>Sem um oficial uma batalha não passa de uma briga de bar. Você é treinado para coordenar e auxiliar seus companheiros em combate, tomando decisões 27 rápidas e tirando melhor proveito da situação e do talento de seus aliados.</p>
-cm1bemg2h0006knwbsqhi0w4c	Guerreiro	cm1beidgp0001knwb86n0e6w6	<p>Você treinou sua musculatura e movimentos a ponto de transformar seu corpo em uma verdadeira arma. Com golpes corpo a corpo tão poderosos quanto uma bala, você encara os perigos de frente.</p>
-cm1bemopb0007knwbqn26aktv	Operações Especiais	cm1beidgp0001knwb86n0e6w6	<p>Você é um combatente eficaz. Suas ações são calculadas e otimizadas, sempre antevendo os movimentos inimigos e se posicionando da maneira mais inteligente no campo de batalha.</p>
-cm1bemy380008knwbh8ht7a7b	Tropa de Choque	cm1beidgp0001knwb86n0e6w6	<p>Você é duro na queda. Treinou seu corpo para resistir a traumas físicos, tornando-o praticamente inquebrável, e por isso não teme se colocar entre seus aliados e o perigo.</p>
-cm1bena7w0009knwbg2hm9ply	Atirador de Elite	cm1bejpao0002knwbwlri6asv	<p>Um tiro, uma morte. Ao contrário dos combatentes, você é perito em neutralizar ameaças de longe, terminando uma briga antes mesmo que ela comece. Você trata sua arma como uma ferramenta de precisão, sendo capaz de executar façanhas incríveis.</p>
-cm1beng80000aknwb792uz6wm	Infiltrador	cm1bejpao0002knwbwlri6asv	<p>Você é um perito em infiltração e sabe neutralizar alvos desprevenidos sem causar alarde. Combinando talento acrobático, destreza manual e conhecimento técnico você é capaz de superar qualquer barreira de defesa, mesmo quando a missão parece impossível</p>
-cm1bennph000bknwb01zb8bq1	Médico de Campo	cm1bejpao0002knwbwlri6asv	<p>Você é treinado em técnicas de primeiros socorros e tratamento de emergência, o que torna você um membro valioso para qualquer grupo de agentes. Ao contrário dos profissionais de saúde convencionais, você está acostumado com o campo de batalha e sabe tomar decisões rápidas no meio do caos</p>
-cm1benvcd000cknwbwjc693zu	Negociador	cm1bejpao0002knwbwlri6asv	<p>Você é um diplomata habilidoso e consegue influenciar outras pessoas, seja por lábia ou intimidação. Sua capacidade de avaliar situações com rapidez e eficiência pode tirar o grupo de apuros que nem a mais poderosa das armas poderia resolver.</p>
-cm1beo416000dknwbkk2whchu	Técnico	cm1bejpao0002knwbwlri6asv	<p>Sua principal habilidade é a manutenção e reparo do valioso equipamento que seu time carrega em missão. Seu conhecimento técnico também permite que improvise ferramentas com o que tiver à disposição e sabote os itens usados por seus inimigos.</p>
-cm1beodck000eknwbtc0du48u	Conduíte	cm1bekpmk0003knwbdi0gscjk	<p>Você domina os aspectos fundamentais da conjuração de rituais e é capaz de aumentar o alcance e velocidade de suas conjurações. Conforme sua conexão com as entidades paranormais aumenta você se torna capaz de interferir com os rituais de outros ocultistas.</p>
-cm1beokwi000fknwbd903mrl4	Flagelador	cm1bekpmk0003knwbdi0gscjk	<p>Dor é um poderoso catalisador paranormal e você aprendeu a transformá-la em poder para seus rituais. Quando se torna especialmente poderoso, consegue usar a dor e o sofrimento de seus inimigos como instrumento de seus rituais ocultistas.</p>
-cm1beouk0000gknwbc5gi1wo8	Graduado	cm1bekpmk0003knwbdi0gscjk	<p>Você foca seus estudos em se tornar um conjurador versátil e poderoso, conhecendo mais rituais que os outros ocultistas e sendo capaz de torná-los mais difíceis de serem resistidos. Seu objetivo é desvendar e dominar os segredos do Outro Lado, custe o que custar</p>
-cm1bep1tp000hknwb4xjbo5wi	Intuitivo	cm1bekpmk0003knwbdi0gscjk	<p>Assim como combatentes treinam seus corpos para resistir a traumas f ísicos, você preparou sua mente para resistir aos efeitos do Outro Lado. Seu foco e força de vontade fazem com que você expanda os limites de suas capacidades paranormais.</p>
-cm1bep9u1000iknwb53ztxxq4	Lâmina Paranormal	cm1bekpmk0003knwbdi0gscjk	<p>Alguns ocultistas preferem ficar fechados em suas bibliotecas estudando livros e rituais. Outros preferem investigar fenômenos paranormais em sua fonte. Já você, prefere usar o paranormal como uma arma. Você aprendeu e dominou técnicas de luta mesclando suas habilidades de conjuração com suas capacidades de combate.</p>
-\.
 
 
 --
@@ -1279,15 +482,6 @@ cm5hkxkoa000b6apbiqnmubat	cm1benvcd000cknwbwjc693zu	20
 --
 -- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-COPY public."User" (id, username, password, email, role) FROM stdin;
-cm1bc46xx0000knwbt37wqtvi	quarerma	$2b$10$MqArroBMznobLK3qd9pARO1FlBowQLZHaZCuWaJe/dw15vr3oI.Xa	gabriel.oliveira.quaresma@gmail.com	ADMIN
-cm5bmno2k0000n92qg3024kzq	pukA	$2b$10$wHOyJM0.dQp6Qidv2JlUo.XZm2kGOzA6Eb321EOwdlUqgWMSrD47S	eck.leal.39@gmail.com	USER
-cm5hc0bh900004p9wvlq38ry2	JoeBlossom	$2b$10$fzjGEGDWAOnKpzISnpqFbOYT2q3djWAPN0YfPBMF2PNHBDBbf89bS	snack9827@gmail.com	ADMIN
-cm5ieq8i70008xhvho01d3xkv	Gabili	$2b$10$I6vJs5oEBk8.BbwUOUaqE.zMGbi4eKVbDZhVhFVHLundSg7WMEOtu	g.vanzella1812@gmail.com	USER
-cm5jis4km0000pa9ew5i0gk3s	Danas	$2b$10$sSw5s3z10XE2jkcWRTG1K.5xx6fvF9fgzXa7f2S68NCbyIv0FcE9O	dsouzamiguelfaria@gmail.com	USER
-\.
-
 
 --
 -- Data for Name: Weapon; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -1362,669 +556,4 @@ bdbee976-91a3-4d0d-a900-1aade027b116	4479803cbdd7fa591cb708b8472c1d59ef63fd3e4da
 d3cbc283-0e75-439e-a8e9-296d9fccbbd4	56f76a7147959131d07b6868cb56c91013894725759836407a0dc5ba3a9e6b87	2025-01-13 22:40:36.369242+00	20250113224034_optional_char_campaign_note	\N	\N	2025-01-13 22:40:35.315011+00	1
 \.
 
-
---
--- Name: Equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."Equipment_id_seq"', 1, false);
-
-
---
--- Name: CampaignEquipment CampaignEquipment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignEquipment"
-    ADD CONSTRAINT "CampaignEquipment_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CampaignModifications CampaignModifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignModifications"
-    ADD CONSTRAINT "CampaignModifications_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CampaignOrigin CampaignOrigin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignOrigin"
-    ADD CONSTRAINT "CampaignOrigin_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CampaignRitual CampaignRitual_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignRitual"
-    ADD CONSTRAINT "CampaignRitual_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Campaign Campaign_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Campaign"
-    ADD CONSTRAINT "Campaign_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Character Character_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Class Class_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Class"
-    ADD CONSTRAINT "Class_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Condition Condition_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Condition"
-    ADD CONSTRAINT "Condition_pkey" PRIMARY KEY (id);
-
-
---
--- Name: CursedItem CursedItem_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CursedItem"
-    ADD CONSTRAINT "CursedItem_pkey" PRIMARY KEY ("equipmentId");
-
-
---
--- Name: DamageRitual DamageRitual_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."DamageRitual"
-    ADD CONSTRAINT "DamageRitual_pkey" PRIMARY KEY ("ritualId");
-
-
---
--- Name: Equipment Equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Equipment"
-    ADD CONSTRAINT "Equipment_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Feat Feat_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Feat"
-    ADD CONSTRAINT "Feat_pkey" PRIMARY KEY (id);
-
-
---
--- Name: GeneralFeats GeneralFeats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."GeneralFeats"
-    ADD CONSTRAINT "GeneralFeats_pkey" PRIMARY KEY (id);
-
-
---
--- Name: InventorySlot InventorySlot_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InventorySlot"
-    ADD CONSTRAINT "InventorySlot_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Inventory Inventory_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Inventory"
-    ADD CONSTRAINT "Inventory_pkey" PRIMARY KEY (character_id);
-
-
---
--- Name: Modification Modification_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Modification"
-    ADD CONSTRAINT "Modification_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Notes Notes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Notes"
-    ADD CONSTRAINT "Notes_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Origin Origin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Origin"
-    ADD CONSTRAINT "Origin_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Ritual Ritual_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Ritual"
-    ADD CONSTRAINT "Ritual_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Skill Skill_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Skill"
-    ADD CONSTRAINT "Skill_pkey" PRIMARY KEY (name);
-
-
---
--- Name: Subclass Subclass_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Subclass"
-    ADD CONSTRAINT "Subclass_pkey" PRIMARY KEY (id);
-
-
---
--- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."User"
-    ADD CONSTRAINT "User_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Weapon Weapon_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Weapon"
-    ADD CONSTRAINT "Weapon_pkey" PRIMARY KEY ("equipmentId");
-
-
---
--- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public._prisma_migrations
-    ADD CONSTRAINT _prisma_migrations_pkey PRIMARY KEY (id);
-
-
---
--- Name: CampaignEquipment_campaign_id_equipment_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignEquipment_campaign_id_equipment_id_key" ON public."CampaignEquipment" USING btree (campaign_id, equipment_id);
-
-
---
--- Name: CampaignFeats_featId_campaignId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignFeats_featId_campaignId_key" ON public."CampaignFeats" USING btree ("featId", "campaignId");
-
-
---
--- Name: CampaignModifications_campaign_id_modification_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignModifications_campaign_id_modification_id_key" ON public."CampaignModifications" USING btree (campaign_id, modification_id);
-
-
---
--- Name: CampaignOrigin_campaign_id_origin_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignOrigin_campaign_id_origin_id_key" ON public."CampaignOrigin" USING btree (campaign_id, origin_id);
-
-
---
--- Name: CampaignRitual_campaign_id_ritual_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CampaignRitual_campaign_id_ritual_id_key" ON public."CampaignRitual" USING btree (campaign_id, ritual_id);
-
-
---
--- Name: CharacterCondition_character_id_condition_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CharacterCondition_character_id_condition_id_key" ON public."CharacterCondition" USING btree (character_id, condition_id);
-
-
---
--- Name: CharacterFeat_character_id_feat_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CharacterFeat_character_id_feat_id_key" ON public."CharacterFeat" USING btree (character_id, feat_id);
-
-
---
--- Name: CharacterRitual_character_id_ritual_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "CharacterRitual_character_id_ritual_id_key" ON public."CharacterRitual" USING btree (character_id, ritual_id);
-
-
---
--- Name: ClassFeats_featId_classId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "ClassFeats_featId_classId_key" ON public."ClassFeats" USING btree ("featId", "classId");
-
-
---
--- Name: GeneralFeats_featId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "GeneralFeats_featId_key" ON public."GeneralFeats" USING btree ("featId");
-
-
---
--- Name: PlayerOnCampaign_campaign_id_player_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "PlayerOnCampaign_campaign_id_player_id_key" ON public."PlayerOnCampaign" USING btree (campaign_id, player_id);
-
-
---
--- Name: RitualCondition_ritual_id_condition_id_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "RitualCondition_ritual_id_condition_id_key" ON public."RitualCondition" USING btree (ritual_id, condition_id);
-
-
---
--- Name: SubclassFeats_featId_subclassId_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "SubclassFeats_featId_subclassId_key" ON public."SubclassFeats" USING btree ("featId", "subclassId");
-
-
---
--- Name: User_email_idx; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX "User_email_idx" ON public."User" USING btree (email);
-
-
---
--- Name: User_email_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "User_email_key" ON public."User" USING btree (email);
-
-
---
--- Name: User_username_idx; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX "User_username_idx" ON public."User" USING btree (username);
-
-
---
--- Name: User_username_key; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX "User_username_key" ON public."User" USING btree (username);
-
-
---
--- Name: CampaignEquipment CampaignEquipment_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignEquipment"
-    ADD CONSTRAINT "CampaignEquipment_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignEquipment CampaignEquipment_equipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignEquipment"
-    ADD CONSTRAINT "CampaignEquipment_equipment_id_fkey" FOREIGN KEY (equipment_id) REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignFeats CampaignFeats_campaignId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignFeats"
-    ADD CONSTRAINT "CampaignFeats_campaignId_fkey" FOREIGN KEY ("campaignId") REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignFeats CampaignFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignFeats"
-    ADD CONSTRAINT "CampaignFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignModifications CampaignModifications_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignModifications"
-    ADD CONSTRAINT "CampaignModifications_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignModifications CampaignModifications_modification_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignModifications"
-    ADD CONSTRAINT "CampaignModifications_modification_id_fkey" FOREIGN KEY (modification_id) REFERENCES public."Modification"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignOrigin CampaignOrigin_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignOrigin"
-    ADD CONSTRAINT "CampaignOrigin_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignOrigin CampaignOrigin_origin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignOrigin"
-    ADD CONSTRAINT "CampaignOrigin_origin_id_fkey" FOREIGN KEY (origin_id) REFERENCES public."Origin"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignRitual CampaignRitual_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignRitual"
-    ADD CONSTRAINT "CampaignRitual_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CampaignRitual CampaignRitual_ritual_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CampaignRitual"
-    ADD CONSTRAINT "CampaignRitual_ritual_id_fkey" FOREIGN KEY (ritual_id) REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Campaign Campaign_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Campaign"
-    ADD CONSTRAINT "Campaign_owner_id_fkey" FOREIGN KEY (owner_id) REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterCondition CharacterCondition_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterCondition"
-    ADD CONSTRAINT "CharacterCondition_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterCondition CharacterCondition_condition_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterCondition"
-    ADD CONSTRAINT "CharacterCondition_condition_id_fkey" FOREIGN KEY (condition_id) REFERENCES public."Condition"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterFeat CharacterFeat_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterFeat"
-    ADD CONSTRAINT "CharacterFeat_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterFeat CharacterFeat_feat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterFeat"
-    ADD CONSTRAINT "CharacterFeat_feat_id_fkey" FOREIGN KEY (feat_id) REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterRitual CharacterRitual_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterRitual"
-    ADD CONSTRAINT "CharacterRitual_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CharacterRitual CharacterRitual_ritual_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CharacterRitual"
-    ADD CONSTRAINT "CharacterRitual_ritual_id_fkey" FOREIGN KEY (ritual_id) REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_class_id_fkey" FOREIGN KEY (class_id) REFERENCES public."Class"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_origin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_origin_id_fkey" FOREIGN KEY (origin_id) REFERENCES public."Origin"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_owner_id_fkey" FOREIGN KEY (owner_id) REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Character Character_subclass_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Character"
-    ADD CONSTRAINT "Character_subclass_id_fkey" FOREIGN KEY (subclass_id) REFERENCES public."Subclass"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: ClassFeats ClassFeats_classId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."ClassFeats"
-    ADD CONSTRAINT "ClassFeats_classId_fkey" FOREIGN KEY ("classId") REFERENCES public."Class"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: ClassFeats ClassFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."ClassFeats"
-    ADD CONSTRAINT "ClassFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: CursedItem CursedItem_equipmentId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."CursedItem"
-    ADD CONSTRAINT "CursedItem_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: DamageRitual DamageRitual_ritualId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."DamageRitual"
-    ADD CONSTRAINT "DamageRitual_ritualId_fkey" FOREIGN KEY ("ritualId") REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: GeneralFeats GeneralFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."GeneralFeats"
-    ADD CONSTRAINT "GeneralFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: InventorySlot InventorySlot_equipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InventorySlot"
-    ADD CONSTRAINT "InventorySlot_equipment_id_fkey" FOREIGN KEY (equipment_id) REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: InventorySlot InventorySlot_inventory_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."InventorySlot"
-    ADD CONSTRAINT "InventorySlot_inventory_id_fkey" FOREIGN KEY (inventory_id) REFERENCES public."Inventory"(character_id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Inventory Inventory_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Inventory"
-    ADD CONSTRAINT "Inventory_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Notes Notes_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Notes"
-    ADD CONSTRAINT "Notes_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: Notes Notes_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Notes"
-    ADD CONSTRAINT "Notes_character_id_fkey" FOREIGN KEY (character_id) REFERENCES public."Character"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: Origin Origin_feat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Origin"
-    ADD CONSTRAINT "Origin_feat_id_fkey" FOREIGN KEY (feat_id) REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: PlayerOnCampaign PlayerOnCampaign_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."PlayerOnCampaign"
-    ADD CONSTRAINT "PlayerOnCampaign_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: PlayerOnCampaign PlayerOnCampaign_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."PlayerOnCampaign"
-    ADD CONSTRAINT "PlayerOnCampaign_player_id_fkey" FOREIGN KEY (player_id) REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: RitualCondition RitualCondition_condition_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."RitualCondition"
-    ADD CONSTRAINT "RitualCondition_condition_id_fkey" FOREIGN KEY (condition_id) REFERENCES public."Condition"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: RitualCondition RitualCondition_ritual_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."RitualCondition"
-    ADD CONSTRAINT "RitualCondition_ritual_id_fkey" FOREIGN KEY (ritual_id) REFERENCES public."Ritual"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Skill Skill_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Skill"
-    ADD CONSTRAINT "Skill_campaign_id_fkey" FOREIGN KEY (campaign_id) REFERENCES public."Campaign"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: SubclassFeats SubclassFeats_featId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."SubclassFeats"
-    ADD CONSTRAINT "SubclassFeats_featId_fkey" FOREIGN KEY ("featId") REFERENCES public."Feat"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: SubclassFeats SubclassFeats_subclassId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."SubclassFeats"
-    ADD CONSTRAINT "SubclassFeats_subclassId_fkey" FOREIGN KEY ("subclassId") REFERENCES public."Subclass"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Subclass Subclass_classId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Subclass"
-    ADD CONSTRAINT "Subclass_classId_fkey" FOREIGN KEY ("classId") REFERENCES public."Class"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: Weapon Weapon_equipmentId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Weapon"
-    ADD CONSTRAINT "Weapon_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES public."Equipment"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-
-
---
--- PostgreSQL database dump complete
---
 

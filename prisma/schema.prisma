@@ -21,6 +21,7 @@ model User {
 
   @@index([username])
   @@index([email])
+  @@index([id])
 }
 
 enum Role {
@@ -38,6 +39,9 @@ model PlayerOnCampaign {
   joinedAt DateTime @default(now()) @map("joined_at")
 
   @@unique([campaignId, playerId])
+
+  @@index([campaignId])
+  @@index([playerId])
 }
 
 ///////////////////////////////////////////// Tabela de Campanhas /////////////////////////////////////////////
@@ -72,6 +76,7 @@ model Campaign {
 
   notes Notes[]
 
+  @@index([ownerId])
 }
 
 
@@ -133,6 +138,10 @@ model Character {
   originId String @map("origin_id")
 
   notes Notes[]
+
+  @@index([ownerId])
+  @@index([campaignId])
+  @@index([classId])
 }
 
 model CharacterFeat {
@@ -143,6 +152,8 @@ model CharacterFeat {
   usingAfinity Boolean @default(false)
 
   @@unique([characterId, featId])
+
+  @@index([characterId])
 }
 
 
@@ -156,6 +167,8 @@ model Notes {
   characterId String? @map("character_id")
   campaign Campaign? @relation(fields: [campaignId], references: [id])
   campaignId String? @map("campaign_id")
+
+  @@index([id])
 }
 ////////////////////////////////////////////// Tabela de Inventário /////////////////////////////////////////////
 
@@ -169,6 +182,8 @@ model Inventory {
   patent Patent
   slots InventorySlot[]
   credit Credit @default(LOW)
+
+  @@index([characterId])
 }
 
 enum Patent {
@@ -191,11 +206,12 @@ model InventorySlot {
   category Int
   weight Int @default(0)
   local_name String
-  local_description String
-  is_equipped Boolean @default(false)
+  local_description String? @db.Text @default("")
+  is_equipped Boolean @default(true)
 
   alterations Json[]
 
+  @@index([id])
 }
 ///////////////////////////////////////////// Tabela de Condições /////////////////////////////////////////////
 model Condition {
@@ -205,6 +221,8 @@ model Condition {
   is_custom Boolean
   character CharacterCondition[]
   ritual RitualCondition[]
+
+  @@index([id])
 }
 
 model RitualCondition {
@@ -214,6 +232,8 @@ model RitualCondition {
   conditionId String @map("condition_id")
 
   @@unique([ritualId, conditionId])
+
+  @@index([ritualId])
 }
 model CharacterCondition {
   character Character @relation(fields: [characterId], references: [id])
@@ -222,6 +242,7 @@ model CharacterCondition {
   conditionId String @map("condition_id")
 
   @@unique([characterId, conditionId])
+  @@index([characterId])
 }
 
 ///////////////////////////////////////////// Tabela de Classes /////////////////////////////////////////////
@@ -244,6 +265,8 @@ model Class {
   subclasses Subclass[]
   classFeats ClassFeats[]
   character Character[]
+
+  @@index([id])
 }
 
 model Subclass {
@@ -255,6 +278,8 @@ model Subclass {
   class Class @relation(fields: [classId], references: [id])
   subclassFeats SubclassFeats[]
   character Character[]
+
+  @@index([id])
 }
 
 ///////////////////////////////////////////// Tabela de Feats /////////////////////////////////////////////
@@ -281,7 +306,8 @@ model Feat {
 
   character CharacterFeat[]
   origin Origin[]
-  
+
+  @@index([id])
 }
 
 
@@ -293,6 +319,7 @@ model ClassFeats {
   isStarterFeat Boolean @default(false)
 
   @@unique([featId, classId])
+  @@index([classId])
 }
 
 model SubclassFeats {
@@ -303,6 +330,7 @@ model SubclassFeats {
   levelRequired Int
 
   @@unique([featId, subclassId])
+  @@index([subclassId])
 }
 
 model CampaignFeats {
@@ -313,6 +341,7 @@ model CampaignFeats {
  
 
   @@unique([featId, campaignId])
+  @@index([campaignId])
 }
 
 model GeneralFeats {
@@ -322,6 +351,7 @@ model GeneralFeats {
  
 
   @@unique([featId])
+  @@index([id])
 }
 
 ///////////////////////////////////////////// Tabela de Atributos /////////////////////////////////////////////
@@ -337,6 +367,8 @@ model Origin {
   skills String[]
   character Character[]
   campaign CampaignOrigin[]
+
+  @@index([id])
 }
 
 model CampaignOrigin {
@@ -347,6 +379,7 @@ model CampaignOrigin {
   originId String @map("origin_id")
 
   @@unique([campaignId, originId])
+  @@index([campaignId])
 }
 model Skill {
   name String @id
@@ -393,6 +426,7 @@ model Ritual {
   character CharacterRitual[]
   campaign  CampaignRitual[]
   
+  @@index([id])
 }
 
 model CharacterRitual {
@@ -404,6 +438,8 @@ model CharacterRitual {
   ritual_cost Int
   alterations Json[]
   @@unique([characterId, ritualId])
+
+  @@index([characterId])
 }
 
 model DamageRitual {
@@ -416,6 +452,8 @@ model DamageRitual {
   normalCastDamage String?
   discentCastDamage String?
   trueCastDamage String?
+
+  @@index([ritualId])
 }
 enum RitualType {
   EFFECT
@@ -430,6 +468,7 @@ model CampaignRitual {
   ritualId String @map("ritual_id")
 
   @@unique([campaignId, ritualId])
+  @@index([campaignId])
 }
 ///////////////////////////////////////////// Tabela de Equipamentos e Modificações /////////////////////////////////////////////
 model Modification {
@@ -441,6 +480,8 @@ model Modification {
   description String
   is_custom Boolean
   campaign CampaignModifications[]
+
+  @@index([id])
 }
 
 model CampaignModifications {
@@ -451,6 +492,8 @@ model CampaignModifications {
   modificationId String @map("modification_id")
 
   @@unique([campaignId, modificationId])
+
+  @@index([campaignId])
 }
 
 model Equipment {
@@ -471,6 +514,8 @@ model Equipment {
   CursedItem CursedItem?
   slots InventorySlot[]
   CampaignEquipment CampaignEquipment[]
+
+  @@index([id])
 }
 
 model CampaignEquipment {
@@ -481,6 +526,8 @@ model CampaignEquipment {
   equipmentId Int @map("equipment_id")
 
   @@unique([campaignId, equipmentId])
+
+  @@index([campaignId])
 }
 
 model Weapon {
@@ -494,6 +541,8 @@ model Weapon {
   weapon_category WeaponCategory 
   weapon_type WeaponType 
   hand_type HandType 
+
+  @@index([equipmentId])
 }
 
 
@@ -501,6 +550,8 @@ model CursedItem {
   Equipment Equipment @relation(fields: [equipmentId], references: [id])
   equipmentId Int @id
   element Element
+
+  @@index([equipmentId])
 }
 
 
