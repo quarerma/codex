@@ -288,9 +288,6 @@ export class FeatsService {
         },
       });
 
-      // flat map all feats, classfeats, subclassfeats, originfeat, set usingAfinity to false as default
-      // return a object in the format { feat: Feat, usingAfinity: boolean }[]
-
       const allFeats = [
         ...feats.feats.map((feat) => ({ feat: feat.feat, usingAfinity: feat.usingAfinity })),
         ...feats.class.classFeats.map((feat) => ({ feat: feat.feat, usingAfinity: false })),

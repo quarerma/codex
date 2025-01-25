@@ -69,6 +69,7 @@ export class InventoryController {
     try {
       return await this.characterSlotsService.updateSlot(data);
     } catch (error) {
+      console.log(error);
       throw new HttpException(`Error updating slot: ${error}`, HttpStatus.BAD_REQUEST);
     }
   }

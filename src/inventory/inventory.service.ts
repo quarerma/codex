@@ -28,6 +28,9 @@ export class InventoryService {
           maxValue: true,
           patent: true,
           slots: {
+            orderBy: {
+              local_name: 'asc',
+            },
             select: {
               equipment: {
                 include: {

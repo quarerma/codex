@@ -15,17 +15,18 @@ export class CharacterSlotService {
       uses: 0,
       weight: 0,
     };
-    return await this.dataBaseService.inventory.update({
-      where: { characterId: data.characterId },
+
+    return await this.dataBaseService.inventorySlot.create({
       data: {
-        slots: {
-          create: {
-            category: data.category,
-            local_name: data.local_name,
-            uses: data.uses,
-            weight: data.weight,
+        category: data.category,
+        inventory: {
+          connect: {
+            characterId: data.characterId,
           },
         },
+        local_name: data.local_name,
+        uses: data.uses,
+        weight: data.weight,
       },
     });
   }
@@ -37,7 +38,7 @@ export class CharacterSlotService {
         local_description: data.new_local_description,
         local_name: data.new_local_name,
         uses: data.new_uses,
-        weight: data.weight,
+        weight: data.new_weight,
         category: data.new_category,
       },
     });
