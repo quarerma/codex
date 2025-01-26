@@ -3,6 +3,7 @@ import { CharacterService } from './character.service';
 import { CreateCharacterDTO } from './dto/create-character-dto';
 import { CharacterFeatsService } from './aux_services/character.feats.service';
 import { CharacterRitualsService } from './aux_services/character.rituals.service';
+import { CharacterLevelService } from './aux_services/character.level.service';
 
 @Controller('character')
 export class CharacterController {
@@ -10,6 +11,7 @@ export class CharacterController {
     private readonly characterService: CharacterService,
     private readonly characterFeatsService: CharacterFeatsService,
     private readonly characterRitualsService: CharacterRitualsService,
+    private readonly characterLevelService: CharacterLevelService,
   ) {}
 
   @Post('create')
@@ -101,6 +103,15 @@ export class CharacterController {
       return await this.characterService.updateStat(characterId, stat, Number(value));
     } catch (error) {
       throw new Error('Error updating stat');
+    }
+  }
+
+  @Patch('update-level')
+  async updateLevel(@Query('characterId') characterId: string, @Query('newLevel') newLevel: string) {
+    try {
+      return await this.characterLevelService.updateCharacterLevel(characterId, Number(newLevel));
+    } catch (error) {
+      throw new Error('Error updating level');
     }
   }
 }
