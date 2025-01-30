@@ -14,9 +14,10 @@ import { AuthModule } from './auth/auth.module';
 import { OriginsModule } from './origins/origins.module';
 import { ConditionsModule } from './conditions/conditions.module';
 import { NotesModule } from './notes/notes.module';
+import { SocketsModule } from './sockets/sockets.module';
 
 @Module({
-  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule, RitualModule, AuthModule, OriginsModule, ConditionsModule, NotesModule],
+  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule, RitualModule, AuthModule, OriginsModule, ConditionsModule, NotesModule, SocketsModule],
   controllers: [],
   providers: [DataBaseService],
 })

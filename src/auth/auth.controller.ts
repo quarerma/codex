@@ -9,7 +9,6 @@ export class AuthController {
 
   @Post('/auth-login')
   async login(@Body() body: LoginDto) {
-    console.log(body);
     try {
       const payload = await this.authService.login(body);
 
