@@ -24,6 +24,7 @@ export class CharacterLevelService {
       });
 
       if (!character) {
+        console.log('Character not found');
         throw new Error('Character not found');
       }
 
@@ -35,6 +36,7 @@ export class CharacterLevelService {
 
       return await this.updateStats(characterId, newLevel);
     } catch (error) {
+      console.log('Error updating character level', error);
       throw error;
     }
   }
@@ -125,6 +127,15 @@ export class CharacterLevelService {
           },
 
           level: newLevel,
+        },
+        select: {
+          current_health: true,
+          current_effort: true,
+          current_sanity: true,
+          max_health: true,
+          max_effort: true,
+          max_sanity: true,
+          level: true,
         },
       });
     } catch (error) {

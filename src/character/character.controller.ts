@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { CharacterService } from './character.service';
 import { CreateCharacterDTO } from './dto/create-character-dto';
 import { CharacterFeatsService } from './aux_services/character.feats.service';
@@ -107,9 +107,10 @@ export class CharacterController {
   }
 
   @Patch('update-level')
-  async updateLevel(@Query('characterId') characterId: string, @Query('newLevel') newLevel: string) {
+  async updateLevel(@Query('characterId') characterId: string, @Query('newLevel', ParseIntPipe) newLevel: number) {
     try {
-      return await this.characterLevelService.updateCharacterLevel(characterId, Number(newLevel));
+      console.log('Updating level', characterId, newLevel);
+      return await this.characterLevelService.updateCharacterLevel(characterId, newLevel);
     } catch (error) {
       throw new Error('Error updating level');
     }
