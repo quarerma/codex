@@ -5,6 +5,10 @@ import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/ex
 import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
 import { Request } from 'express';
 import { UserRequest } from './dto/user-request';
+import { RolesGuard } from 'src/auth/guards/role.guard';
+import { Role } from '@prisma/client';
+import { Roles } from 'src/auth/dto/role.decorator';
+import { CurrentUser } from 'src/middleware/current-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -54,19 +58,10 @@ export class UserController {
   }
 
   @Get('all')
-  @UseGuards(JwtAuthGuards)
-  async getAllUsers(@Req() req: Request) {
+  @UseGuards(JwtAuthGuards, RolesGuard)
+  @Roles(Role.ADMIN)
+  async getAllUsers(@CurrentUser() user: UserRequest) {
     try {
-      const user = req.user as UserRequest;
-      if (user.role !== 'ADMIN') {
-        throw new HttpException(
-          {
-            status: 'userError',
-            message: 'Usuário não autorizado',
-          },
-          HttpStatus.UNAUTHORIZED,
-        );
-      }
       return await this.userService.getAllUsers(user);
     } catch (error) {
       throw new HttpException(
