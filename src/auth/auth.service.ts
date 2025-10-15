@@ -11,7 +11,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(body: LoginDto) {
+  async login(body: LoginDto, ip: string) {
     try {
       const user = await this.dataBaseService.user.findUnique({
         where: {
@@ -26,6 +26,13 @@ export class AuthService {
       if (await bcrypt.compare(body.password, user.password)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, email, ...result } = user;
+        // On sucessful Login, add the IP to the database
+        await this.dataBaseService.ipTrack.create({
+          data: {
+            ip,
+            userId: user.id,
+          },
+        });
 
         return this.jwtService.sign(result);
       }

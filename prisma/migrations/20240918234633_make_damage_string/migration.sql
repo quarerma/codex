@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Weapon" ALTER COLUMN "damage" SET NOT NULL,
-ALTER COLUMN "damage" SET DATA TYPE TEXT;

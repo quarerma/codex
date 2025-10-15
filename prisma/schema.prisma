@@ -10,14 +10,16 @@ datasource db {
 ///////////////////////////////////////////// Tabela de Usuários /////////////////////////////////////////////
 
 model User {
-  id String @id @default(cuid())
-  username String @unique @db.VarChar(50)
-  password String
-  email String @unique
-  role Role @default(USER)
-  characters Character[]
-  campaigns_dm Campaign[] @relation("CampaignDm")
+  id               String             @id @default(cuid())
+  username         String             @unique @db.VarChar(50)
+  password         String
+  email            String             @unique
+  role             Role               @default(USER)
+  characters       Character[]
+  campaigns_dm     Campaign[]         @relation("CampaignDm")
   campaigns_player PlayerOnCampaign[] @relation("PlayerCampaigns")
+  ipTracks         IpTrack[]
+  createdAt        DateTime           @default(now())
 
   @@index([username])
   @@index([email])
@@ -29,17 +31,28 @@ enum Role {
   ADMIN
 }
 
+model IpTrack {
+  id        Int      @id @default(autoincrement())
+  ip        String   @db.VarChar(45)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([ip])
+  @@index([userId])
+  @@map("ip_track")
+}
+
 ///////////////////////////////////////////// Tabela de Jogadores nas Campanhas /////////////////////////////////////////////
 
 model PlayerOnCampaign {
-  campaign Campaign @relation("CampaignPlayers", fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  player User @relation("PlayerCampaigns", fields: [playerId], references: [id])
-  playerId String @map("player_id")
-  joinedAt DateTime @default(now()) @map("joined_at")
+  campaign   Campaign @relation("CampaignPlayers", fields: [campaignId], references: [id])
+  campaignId String   @map("campaign_id")
+  player     User     @relation("PlayerCampaigns", fields: [playerId], references: [id])
+  playerId   String   @map("player_id")
+  joinedAt   DateTime @default(now()) @map("joined_at")
 
   @@unique([campaignId, playerId])
-
   @@index([campaignId])
   @@index([playerId])
 }
@@ -47,14 +60,14 @@ model PlayerOnCampaign {
 ///////////////////////////////////////////// Tabela de Campanhas /////////////////////////////////////////////
 
 model Campaign {
-  id String @id @default(cuid())
-  createdAt DateTime @default(now())  
-  
-  name String @db.VarChar(50)
-  description String @db.VarChar(255)
-  password String
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-  owner User @relation("CampaignDm", fields: [ownerId], references: [id])
+  name        String @db.VarChar(50)
+  description String @db.VarChar(255)
+  password    String
+
+  owner   User   @relation("CampaignDm", fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
   players PlayerOnCampaign[] @relation("CampaignPlayers")
@@ -79,15 +92,13 @@ model Campaign {
   @@index([ownerId])
 }
 
-
 ///////////////////////////////////////////// Tabela de Personagens /////////////////////////////////////////////
 
 model Character {
-  id String @id @default(cuid())
+  id   String @id @default(cuid())
   name String @db.VarChar(50)
 
   level Int
-  
 
   current_health Int
   current_sanity Int
@@ -97,10 +108,10 @@ model Character {
   max_sanity Int
   max_effort Int
 
-  speed Int
-  defense Int
+  speed         Int
+  defense       Int
   num_of_skills Int @default(0)
-  
+
   healthInfo Json @map("health_info")
   effortInfo Json @map("effort_info")
   sanityInfo Json @map("sanity_info")
@@ -111,18 +122,18 @@ model Character {
 
   attacks Json[]
 
-  owner User @relation(fields: [ownerId], references: [id])
+  owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
-  
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  
-  class Class @relation(fields: [classId], references: [id])
+
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String   @map("campaign_id")
+
+  class   Class  @relation(fields: [classId], references: [id])
   classId String @map("class_id")
-  
-  subclass Subclass @relation(fields: [subclassId], references: [id])
-  subclassId String @map("subclass_id")
-  
+
+  subclass   Subclass @relation(fields: [subclassId], references: [id])
+  subclassId String   @map("subclass_id")
+
   Inventory Inventory?
 
   feats CharacterFeat[]
@@ -133,9 +144,8 @@ model Character {
 
   conditions CharacterCondition[]
 
-
-  origin Origin? @relation(fields: [originId], references: [id])
-  originId String @map("origin_id")
+  origin   Origin? @relation(fields: [originId], references: [id])
+  originId String  @map("origin_id")
 
   notes Notes[]
 
@@ -145,43 +155,42 @@ model Character {
 }
 
 model CharacterFeat {
-  character Character @relation(fields: [characterId], references: [id])
-  characterId String @map("character_id")
-  feat Feat @relation(fields: [featId], references: [id])
-  featId String @map("feat_id")
-  usingAfinity Boolean @default(false)
+  character    Character @relation(fields: [characterId], references: [id])
+  characterId  String    @map("character_id")
+  feat         Feat      @relation(fields: [featId], references: [id])
+  featId       String    @map("feat_id")
+  usingAfinity Boolean   @default(false)
 
   @@unique([characterId, featId])
-
   @@index([characterId])
 }
-
 
 ////////////////////////////////////////////// Tabela de Notas //////////////////////////////////////////////////
 
 model Notes {
-  id String @id @default(cuid())
-  title String @db.VarChar(50)
-  content String? @db.Text
-  character Character? @relation(fields: [characterId], references: [id])
-  characterId String? @map("character_id")
-  campaign Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId String? @map("campaign_id")
+  id          String     @id @default(cuid())
+  title       String     @db.VarChar(50)
+  content     String?    @db.Text
+  character   Character? @relation(fields: [characterId], references: [id])
+  characterId String?    @map("character_id")
+  campaign    Campaign?  @relation(fields: [campaignId], references: [id])
+  campaignId  String?    @map("campaign_id")
 
   @@index([id])
 }
+
 ////////////////////////////////////////////// Tabela de Inventário /////////////////////////////////////////////
 
 model Inventory {
-  character Character @relation(fields: [characterId], references: [id])
-  characterId String @id @map("character_id")
+  character   Character @relation(fields: [characterId], references: [id])
+  characterId String    @id @map("character_id")
 
-  maxValue Int
+  maxValue    Int
   alterations Json[]
 
   patent Patent
-  slots InventorySlot[]
-  credit Credit @default(LOW)
+  slots  InventorySlot[]
+  credit Credit          @default(LOW)
 
   @@index([characterId])
 }
@@ -195,51 +204,52 @@ enum Patent {
 }
 
 model InventorySlot {
-  id String @id @default(cuid())
-  inventory Inventory @relation(fields: [inventoryId], references: [characterId])
-  inventoryId String @map("inventory_id")
+  id          String    @id @default(cuid())
+  inventory   Inventory @relation(fields: [inventoryId], references: [characterId])
+  inventoryId String    @map("inventory_id")
 
-  equipment Equipment? @relation(fields: [equipmentId], references: [id])
-  equipmentId Int? @map("equipment_id")
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+  equipmentId Int?       @map("equipment_id")
 
-  uses Int @default(0)
-  category Int
-  weight Int @default(0)
-  local_name String
-  local_description String? @db.Text @default("")
-  is_equipped Boolean @default(true)
+  uses              Int     @default(0)
+  category          Int
+  weight            Int     @default(0)
+  local_name        String
+  local_description String? @default("") @db.Text
+  is_equipped       Boolean @default(true)
 
   alterations Json[]
 
   @@index([id])
 }
+
 ///////////////////////////////////////////// Tabela de Condições /////////////////////////////////////////////
 model Condition {
-  id String @id @default(cuid())
-  name String @db.VarChar(50)
-  description String @db.Text
-  is_custom Boolean
-  character CharacterCondition[]
-  ritual RitualCondition[]
+  id          String               @id @default(cuid())
+  name        String               @db.VarChar(50)
+  description String               @db.Text
+  is_custom   Boolean
+  character   CharacterCondition[]
+  ritual      RitualCondition[]
 
   @@index([id])
 }
 
 model RitualCondition {
-  ritual Ritual @relation(fields: [ritualId], references: [id])
-  ritualId String @map("ritual_id")
-  condition Condition @relation(fields: [conditionId], references: [id])
-  conditionId String @map("condition_id")
+  ritual      Ritual    @relation(fields: [ritualId], references: [id])
+  ritualId    String    @map("ritual_id")
+  condition   Condition @relation(fields: [conditionId], references: [id])
+  conditionId String    @map("condition_id")
 
   @@unique([ritualId, conditionId])
-
   @@index([ritualId])
 }
+
 model CharacterCondition {
-  character Character @relation(fields: [characterId], references: [id])
-  characterId String @map("character_id")
-  condition Condition @relation(fields: [conditionId], references: [id])
-  conditionId String @map("condition_id")
+  character   Character @relation(fields: [characterId], references: [id])
+  characterId String    @map("character_id")
+  condition   Condition @relation(fields: [conditionId], references: [id])
+  conditionId String    @map("condition_id")
 
   @@unique([characterId, conditionId])
   @@index([characterId])
@@ -247,11 +257,11 @@ model CharacterCondition {
 
 ///////////////////////////////////////////// Tabela de Classes /////////////////////////////////////////////
 model Class {
-  id String @id @default(cuid())
-  name String @db.VarChar(50) 
+  id          String @id @default(cuid())
+  name        String @db.VarChar(50)
   description String @db.Text
 
-  hitPointsPerLevel Int
+  hitPointsPerLevel    Int
   SanityPointsPerLevel Int
   effortPointsPerLevel Int
 
@@ -259,25 +269,25 @@ model Class {
   initialSanity Int
   initialEffort Int
 
-  number_of_skills Int @default(0)
-  proficiencies Proficiency[]
+  number_of_skills Int           @default(0)
+  proficiencies    Proficiency[]
 
   subclasses Subclass[]
   classFeats ClassFeats[]
-  character Character[]
+  character  Character[]
 
   @@index([id])
 }
 
 model Subclass {
-  id String @id @default(cuid())
-  name String @db.VarChar(50)
-  description String @db.Text 
+  id          String @id @default(cuid())
+  name        String @db.VarChar(50)
+  description String @db.Text
 
-  classId String
-  class Class @relation(fields: [classId], references: [id])
+  classId       String
+  class         Class           @relation(fields: [classId], references: [id])
   subclassFeats SubclassFeats[]
-  character Character[]
+  character     Character[]
 
   @@index([id])
 }
@@ -285,37 +295,35 @@ model Subclass {
 ///////////////////////////////////////////// Tabela de Feats /////////////////////////////////////////////
 
 model Feat {
-  id String @id @default(cuid())
-  name String @db.VarChar(50)
-  description String @db.Text
-  prerequisites String?
+  id                String   @id @default(cuid())
+  name              String   @db.VarChar(50)
+  description       String   @db.Text
+  prerequisites     String?
   characterUpgrades Json[]
-  type        FeatType
+  type              FeatType
 
-  afinity String? @db.Text
+  afinity         String? @db.Text
   afinityUpgrades Json[]
 
   element Element
 
-
-  classFeats ClassFeats[]
+  classFeats    ClassFeats[]
   subclassFeats SubclassFeats[]
   campaignFeats CampaignFeats[]
 
   generalFeats GeneralFeats[]
 
   character CharacterFeat[]
-  origin Origin[]
+  origin    Origin[]
 
   @@index([id])
 }
 
-
 model ClassFeats {
-  feat Feat @relation(fields: [featId], references: [id])
-  featId String
-  class Class @relation(fields: [classId], references: [id])
-  classId String
+  feat          Feat    @relation(fields: [featId], references: [id])
+  featId        String
+  class         Class   @relation(fields: [classId], references: [id])
+  classId       String
   isStarterFeat Boolean @default(false)
 
   @@unique([featId, classId])
@@ -323,10 +331,10 @@ model ClassFeats {
 }
 
 model SubclassFeats {
-  feat Feat @relation(fields: [featId], references: [id])
-  featId String
-  subclass Subclass @relation(fields: [subclassId], references: [id])
-  subclassId String
+  feat          Feat     @relation(fields: [featId], references: [id])
+  featId        String
+  subclass      Subclass @relation(fields: [subclassId], references: [id])
+  subclassId    String
   levelRequired Int
 
   @@unique([featId, subclassId])
@@ -334,21 +342,19 @@ model SubclassFeats {
 }
 
 model CampaignFeats {
-  feat Feat @relation(fields: [featId], references: [id])
-  featId String
-  campaign Campaign @relation(fields: [campaignId], references: [id])
+  feat       Feat     @relation(fields: [featId], references: [id])
+  featId     String
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
   campaignId String
- 
 
   @@unique([featId, campaignId])
   @@index([campaignId])
 }
 
 model GeneralFeats {
-  id String @id @default(cuid())
-  feat Feat @relation(fields: [featId], references: [id])
+  id     String @id @default(cuid())
+  feat   Feat   @relation(fields: [featId], references: [id])
   featId String
- 
 
   @@unique([featId])
   @@index([id])
@@ -357,204 +363,201 @@ model GeneralFeats {
 ///////////////////////////////////////////// Tabela de Atributos /////////////////////////////////////////////
 
 model Origin {
-  id String @id @default(cuid())
-  name String 
+  id          String  @id @default(cuid())
+  name        String
   description String
-  is_custom Boolean
-  feats Feat @relation(fields: [featId], references: [id])
-  featId String  @map("feat_id")
+  is_custom   Boolean
+  feats       Feat    @relation(fields: [featId], references: [id])
+  featId      String  @map("feat_id")
 
-  skills String[]
+  skills    String[]
   character Character[]
-  campaign CampaignOrigin[]
+  campaign  CampaignOrigin[]
 
   @@index([id])
 }
 
 model CampaignOrigin {
-  id String @id @default(cuid())
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  origin Origin @relation(fields: [originId], references: [id])
-  originId String @map("origin_id")
+  id         String   @id @default(cuid())
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String   @map("campaign_id")
+  origin     Origin   @relation(fields: [originId], references: [id])
+  originId   String   @map("origin_id")
 
   @@unique([campaignId, originId])
   @@index([campaignId])
 }
+
 model Skill {
-  name String @id
-  atribute Atribute
-  description String
-  only_trained Boolean
+  name           String   @id
+  atribute       Atribute
+  description    String
+  only_trained   Boolean
   carry_peanalty Boolean
-  needs_kit Boolean
-  is_custom Boolean
+  needs_kit      Boolean
+  is_custom      Boolean
 
-  campaign Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId String? @map("campaign_id")
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String?   @map("campaign_id")
 }
-
 
 ///////////////////////////////////////////// Tabela de Rituais /////////////////////////////////////////////
 
 model Ritual {
-  id String @id @default(cuid())
-  name String 
+  id   String @id @default(cuid())
+  name String
 
   normalCastDescription String @db.Text
-  normalCost Int
+  normalCost            Int
 
   discentCastDescription String? @db.Text
-  discentCost Int?
+  discentCost            Int?
 
   trueCastDescription String? @db.Text
-  trueCost Int?
+  trueCost            Int?
 
-  ritualLevel Int
+  ritualLevel    Int
   exectutionTime String
-  range Range
-  target String
-  duration String
-  element Element
-  resistence String
+  range          Range
+  target         String
+  duration       String
+  element        Element
+  resistence     String
 
-  is_custom Boolean
+  is_custom    Boolean
   damageRitual DamageRitual?
-  conditions RitualCondition[]
+  conditions   RitualCondition[]
 
-  type RitualType
+  type      RitualType
   character CharacterRitual[]
   campaign  CampaignRitual[]
-  
+
   @@index([id])
 }
 
 model CharacterRitual {
-  character Character @relation(fields: [characterId], references: [id])
-  characterId String @map("character_id")
-  ritual Ritual @relation(fields: [ritualId], references: [id])
-  ritualId String @map("ritual_id")
+  character   Character @relation(fields: [characterId], references: [id])
+  characterId String    @map("character_id")
+  ritual      Ritual    @relation(fields: [ritualId], references: [id])
+  ritualId    String    @map("ritual_id")
 
   ritual_cost Int
   alterations Json[]
-  @@unique([characterId, ritualId])
 
+  @@unique([characterId, ritualId])
   @@index([characterId])
 }
 
 model DamageRitual {
-  ritual Ritual @relation(fields: [ritualId], references: [id])
-  ritualId String @id
-  normalCastDamageType DamageType?
+  ritual                Ritual      @relation(fields: [ritualId], references: [id])
+  ritualId              String      @id
+  normalCastDamageType  DamageType?
   discentCastDamageType DamageType?
-  trueCastDamageType DamageType?
+  trueCastDamageType    DamageType?
 
-  normalCastDamage String?
+  normalCastDamage  String?
   discentCastDamage String?
-  trueCastDamage String?
+  trueCastDamage    String?
 
   @@index([ritualId])
 }
+
 enum RitualType {
   EFFECT
   DAMAGE
 }
 
 model CampaignRitual {
-  id String @id @default(cuid())
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  ritual Ritual @relation(fields: [ritualId], references: [id])
-  ritualId String @map("ritual_id")
+  id         String   @id @default(cuid())
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String   @map("campaign_id")
+  ritual     Ritual   @relation(fields: [ritualId], references: [id])
+  ritualId   String   @map("ritual_id")
 
   @@unique([campaignId, ritualId])
   @@index([campaignId])
 }
+
 ///////////////////////////////////////////// Tabela de Equipamentos e Modificações /////////////////////////////////////////////
 model Modification {
-  id String @id @default(cuid())
-  name String 
-  type ModificationType[]
-  element Element
+  id                String                  @id @default(cuid())
+  name              String
+  type              ModificationType[]
+  element           Element
   characterUpgrades Json[]
-  description String
-  is_custom Boolean
-  campaign CampaignModifications[]
+  description       String
+  is_custom         Boolean
+  campaign          CampaignModifications[]
 
   @@index([id])
 }
 
 model CampaignModifications {
-  id String @id @default(cuid())
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  modification Modification @relation(fields: [modificationId], references: [id])
-  modificationId String @map("modification_id")
+  id             String       @id @default(cuid())
+  campaign       Campaign     @relation(fields: [campaignId], references: [id])
+  campaignId     String       @map("campaign_id")
+  modification   Modification @relation(fields: [modificationId], references: [id])
+  modificationId String       @map("modification_id")
 
   @@unique([campaignId, modificationId])
-
   @@index([campaignId])
 }
 
 model Equipment {
-  id Int @id @default(autoincrement())
-  name String 
+  id   Int    @id @default(autoincrement())
+  name String
 
   num_of_uses Int
   description String
-  weight Int
-  category Int
-  
-  type ItemType
+  weight      Int
+  category    Int
+
+  type      ItemType
   is_custom Boolean
-  
+
   characterUpgrades Json[]
 
-  Weapon Weapon?
-  CursedItem CursedItem?
-  slots InventorySlot[]
+  Weapon            Weapon?
+  CursedItem        CursedItem?
+  slots             InventorySlot[]
   CampaignEquipment CampaignEquipment[]
 
   @@index([id])
 }
 
 model CampaignEquipment {
-  id String @id @default(cuid())
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  campaignId String @map("campaign_id")
-  equipment Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId Int @map("equipment_id")
+  id          String    @id @default(cuid())
+  campaign    Campaign  @relation(fields: [campaignId], references: [id])
+  campaignId  String    @map("campaign_id")
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int       @map("equipment_id")
 
   @@unique([campaignId, equipmentId])
-
   @@index([campaignId])
 }
 
 model Weapon {
-  Equipment Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId Int @id
-  damage String
+  Equipment           Equipment      @relation(fields: [equipmentId], references: [id])
+  equipmentId         Int            @id
+  damage              String
   critical_multiplier Int
-  critical_range Int
-  range Range
-  damage_type DamageType
-  weapon_category WeaponCategory 
-  weapon_type WeaponType 
-  hand_type HandType 
+  critical_range      Int
+  range               Range
+  damage_type         DamageType
+  weapon_category     WeaponCategory
+  weapon_type         WeaponType
+  hand_type           HandType
 
   @@index([equipmentId])
 }
-
 
 model CursedItem {
-  Equipment Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId Int @id
-  element Element
+  Equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId Int       @id
+  element     Element
 
   @@index([equipmentId])
 }
-
-
 
 /////////////////////////////////////////////  Enums /////////////////////////////////////////////
 enum ModificationType {
@@ -581,12 +584,12 @@ enum Credit {
   UNLIMITED
 }
 
-
 enum HandType {
   LIGHT
   ONE_HANDED
   TWO_HANDED
 }
+
 enum WeaponType {
   MELEE
   BOLT
@@ -606,6 +609,7 @@ enum Proficiency {
   LIGHT_ARMOR
   HEAVY_ARMOR
 }
+
 enum Element {
   REALITY
   FEAR
@@ -625,7 +629,6 @@ enum ItemType {
   PARANORMAL_EQUIPMENT
   CURSED_ITEM
   DEFAULT
-
 }
 
 enum Range {
