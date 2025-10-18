@@ -15,10 +15,11 @@ import { OriginsModule } from './origins/origins.module';
 import { ConditionsModule } from './conditions/conditions.module';
 import { NotesModule } from './notes/notes.module';
 import { SocketsModule } from './sockets/sockets.module';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule, RitualModule, AuthModule, OriginsModule, ConditionsModule, NotesModule, SocketsModule],
   controllers: [],
-  providers: [DataBaseService],
+  providers: [DataBaseService, EmailService],
 })
 export class AppModule {}
