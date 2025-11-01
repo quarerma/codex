@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { CharacterModule } from './character/character.module';
 import { ClassesModule } from './rpg-classes/classes.module';
@@ -15,11 +15,40 @@ import { OriginsModule } from './origins/origins.module';
 import { ConditionsModule } from './conditions/conditions.module';
 import { NotesModule } from './notes/notes.module';
 import { SocketsModule } from './sockets/sockets.module';
+import { CacheModule } from './cache/cache.module';
+import { ConfigModule } from '@nestjs/config';
+import { CacheServiceMiddleware } from './middleware/cache.middleware';
+import { UserService } from './user/user.service';
+import { UserSessionExecutor } from './user/executor/session.executor';
 import { EmailService } from './email/email.service';
 
 @Module({
-  imports: [UserModule, CharacterModule, ClassesModule, SubClassModule, FeatsModule, CampaingsModule, EquipmentModule, SkillModule, InventoryModule, RitualModule, AuthModule, OriginsModule, ConditionsModule, NotesModule, SocketsModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    UserModule,
+    CharacterModule,
+    ClassesModule,
+    SubClassModule,
+    FeatsModule,
+    CampaingsModule,
+    EquipmentModule,
+    SkillModule,
+    InventoryModule,
+    RitualModule,
+    AuthModule,
+    OriginsModule,
+    ConditionsModule,
+    NotesModule,
+    SocketsModule,
+    CacheModule,
+  ],
   controllers: [],
-  providers: [DataBaseService, EmailService],
+  providers: [DataBaseService, UserService, UserSessionExecutor, EmailService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CacheServiceMiddleware).forRoutes('*');
+  }
+}

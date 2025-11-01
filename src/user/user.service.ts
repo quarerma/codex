@@ -4,10 +4,16 @@ import * as bcrypt from 'bcrypt';
 import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/exceptions/UserExceptions';
 import { DataBaseService } from 'src/database/database.service';
 import { UserRequest } from './dto/user-request';
+import { UserSessionExecutor } from './executor/session.executor';
+import { CacheService } from 'src/cache/cache.service';
 
 @Injectable()
 export class UserService {
-  constructor(private dataBaseService: DataBaseService) {}
+  constructor(
+    private dataBaseService: DataBaseService,
+    private readonly cacheService: CacheService,
+    private readonly sessionExecutor: UserSessionExecutor,
+  ) {}
 
   async createUser(data: CreateUserDto) {
     try {
@@ -70,14 +76,7 @@ export class UserService {
 
   async getUserById(id: string) {
     try {
-      const user = await this.dataBaseService.user.findUnique({
-        where: { id },
-        select: {
-          username: true,
-          id: true,
-          role: true,
-        },
-      });
+      const user = await this.cacheService.getCached('session', [`${id}`], async () => await this.sessionExecutor.execute(id), 30 * 60 * 1000);
 
       if (!user) {
         throw new Error('User not found');

@@ -3,12 +3,14 @@ import { DataBaseService } from 'src/database/database.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly dataBaseService: DataBaseService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) {}
 
   async login(body: LoginDto, ip: string) {
@@ -16,6 +18,15 @@ export class AuthService {
       const user = await this.dataBaseService.user.findUnique({
         where: {
           username: body.username,
+        },
+        select: {
+          id: true,
+          password: true,
+          ipTracks: {
+            select: {
+              ip: true,
+            },
+          },
         },
       });
 

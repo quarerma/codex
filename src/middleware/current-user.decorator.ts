@@ -1,4 +1,5 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { BadRequestException, createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { CacheService } from 'src/cache/cache.service';
 import { UserRequest } from 'src/user/dto/user-request';
 import { UserSessionExecutor } from 'src/user/executor/session.executor';
 
@@ -13,20 +14,25 @@ export const CurrentUser = createParamDecorator(async (data: unknown, ctx: Execu
   // Assume CacheService and FunctionExecutorService are attached to the request (via middleware or interceptor)
 
   const sessionExecutor: UserSessionExecutor = request.sessionExecutor;
-
-  if (!sessionExecutor) {
+  const cacheService: CacheService = request.cacheService;
+  if (!sessionExecutor || !cacheService) {
     throw new Error('CacheService or FunctionExecutorService not available in request context');
   }
 
   const user_id = user.id;
-  const fullUserData = await sessionExecutor.execute(user_id);
+  const fullUserData = await cacheService.getCached('session', [`${user_id}`], async () => await sessionExecutor.execute(user_id), 30 * 60 * 1000);
 
-  if (fullUserData.id !== user_id) {
-    console.warn(`ID mismatch for user_id: ${user_id}. Refetching user data.`);
-    const refreshedUserData = await sessionExecutor.execute(user_id);
+  if (fullUserData.id !== user_id || fullUserData.role != user.role) {
+    throw new UnauthorizedException();
+  }
 
-    // await cacheService.setCached('session', [`${user_id}`], refreshedUserData, 30 * 60 * 1000);
-    return refreshedUserData;
+  const allowedIps = fullUserData.ipTracks.map((t) => t.ip);
+
+  const clientIp: string = ctx.switchToHttp().getRequest().ip;
+
+  console.log('Request IP', clientIp);
+  if (!allowedIps.includes(clientIp)) {
+    throw new UnauthorizedException('IP not authorized');
   }
 
   return fullUserData;
