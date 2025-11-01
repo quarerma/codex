@@ -20,6 +20,7 @@ model User {
   campaigns_player PlayerOnCampaign[] @relation("PlayerCampaigns")
   ipTracks         IpTrack[]
   createdAt        DateTime           @default(now())
+  loginCodes       LoginCode[]
 
   @@index([username])
   @@index([email])
@@ -41,6 +42,19 @@ model IpTrack {
   @@index([ip])
   @@index([userId])
   @@map("ip_track")
+}
+
+model LoginCode {
+  id        Int      @id @default(autoincrement())
+  code      String   @db.VarChar(6)
+  ip        String   @db.VarChar(45)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+
+  @@index([userId])
+  @@map("login_codes")
 }
 
 ///////////////////////////////////////////// Tabela de Jogadores nas Campanhas /////////////////////////////////////////////
