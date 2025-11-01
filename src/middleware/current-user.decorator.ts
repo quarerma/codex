@@ -1,4 +1,4 @@
-import { BadRequestException, createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { CacheService } from 'src/cache/cache.service';
 import { UserRequest } from 'src/user/dto/user-request';
 import { UserSessionExecutor } from 'src/user/executor/session.executor';
@@ -20,8 +20,10 @@ export const CurrentUser = createParamDecorator(async (data: unknown, ctx: Execu
   }
 
   const user_id = user.id;
-  const fullUserData = await cacheService.getCached('session', [`${user_id}`], async () => await sessionExecutor.execute(user_id), 30 * 60 * 1000);
+  const fullUserData = await cacheService.getCached('session', [`${user_id}`], async () => await sessionExecutor.execute(user_id), 0.1 * 60 * 1000);
 
+  console.log(fullUserData);
+  console.log(user);
   if (fullUserData.id !== user_id || fullUserData.role != user.role) {
     throw new UnauthorizedException();
   }

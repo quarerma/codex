@@ -41,6 +41,7 @@ model IpTrack {
 
   @@index([ip])
   @@index([userId])
+  @@unique([userId, ip])
   @@map("ip_track")
 }
 

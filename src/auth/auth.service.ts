@@ -22,6 +22,8 @@ export class AuthService {
         select: {
           id: true,
           password: true,
+          email: true,
+          role: true,
           ipTracks: {
             select: {
               ip: true,
@@ -34,20 +36,13 @@ export class AuthService {
         return { error: 'User not found' };
       }
 
-      if (!(await this.handleIpTracking(ip, user.id, user.email))) {
+      if (!(await this.handleIpTracking(ip, user.id))) {
         throw new Error('Unrecognized IP address. Verification code sent to email.');
       }
       // If ip is found
       if (await bcrypt.compare(body.password, user.password)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, email, ...result } = user;
-        // On sucessful Login, add the IP to the database
-        await this.dataBaseService.ipTrack.create({
-          data: {
-            ip,
-            userId: user.id,
-          },
-        });
+        const { password, email, ipTracks, ...result } = user;
 
         return this.jwtService.sign(result);
       }
@@ -57,7 +52,7 @@ export class AuthService {
     }
   }
 
-  private async handleIpTracking(ip: string, userId: string, userEmail: string) {
+  private async handleIpTracking(ip: string, userId: string) {
     const hasRegisteredIp = await this.dataBaseService.ipTrack.findFirst({
       where: {
         ip,
@@ -78,7 +73,7 @@ export class AuthService {
         },
       });
 
-      // TODO: Add email service to send the code to the user
+      this.emailService.sendEmail('Confirmation code', 'This code is Valid for 30minutes: ' + code);
       return false;
     }
 
@@ -121,15 +116,16 @@ export class AuthService {
       where: {
         id: userId,
       },
+      select: {
+        id: true,
+        role: true,
+      },
     });
 
     if (!user) {
       return { error: 'User not found' };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, email, ...result } = user;
-
-    return this.jwtService.sign(result);
+    return this.jwtService.sign(user);
   }
 }

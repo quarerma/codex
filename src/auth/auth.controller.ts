@@ -7,7 +7,7 @@ import { JwtAuthGuards } from './guards/jwt.guards';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/auth-login')
+  @Post('/login')
   async login(@Body() body: LoginDto, @Ip() ip: string) {
     try {
       const payload = await this.authService.login(body, ip);
@@ -27,5 +27,14 @@ export class AuthController {
   @UseGuards(JwtAuthGuards)
   async auth() {
     return { message: 'User is authenticated' };
+  }
+
+  @Post('consume-code')
+  async consumeCode(@Body() data: { user_id: string; code: string }, @Ip() ip: string) {
+    try {
+      return await this.authService.consumeLoginCode(data.user_id, data.code, ip);
+    } catch (e) {
+      throw e;
+    }
   }
 }

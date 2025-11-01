@@ -14,7 +14,7 @@ import { CurrentUser } from 'src/middleware/current-user.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
+  @Post()
   async createUser(@Body() data: CreateUserDto) {
     try {
       return await this.userService.createUser(data);

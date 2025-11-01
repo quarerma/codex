@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtAuthGuards } from './jwt.guards';
 import { UserRequest } from 'src/user/dto/user-request';
@@ -27,9 +27,15 @@ export class RolesGuard extends JwtAuthGuards implements CanActivate {
     const user: UserRequest = request.user;
 
     if (!user) {
-      return false; // No user found, deny access
+      throw new UnauthorizedException("You don't have access to this resource");
     }
 
-    return requiredRoles.some((role) => user.role === role);
+    const hasAccess = requiredRoles.some((role) => user.role === role);
+
+    if (!hasAccess) {
+      throw new UnauthorizedException("You don't have access to this resource");
+    }
+
+    return hasAccess;
   }
 }

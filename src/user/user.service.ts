@@ -24,7 +24,6 @@ export class UserService {
 
       await this.checkEmailAlreadyInUse(userData.email);
 
-      console.log('username', userData.username);
       await this.checkExistingUser(userData.username);
 
       return await this.dataBaseService.user.create({
