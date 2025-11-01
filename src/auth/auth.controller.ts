@@ -16,7 +16,6 @@ export class AuthController {
         throw new HttpException(payload.error, HttpStatus.UNAUTHORIZED);
       }
 
-      console.log(payload);
       return payload;
     } catch (error) {
       console.log(error);

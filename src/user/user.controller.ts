@@ -40,11 +40,10 @@ export class UserController {
     }
   }
 
-  @Get()
+  @Get('session')
   @UseGuards(JwtAuthGuards)
-  async getUserById(@Req() req: Request) {
+  async getSession(@CurrentUser() user: UserRequest) {
     try {
-      const user = req.user as UserRequest;
       return await this.userService.getUserById(user.id);
     } catch (error) {
       throw new HttpException(
