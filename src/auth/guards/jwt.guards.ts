@@ -36,7 +36,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const { fingerprint: currentFp, data: currentData } = computeServerFingerprint(req);
 
-    // === 1. Validate JWT (auth or refresh) ===
+    //  Validate JWT
     let payload: any;
     let isRefresh = false;
 
@@ -44,6 +44,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       payload = this.jwtService.verify(authToken);
       if (payload.device_id !== deviceId) throw new Error();
     } catch {
+      // Refresh
       try {
         const rPayload: any = this.jwtService.verify(refreshToken);
         if (rPayload.device_id !== deviceId || rPayload.type !== 'refresh') {
@@ -58,21 +59,20 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const userId = payload.sub;
 
-    // === 2. Load full user from cache (includes devices) ===
+    //  Load user from cache
     const fullUser = await this.cacheService.getCached('session', [userId], () => this.sessionExecutor.execute(userId), 6 * 1000);
 
-    // === 3. Find device in fullUser.devices ===
     const deviceRecord = fullUser.devices?.find((d: any) => d.device_id === deviceId);
     if (!deviceRecord) {
       throw new UnauthorizedException('Device not registered');
     }
 
-    // === 4. Validate device_secret ===
+    // Validate device_secret
     if (deviceRecord.device_secret_hash !== this.hashService.sha256(deviceSecret)) {
       throw new UnauthorizedException('Invalid device secret');
     }
 
-    // === 5. Fingerprint drift detection (field-level) ===
+    // Fingerprint
     const storedFp = deviceRecord.fingerprint_hash;
     const storedData = deviceRecord.fingerprint_data;
 
@@ -80,14 +80,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       const { critical, nonCritical } = this.compareFingerprintFields(currentData, storedData);
 
       if (critical > 0) {
-        throw new UnauthorizedException('Critical fingerprint change (JA3)');
+        throw new UnauthorizedException('Critical fingerprint change');
       }
 
       if (nonCritical > 2) {
         throw new UnauthorizedException('Too many non-critical changes');
       }
 
-      // If small change, update fingerprint on database
+      // On small change, update fingerprint on database
       await this.db.userDevice.update({
         where: { userId_device_id: { userId, device_id: deviceId } },
         data: {
@@ -100,7 +100,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       await this.cacheService.deleteSpecificCache('session', [userId]);
     }
 
-    // === 6. Refresh: issue new auth_token ===
+    //  Refresh: issue new auth_token
     if (isRefresh) {
       const newAuth = this.jwtService.sign(
         {
@@ -123,7 +123,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return true;
   }
 
-  // === Field comparison logic ===
   private compareFingerprintFields(current: any, stored: any) {
     let critical = 0;
     let nonCritical = 0;
