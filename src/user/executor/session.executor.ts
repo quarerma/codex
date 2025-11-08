@@ -16,9 +16,12 @@ export class UserSessionExecutor {
         role: true,
         username: true,
         email: true,
-        ipTracks: {
+        devices: {
           select: {
-            ip: true,
+            device_secret_hash: true,
+            device_id: true,
+            fingerprint_hash: true,
+            fingerprint_data: true,
           },
         },
       },

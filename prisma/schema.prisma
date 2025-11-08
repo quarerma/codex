@@ -18,7 +18,7 @@ model User {
   characters       Character[]
   campaigns_dm     Campaign[]         @relation("CampaignDm")
   campaigns_player PlayerOnCampaign[] @relation("PlayerCampaigns")
-  ipTracks         IpTrack[]
+  devices          UserDevice[]
   createdAt        DateTime           @default(now())
   loginCodes       LoginCode[]
 
@@ -32,25 +32,32 @@ enum Role {
   ADMIN
 }
 
-model IpTrack {
-  id        Int      @id @default(autoincrement())
-  ip        String   @db.VarChar(45)
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
+model UserDevice {
+  id                 Int       @id @default(autoincrement())
+  user               User      @relation(fields: [userId], references: [id])
+  userId             String    @map("user_id")
+  fingerprint_hash   String
+  fingerprint_data   Json
+  device_id          String
+  user_agent         String
+  device_secret_hash String
+  last_login         DateTime
+  last_used_at       DateTime  @default(now())
+  expires_at         DateTime?
+  created_at         DateTime  @default(now())
 
-  @@index([ip])
   @@index([userId])
-  @@unique([userId, ip])
-  @@map("ip_track")
+  @@index([device_id, fingerprint_hash])
+  @@unique([userId, device_id])
+  @@map("user_devices")
 }
 
 model LoginCode {
   id        Int      @id @default(autoincrement())
   code      String   @db.VarChar(6)
-  ip        String   @db.VarChar(45)
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("user_id")
+  device_id String
   createdAt DateTime @default(now()) @map("created_at")
   expiresAt DateTime @map("expires_at")
 

@@ -21,6 +21,8 @@ import { CacheServiceMiddleware } from './middleware/cache.middleware';
 import { UserService } from './user/user.service';
 import { UserSessionExecutor } from './user/executor/session.executor';
 import { EmailService } from './email/email.service';
+import { HashService } from './hash/hash.service';
+import { RequireDeviceIdMiddleware } from './middleware/require-device-id';
 
 @Module({
   imports: [
@@ -45,10 +47,10 @@ import { EmailService } from './email/email.service';
     CacheModule,
   ],
   controllers: [],
-  providers: [DataBaseService, UserService, UserSessionExecutor, EmailService],
+  providers: [DataBaseService, UserService, UserSessionExecutor, EmailService, HashService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CacheServiceMiddleware).forRoutes('*');
+    consumer.apply(CacheServiceMiddleware, RequireDeviceIdMiddleware).forRoutes('*');
   }
 }
