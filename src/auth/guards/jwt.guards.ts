@@ -53,7 +53,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         payload = rPayload;
         isRefresh = true;
       } catch {
-        throw new UnauthorizedException('Invalid session');
+        throw new UnauthorizedException({
+          error: 'session_expired',
+          code: 'relogin',
+          message: 'Refresh token expired. Re-authenticate.',
+        });
       }
     }
 
@@ -67,9 +71,38 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Device not registered');
     }
 
-    // Validate device_secret
-    if (deviceRecord.device_secret_hash !== this.hashService.sha256(deviceSecret)) {
-      throw new UnauthorizedException('Invalid device secret');
+    // Handle expired device_secret
+    if (!deviceSecret) {
+      // Regenerate if device trusted (fingerprint matches with tolerance) - Auth0
+      const { critical, nonCritical } = this.compareFingerprintFields(currentData, deviceRecord.fingerprint_data);
+
+      if (critical > 0 || nonCritical > 2) {
+        throw new UnauthorizedException('Device mismatch - re-authenticate');
+      }
+
+      // Generate new secret + update DB
+      const newSecret = this.hashService.generateRandomToken(32);
+      const newSecretHash = this.hashService.sha256(newSecret);
+
+      await this.db.userDevice.update({
+        where: { userId_device_id: { userId, device_id: deviceId } },
+        data: { device_secret_hash: newSecretHash },
+      });
+
+      res.cookie('device_secret', newSecret, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 90 * 24 * 60 * 60 * 1000,
+      });
+
+      // Invalidate cache
+      await this.cacheService.deleteSpecificCache('session', [userId]);
+    } else {
+      // Validate existing secret
+      if (deviceRecord.device_secret_hash !== this.hashService.sha256(deviceSecret)) {
+        throw new UnauthorizedException('Invalid device secret');
+      }
     }
 
     // Fingerprint
