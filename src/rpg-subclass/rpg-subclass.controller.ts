@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { SubClassService } from './rpg-subclass.service';
 import { CreateSubClassDto } from './dto/create-subclass-dto';
-import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { AssignFeatDto } from './dto/assign.feat.dto';
 
 @Controller('rpg-subclass')
@@ -37,7 +37,7 @@ export class SubClassController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getAllSubclasses() {
     try {
       return await this.rpgSubclassService.getAllSubclasses();

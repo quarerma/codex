@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpException, HttpStatus, Get, UseGuards, Req 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EmailAlreadyInUseExcption, UserNameAlreadyInUseException } from 'src/exceptions/UserExceptions';
-import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { Request } from 'express';
 import { UserRequest } from './dto/user-request';
 import { RolesGuard } from 'src/auth/guards/role.guard';
@@ -41,7 +41,7 @@ export class UserController {
   }
 
   @Get('session')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getSession(@CurrentUser() user: UserRequest) {
     try {
       return await this.userService.getUserById(user.id);
@@ -57,7 +57,7 @@ export class UserController {
   }
 
   @Get('all')
-  @UseGuards(JwtAuthGuards, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async getAllUsers(@CurrentUser() user: UserRequest) {
     try {
@@ -74,7 +74,7 @@ export class UserController {
   }
 
   @Get('campaigns')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getUserCampaigns(@Req() req: Request) {
     try {
       const user = req.user as UserRequest;
@@ -91,7 +91,7 @@ export class UserController {
   }
 
   @Get('campaigns-player')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getUserCampaignsPlayer(@Req() req: Request) {
     try {
       const user = req.user as UserRequest;
@@ -108,7 +108,7 @@ export class UserController {
   }
 
   @Get('characters')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getUserCharacters(@Req() req: Request) {
     try {
       const user = req.user as UserRequest;

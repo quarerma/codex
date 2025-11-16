@@ -15,9 +15,26 @@ import { CharacterUnUpgradesService } from './aux_services/character.unupgrade.s
 import { CharacterRitualsService } from './aux_services/character.rituals.service';
 import { CharacterskillsController } from './character.skills.controller';
 import { CharacterLevelService } from './aux_services/character.level.service';
+import { CharacterFetcher } from './executor/character.fetcher';
 
 @Module({
   controllers: [CharacterController, CharacterskillsController],
-  providers: [CharacterService, CharacterLevelService, CharacterRitualsService, DataBaseService, WeapondAddService, SkillService, CharacterSkillsService, CharacterAttacksService, CharacterAtributesService, CharacterUpgradesService, CharacterClassService, CharacterFeatsService, InventoryService, CharacterUnUpgradesService],
+  providers: [
+    CharacterService,
+    CharacterLevelService,
+    CharacterRitualsService,
+    DataBaseService,
+    WeapondAddService,
+    SkillService,
+    CharacterSkillsService,
+    CharacterAttacksService,
+    CharacterAtributesService,
+    CharacterUpgradesService,
+    CharacterClassService,
+    CharacterFeatsService,
+    InventoryService,
+    CharacterUnUpgradesService,
+    CharacterFetcher,
+  ],
 })
 export class CharacterModule {}

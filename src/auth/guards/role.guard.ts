@@ -1,18 +1,19 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtAuthGuards } from './jwt.guards';
+import { JwtAuthGuard } from './jwt.guards';
 import { UserRequest } from 'src/user/dto/user-request';
 import { Role } from '@prisma/client';
 import { ROLES_KEY } from '../dto/role.decorator';
 
 @Injectable()
-export class RolesGuard extends JwtAuthGuards implements CanActivate {
-  constructor(private reflector: Reflector) {
-    super();
-  }
+export class RolesGuard implements CanActivate {
+  constructor(
+    private reflector: Reflector,
+    private jwtAuthGuard: JwtAuthGuard,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isJwtValid = await super.canActivate(context);
+    const isJwtValid = await this.jwtAuthGuard.canActivate(context);
     if (!isJwtValid) {
       return false;
     }

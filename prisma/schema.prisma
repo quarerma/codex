@@ -156,6 +156,8 @@ model Character {
   subclass   Subclass @relation(fields: [subclassId], references: [id])
   subclassId String   @map("subclass_id")
 
+  privacy_level PrivacyLevel @default(PRIVATE) @map("privacy_level")
+
   Inventory Inventory?
 
   feats CharacterFeat[]
@@ -582,6 +584,11 @@ model CursedItem {
 }
 
 /////////////////////////////////////////////  Enums /////////////////////////////////////////////
+enum PrivacyLevel {
+  CAMPAIGN_ONLY
+  PRIVATE
+  PUBLIC
+}
 enum ModificationType {
   MELEE_WEAPON
   BULLET_WEAPON

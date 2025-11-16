@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Query, Post, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { CreateClassDTO } from './dto/create-class-dto';
-import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { CreateFeatDto } from 'src/feats/dto/create-feat-dto';
 
 @Controller('classes')
@@ -9,7 +9,7 @@ export class ClassesController {
   constructor(private readonly classesService: ClassesService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getClasses() {
     try {
       return await this.classesService.getClasses();
@@ -19,7 +19,7 @@ export class ClassesController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async createClass(@Body() data: CreateClassDTO) {
     try {
       return await this.classesService.createClass(data);
@@ -65,7 +65,7 @@ export class ClassesController {
   }
 
   @Get('/subclasses')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getSubClasses(@Query('classId') classId: string) {
     try {
       return await this.classesService.getSubClasses(classId);

@@ -8,7 +8,6 @@ export class RequireDeviceIdMiddleware implements NestMiddleware {
     if (!deviceId || typeof deviceId !== 'string') {
       throw new BadRequestException('Missing or invalid X-Device-ID header');
     }
-    // optional: store for later use
     req.device_id = deviceId;
     next();
   }

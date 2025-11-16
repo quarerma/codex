@@ -23,6 +23,8 @@ import { UserSessionExecutor } from './user/executor/session.executor';
 import { EmailService } from './email/email.service';
 import { HashService } from './hash/hash.service';
 import { RequireDeviceIdMiddleware } from './middleware/require-device-id';
+import { CharacterFetcher } from './character/executor/character.fetcher';
+import { CampaignFetcher } from './campaings/executors/campaign.fetcher';
 
 @Module({
   imports: [
@@ -47,7 +49,7 @@ import { RequireDeviceIdMiddleware } from './middleware/require-device-id';
     CacheModule,
   ],
   controllers: [],
-  providers: [DataBaseService, UserService, UserSessionExecutor, EmailService, HashService],
+  providers: [DataBaseService, UserService, UserSessionExecutor, EmailService, HashService, CharacterFetcher, CampaignFetcher],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { CampaingsService } from './campaings.service';
-import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { CreateCampaignDTO } from './dto/create-campaign-dto';
 import { UserRequest } from 'src/user/dto/user-request';
 import { Request } from 'express';
@@ -24,81 +24,81 @@ export class CampaingsController {
   ) {}
 
   @Post('create')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async createCampaign(@Body() data: CreateCampaignDTO, @Req() req: Request) {
     const user = req.user as UserRequest;
     return this.campaingsService.createCampaign(data, user.id);
   }
 
   @Get('players')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignPlayers(@Query('id') id: string) {
     return this.campaingsService.getCampaignPlayers(id);
   }
 
   @Post('join')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async joinCampaign(@Body() data: { campaignId: string; password: string }, @Req() req: Request) {
     const user = req.user as UserRequest;
     return this.campaingsService.joinCampaign(data, user.id);
   }
 
   @Get('characters')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignCharacters(@Query('id') id: string) {
     return this.campaingsService.getCampaignCharacters(id);
   }
 
   @Get('byId')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignById(@Query('id') id: string) {
     return this.campaingsService.getCampaignById(id);
   }
 
   @Get('feats')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignFeats(@Query('id') id: string) {
     return this.customFeatsService.getCampaignCustomFeats(id);
   }
 
   @Post('feats')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async createCampaignFeat(@Query('id') id: string, @Body() data: CreateFeatDto) {
     return this.customFeatsService.createCustomFeat(data, id);
   }
 
   @Post('equips')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async createCampaignEquip(@Query('id') id: string, @Body() data: CreateItemDto) {
     return this.customItemsService.createCustomCampaignItem(data, id);
   }
 
   @Get('equips')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignEquips(@Query('id') id: string) {
     return this.customItemsService.getCampaignCustomItems(id);
   }
 
   @Post('rituals')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async createCampaignRitual(@Query('id') id: string, @Body() data: CreateRitualDto) {
     return this.customRitualsService.createCustomRitual(id, data);
   }
 
   @Get('rituals')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignRituals(@Query('id') id: string) {
     return this.customRitualsService.getCampaignCustomRituals(id);
   }
 
   @Post('skills')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async createCampaignSkill(@Query('id') id: string, @Body() data: CreateSkillDTO) {
     return this.customSkillService.createCustomSkill(data, id);
   }
 
   @Get('skills')
-  @UseGuards(JwtAuthGuards)
+  @UseGuards(JwtAuthGuard)
   async getCampaignSkills(@Query('id') id: string) {
     return this.customSkillService.getCampaignCustomSkills(id);
   }
