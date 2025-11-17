@@ -7,7 +7,7 @@ import { DataBaseService } from 'src/database/database.service';
 import { HashService } from 'src/hash/hash.service';
 import { CacheService } from 'src/cache/cache.service';
 import { UserSessionExecutor } from 'src/user/executor/session.executor';
-import { computeServerFingerprint } from '../services/fingerprimts.aux';
+import { computeServerFingerprint, FingerprintData } from '../services/fingerprimts.aux';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -151,12 +151,29 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         sameSite: 'strict',
         maxAge: 15 * 60 * 1000,
       });
+
+      //* Slide session expiration of refresh token
+      const newRefresh = this.jwtService.sign(
+        {
+          sub: userId,
+          type: 'refresh',
+          device_id: deviceId,
+        },
+        { expiresIn: '7d' },
+      );
+
+      res.cookie('refresh_token', newRefresh, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
     }
 
     return true;
   }
 
-  private compareFingerprintFields(current: any, stored: any) {
+  private compareFingerprintFields(current: any | FingerprintData, stored: any | FingerprintData): { critical: number; nonCritical: number } {
     let critical = 0;
     let nonCritical = 0;
 
@@ -164,10 +181,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (current.ja3 !== stored.ja3) critical++;
 
     // NON-CRITICAL: Can change
+    if (current.http_version !== stored.http_version) nonCritical++;
     if (current.user_agent !== stored.user_agent) nonCritical++;
+    if (current.accept !== stored.accept) nonCritical++;
+    if (current.encoding !== stored.encoding) nonCritical++;
+    if (current.language !== stored.language) nonCritical++;
     if (current.sec_ch_ua !== stored.sec_ch_ua) nonCritical++;
     if (current.sec_ch_ua_platform !== stored.sec_ch_ua_platform) nonCritical++;
-    if (current.accept_language !== stored.accept_language) nonCritical++;
 
     return { critical, nonCritical };
   }
