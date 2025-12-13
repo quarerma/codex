@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
@@ -42,5 +42,22 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async protected() {
     return { message: 'Authenticated' };
+  }
+
+  @Get('auth-token')
+  @UseGuards(JwtAuthGuard)
+  async auth() {
+    return {
+      message: 'Sucess',
+    };
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('auth_token', { path: '/' });
+    res.clearCookie('refresh_token', { path: '/' });
+    res.clearCookie('device_secret', { path: '/' });
+
+    return { message: 'Logged out successfully' };
   }
 }

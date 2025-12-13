@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
@@ -27,7 +27,7 @@ export class AuthService {
       return { error: 'Invalid credentials' };
     }
 
-    const clientDeviceId = body.device_id;
+    const clientDeviceId = req.device_id;
     const existingDevice = await this.dataBaseService.userDevice.findUnique({
       where: { userId_device_id: { userId: user.id, device_id: clientDeviceId } },
     });
@@ -43,7 +43,14 @@ export class AuthService {
         },
       });
       await this.emailService.sendEmail('Confirm your device', `Code: ${code}`);
-      return { message: 'Verification code sent' };
+      throw new HttpException(
+        JSON.stringify({
+          message: 'Redirecting for device verification',
+          user_id: user.id,
+        }),
+        307,
+        {},
+      );
     }
 
     const { fingerprint } = computeServerFingerprint(req);
@@ -93,6 +100,8 @@ export class AuthService {
 
   setAuthCookies(res: Response, tokens: any, device_secret: string) {
     const opts = { httpOnly: true, secure: true, sameSite: 'strict' } as const;
+
+    console.log(tokens);
     res.cookie('auth_token', tokens.auth_token, { ...opts, maxAge: 15 * 60 * 1000 });
     res.cookie('refresh_token', tokens.refresh_token, { ...opts, maxAge: 90 * 24 * 60 * 60 * 1000 });
     res.cookie('device_secret', device_secret, { ...opts, maxAge: 90 * 24 * 60 * 60 * 1000 });
