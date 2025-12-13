@@ -9,12 +9,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => request.cookies?.auth_token || null]),
-      ignoreExpiration: true, // Recommended to enforce expiration
+      ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_SECRET'),
     });
   }
 
-  validate(payload: any) {
+  async validate(payload: any) {
     return payload;
   }
 }

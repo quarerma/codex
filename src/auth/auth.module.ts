@@ -10,22 +10,27 @@ import { EmailService } from 'src/email/email.service';
 import { JwtAuthGuard } from './guards/jwt.guards';
 import { HashService } from 'src/hash/hash.service';
 import { UserSessionExecutor } from 'src/user/executor/session.executor';
-
+import { RolesGuard } from './guards/role.guard';
+import { CampaignCharacterOwnerGuard } from './guards/table.guards';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Global()
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Load .env file
+    ConfigModule.forRoot(),
+    PassportModule,
     PassportModule,
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
       }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, DataBaseService, JwtStrategy, EmailService, JwtAuthGuard, HashService, UserSessionExecutor],
-  exports: [AuthService, JwtAuthGuard, HashService, UserSessionExecutor],
+  providers: [AuthService, DataBaseService, JwtStrategy, EmailService, JwtAuthGuard, HashService, UserSessionExecutor, RolesGuard, CampaignCharacterOwnerGuard],
+  exports: [AuthService, JwtAuthGuard, HashService, UserSessionExecutor, PassportModule, JwtStrategy, RolesGuard, CampaignCharacterOwnerGuard],
 })
 export class AuthModule {}

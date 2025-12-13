@@ -17,8 +17,13 @@ export const CurrentUser = createParamDecorator(async (data: unknown, ctx: Execu
     throw new Error('CacheService or FunctionExecutorService not available in request context');
   }
 
-  const user_id = user.id;
-  const fullUserData = await cacheService.getCached('session', [`${user_id}`], async () => await sessionExecutor.execute(user_id), 0.1 * 60 * 1000);
+  try {
+    const user_id = user.sub;
+    const fullUserData = await cacheService.getCached('session', [`${user_id}`], async () => await sessionExecutor.execute(user_id), 30 * 60 * 1000);
 
-  return fullUserData;
+    return fullUserData;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
 });

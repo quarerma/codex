@@ -7,8 +7,7 @@ import { CreateOriginDTO } from './dto/crete.origin.dto';
 export class OriginsController {
   constructor(private readonly originsService: OriginsService) {}
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
+  @Post('create')
   async createOrigin(@Body() data: CreateOriginDTO) {
     try {
       return await this.originsService.createOrigin(data);
@@ -17,7 +16,7 @@ export class OriginsController {
     }
   }
 
-  @Get()
+  @Get('all')
   @UseGuards(JwtAuthGuard)
   async getOrigins() {
     try {

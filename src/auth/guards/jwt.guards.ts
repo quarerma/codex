@@ -18,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     private cacheService: CacheService,
     private sessionExecutor: UserSessionExecutor,
   ) {
-    super();
+    super('jwt');
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -30,7 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const authToken = req.cookies?.auth_token;
     const refreshToken = req.cookies?.refresh_token;
 
-    if (!deviceId || !deviceSecret || !authToken) {
+    if (!deviceId || !deviceSecret) {
       throw new UnauthorizedException('Missing auth data');
     }
 
@@ -41,6 +41,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     let isRefresh = false;
 
     try {
+      if (!authToken) {
+        throw new Error();
+      }
       payload = this.jwtService.verify(authToken);
       if (payload.device_id !== deviceId) throw new Error();
     } catch {
@@ -52,7 +55,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         }
         payload = rPayload;
         isRefresh = true;
-      } catch {
+      } catch (e) {
         throw new UnauthorizedException({
           error: 'session_expired',
           code: 'relogin',
@@ -64,7 +67,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const userId = payload.sub;
 
     //  Load user from cache
-    const fullUser = await this.cacheService.getCached('session', [userId], () => this.sessionExecutor.execute(userId), 6 * 1000);
+    const fullUser = await this.cacheService.getCached('session', [userId], async () => await this.sessionExecutor.execute(userId), 30 * 60 * 1000);
 
     const deviceRecord = fullUser.devices?.find((d: any) => d.device_id === deviceId);
     if (!deviceRecord) {
@@ -169,6 +172,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
     }
+
+    req.user = payload;
 
     return true;
   }

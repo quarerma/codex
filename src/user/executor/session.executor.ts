@@ -5,9 +5,9 @@ import { DataBaseService } from 'src/database/database.service';
 export class UserSessionExecutor {
   constructor(private readonly dataBaseService: DataBaseService) {}
 
-  execute(userId: string) {
-    console.log('Running Session Query');
-    return this.dataBaseService.user.findFirst({
+  async execute(userId: string) {
+    console.log('Running Session Query', userId);
+    return await this.dataBaseService.user.findFirst({
       where: {
         id: userId,
       },

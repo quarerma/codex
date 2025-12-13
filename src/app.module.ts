@@ -28,9 +28,12 @@ import { CampaignFetcher } from './campaings/executors/campaign.fetcher';
 
 @Module({
   imports: [
+    AuthModule,
+
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
     UserModule,
     CharacterModule,
     ClassesModule,
@@ -41,7 +44,6 @@ import { CampaignFetcher } from './campaings/executors/campaign.fetcher';
     SkillModule,
     InventoryModule,
     RitualModule,
-    AuthModule,
     OriginsModule,
     ConditionsModule,
     NotesModule,
